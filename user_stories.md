@@ -34,7 +34,9 @@ Admins
 * Can add equipment to the list of default equipment
 * Can view requests for adding equipment to default lists
 
-#### Stretch:
+#### Stretch: ()
+
+##### Make api functionality for this app that lets me export all the social networking stuff below to another site:
 
 * A user can be a DM for a party and allot skill points/equipment to characters within that party
 * Use an interface that shows all their equipment (equipped or not) and allows them to equip/unequip and see dynamically updated stats
