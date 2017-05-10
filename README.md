@@ -1,24 +1,26 @@
-# README
+# Empire
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a project for creating, updating, and hopefully, even running games with characters in the game EMPIRE, created by myself (Dillon Arevalo) and Jack Wostrel (currently in alpha). It is a tabletop game in the style of Dungeons and Dragons but with a much more deadly, tactical, and choice oriented flavor.
 
-Things you may want to cover:
+The app is live on (PUT LINK HERE WHEN LIVE).
 
-* Ruby version
+## User Stories:
 
-* System dependencies
+[View User Stories](/user_stories.md)
 
-* Configuration
+## Basic Use
 
-* Database creation
+DESCRIBE USE HERE WHEN IT'S ALL DECIDED
+give walkthrough with screenshots
 
-* Database initialization
+## Tech Stack
 
-* How to run the test suite
+* Ruby on Rails
+* Heroku (soon)
+* IMPLEMENT TRAVIS AND CODECOV (OR SOMETHING SIMILAR)
+* Haml (soon)
 
-* Services (job queues, cache servers, search engines, etc.)
+## Contributing
 
-* Deployment instructions
-
-* ...
+Contributions are welcome, but recognize that the choices relevant to game mechanics are part of an entirely different type of discussion. No proposed changes that modify the expression of the game mechanics will be accepted without revision.
+Beyond that, feel free to fork the repository and make whatever changes or additions you like! Make a pull request and I'll review it at my earliest convenience. Be sure to provide or update testing as appropriate for new features or edits!
