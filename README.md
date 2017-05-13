@@ -1,3 +1,9 @@
+[![Build Status](https://img.shields.io/travis/DillonBArevalo/EmpireApp/development.svg)](https://travis-ci.org/DillonBArevalo/EmpireApp)
+[![Coverage Status](https://img.shields.io/codecov/c/github/DillonbBArevalo/EmpireApp.svg?branch=development)](https://codecov.io/gh/DillonBArevalo/EmpireApp)
+
+<!-- might need the below token for my coverage status: -->
+<!-- &token=8cc186a7-b696-47ff-bc08-58dc7bd47893 -->
+
 # Empire
 
 This is a project for creating, updating, and hopefully, even running games with characters in the game EMPIRE, created by myself (Dillon Arevalo) and Jack Wostrel (currently in alpha). It is a tabletop game in the style of Dungeons and Dragons but with a much more deadly, tactical, and choice oriented flavor.
