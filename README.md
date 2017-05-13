@@ -1,5 +1,8 @@
-[![Build Status](https://travis-ci.org/namuunaa/tonite.svg?branch=development)](https://travis-ci.org/DillonBArevalo/EmpireApp)
-[![Coverage Status](https://img.shields.io/codecov/c/github/codecov/example-python.svg?branch=development)](https://codecov.io/gh/DillonBArevalo/EmpireApp)
+[![Build Status](https://img.shields.io/travis/DillonBArevalo/EmpireApp/development.svg)](https://travis-ci.org/DillonBArevalo/EmpireApp)
+[![Coverage Status](https://img.shields.io/codecov/c/github/DillonbBArevalo/EmpireApp.svg?branch=development)](https://codecov.io/gh/DillonBArevalo/EmpireApp)
+
+<!-- might need the below token for my coverage status: -->
+<!-- &token=8cc186a7-b696-47ff-bc08-58dc7bd47893 -->
 
 # Empire
 
