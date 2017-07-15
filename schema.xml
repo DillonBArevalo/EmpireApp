@@ -546,17 +546,17 @@
 <part>id</part>
 </key>
 </table>
-<table x="310" y="550" name="conditions">
+<table x="330" y="550" name="conditions">
 <row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="threshold" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <row name="description" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+<default>NULL</default></row>
+<row name="effect_description" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
@@ -575,6 +575,9 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="conditions" row="id" />
 </row>
+<row name="threshold" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
