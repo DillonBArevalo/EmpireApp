@@ -46,3 +46,4 @@ Admins
 * Engage in group battles in a combat field with many players controlling many characters
 * Add other users as friends and use their creations
 * Chat with other users
+* A user can upload a picture of their character
