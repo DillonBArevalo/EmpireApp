@@ -12,8 +12,11 @@ class Character < ApplicationRecord
   has_many :skill_costs, through: :skills
 
   has_one :inventory
+
   has_many :obtained_weapons, through: :inventory
   has_many :weapons, through: :obtained_weapons
+  has_many :weapon_types, through: :weapons
+
   has_many :obtained_armors, through: :inventory
   has_many :armors, through: :obtained_armors
   has_many :armor_types, through: :armors

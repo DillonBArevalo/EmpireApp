@@ -19,6 +19,9 @@
 ## Thoughts:
 
 - Maybe a tags table for easy searching?
+- When the game is playable have a fight response form that sends information on how the characters felt/feedback
+- also have a db of results from fights pointing to characters that competed and results.
+- maybe have a whole statistics resource with searching (ransack?)
 
 
 ## skill stat categories:
