@@ -1,0 +1,2 @@
+class AttackOption < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class EquippedArmor < ApplicationRecord
+end

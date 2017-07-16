@@ -1,0 +1,2 @@
+class DamageResistance < ApplicationRecord
+end

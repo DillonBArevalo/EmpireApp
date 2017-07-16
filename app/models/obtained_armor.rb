@@ -1,0 +1,2 @@
+class ObtainedArmor < ApplicationRecord
+end

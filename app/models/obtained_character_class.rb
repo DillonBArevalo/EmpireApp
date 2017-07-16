@@ -1,0 +1,2 @@
+class ObtainedCharacterClass < ApplicationRecord
+end
