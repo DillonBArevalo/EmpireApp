@@ -22,6 +22,7 @@
 - When the game is playable have a fight response form that sends information on how the characters felt/feedback
 - also have a db of results from fights pointing to characters that competed and results.
 - maybe have a whole statistics resource with searching (ransack?)
+- maybe have some kind of character/equipment liking system?
 
 
 ## skill stat categories:
@@ -44,4 +45,5 @@ A LOT OF THESE DON'T MATTER FOR JUST THE CHARACTER CREATOR. ONLY PASSIVE STAT BO
 ## For models:
 
 - add dependent true to associations? Think through which ones
+- depending on what I want the user page to look like i might have to add more associations to it. Might need things like inventories, weapons used, classes used, etc. stats things
 

@@ -1,5 +1,5 @@
 class Armor < ApplicationRecord
-  belongs_to :creator, foreign_key: :user_id, class_name: "User"
+  belongs_to :creator, foreign_key: :user_id, class_name: 'User'
   belongs_to :armor_type
 
   has_many :damage_resistances
