@@ -32,7 +32,7 @@
     <type label="SET" length="1" sql="SET" quote=""/>
     <type label="Bit" length="0" sql="bit" quote=""/>
   </group>
-</datatypes><table x="550" y="150" name="users">
+</datatypes><table x="540" y="160" name="users">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -67,6 +67,9 @@
 <row name="name" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
+<row name="description" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+<default>NULL</default></row>
 <row name="defense_die_number" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -92,7 +95,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1160" y="420" name="characters">
+<table x="1160" y="490" name="characters">
 <row name="creator_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="users" row="id" />
@@ -124,43 +127,16 @@
 <row name="charisma" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="energy_budget" null="1" autoincrement="0">
+<row name="energy_budget_level_bonus" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="energy_pool" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="active_defense_bonus" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="active_offense_bonus" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="health" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="move_speed" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="tactical_maneuver_bonus" null="1" autoincrement="0">
+<row name="energy_pool_level_bonus" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="total_skill_points" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="new field" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
 <row name="available_skill_points" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="dodge_die_size" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="attacks_available" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="blocks_available" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
@@ -313,7 +289,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="150" y="30" name="weapon_classes">
+<table x="150" y="50" name="weapon_classes">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -379,21 +355,24 @@
 <part>id</part>
 </key>
 </table>
-<table x="1150" y="20" name="skills">
+<table x="1160" y="60" name="skills">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="base_class_skill" null="1" autoincrement="0">
-<datatype>bit</datatype>
-<default>NULL</default></row>
-<row name="display_description" null="1" autoincrement="0">
-<datatype>bit</datatype>
 <default>NULL</default></row>
 <row name="skillable_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="character_classes" row="id" />
 <relation table="weapon_classes" row="id" />
 </row>
+<row name="base_class_skill" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="display_description" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="tactical_maneuver_dex_bonus" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
 <row name="skillable_type" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -415,16 +394,13 @@
 <row name="accuracy_boost" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="tactical_maneuver_dex_bonus" null="1" autoincrement="0">
-<datatype>BINARY</datatype>
-<default>NULL</default></row>
 <row name="defense_boost" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="defense_die_boost" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="armor_def_boost" null="1" autoincrement="0">
+<row name="armor_defense_boost" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="bonus_attacks" null="1" autoincrement="0">
@@ -437,7 +413,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="850" y="120" name="obtained_skills">
+<table x="850" y="130" name="obtained_skills">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -486,11 +462,14 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="damage_types" row="id" />
 </row>
+<row name="amount" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="150" y="160" name="weapon_classes_weapons">
+<table x="150" y="190" name="weapon_classes_weapons">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -528,7 +507,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1450" y="20" name="skill_cost">
+<table x="1420" y="50" name="skill_costs">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
