@@ -5,8 +5,8 @@ class CreateAttackOptions < ActiveRecord::Migration[5.0]
       t.text :description
       t.references :weapon
       t.references :damage_type
-      t.integer :strength_dice
-      t.integer :dexterity_dice
+      t.integer :strength_dice, default: 0
+      t.integer :dexterity_dice, default: 0
       t.decimal :energy_modifier
       t.integer :die_number
       t.integer :die_size
