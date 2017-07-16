@@ -38,3 +38,7 @@ A LOT OF THESE DON'T MATTER FOR JUST THE CHARACTER CREATOR. ONLY PASSIVE STAT BO
 - die size increase with a shield (yes)
 - bonus to base armor def (yes)
 
+## For models:
+
+- add dependent true to associations? Think through which ones
+
