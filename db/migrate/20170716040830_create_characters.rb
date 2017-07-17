@@ -12,8 +12,8 @@ class CreateCharacters < ActiveRecord::Migration[5.0]
       t.integer :charisma
       t.integer :energy_budget_level_bonus
       t.integer :energy_pool_level_bonus
-      t.integer :attacks_available
-      t.integer :blocks_available
+      t.integer :total_skill_points
+      t.integer :available_skill_points
 
       t.timestamps
     end

@@ -9,7 +9,7 @@ class CreateArmors < ActiveRecord::Migration[5.0]
       t.integer :active_action_reduction
       t.integer :budget_reduction
       t.integer :energy_pool_reduction
-      t.integer :dodge_energy_mod_penalty
+      t.decimal :dodge_energy_mod_penalty
       t.integer :dodge_die_size_reduction
 
       t.timestamps
