@@ -11,5 +11,5 @@ class Armor < ApplicationRecord
   has_many :obtained_armors
   has_many :inventories, through: :obtained_armors
   has_many :owners, through: :inventories, source: :character
-  has_many :users, through: :owners
+  has_many :users, through: :owners, source: :creator
 end
