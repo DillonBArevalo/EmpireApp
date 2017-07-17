@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Armor, type: :model do
-  describe "Associations" do
+  describe 'Associations' do
   let(:armor_creator) { User.create({username: 'creator', name: 'tom', email: 'tom@tom.com', password: 'tomtom', password_confirmation: 'tomtom'}) }
   let(:armor_type) { ArmorType.create({name: 'armor'})}
   let(:armor) { Armor.create({user_id: armor_creator.id, name: 'armor', armor_type_id: armor_type.id, passive_defense_bonus: 1, active_action_reduction: 1, budget_reduction: 1, dodge_energy_mod_penalty: 0, dodge_die_size_reduction: 0}) }
@@ -9,7 +9,6 @@ RSpec.describe Armor, type: :model do
   let(:character) {user.characters.create(name: 'c', description: 'desc', strength: 11, dexterity: 11, constitution: 11, intelligence: 11, wisdom: 11, charisma: 11, energy_budget_level_bonus: 0, energy_pool_level_bonus: 0, total_skill_points: 0, available_skill_points: 0)}
     describe '#creator' do
       it 'returns the user that created the armor' do
-        p 'THIS IS CURRENTLY HELLA FUNKY AS MY TEST DB SEEMS TO PERSIST. ASK FOR HELP'
         expect(armor.creator).to eq(armor_creator)
       end
     end
@@ -31,7 +30,7 @@ RSpec.describe Armor, type: :model do
         expect(armor.characters).to eq([character])
       end
     end
-    #refactor to not use let so i can use another describe block
+    #refactor to not use let so i can use another describe block.
     describe '#inventories' do
       it 'returns the inventories that contain this armor' do
         #maybe refactor this to a new describe with a let?
