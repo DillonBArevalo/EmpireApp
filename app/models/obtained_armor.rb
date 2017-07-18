@@ -1,4 +1,4 @@
 class ObtainedArmor < ApplicationRecord
   belongs_to :inventory
-  belongs_to :weapon
+  belongs_to :armor
 end

@@ -13,6 +13,9 @@ class Weapon < ApplicationRecord
   has_many :conditions, through: :attack_options_conditions
 
   has_many :equipped_weapons
+  has_many :characters, through: :equipped_weapons
+
   has_many :obtained_weapons
+  has_many :inventories, through: :obtained_weapons
 
 end

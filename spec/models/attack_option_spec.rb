@@ -1,5 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe AttackOption, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'Associations' do
+    describe '#weapon' do
+      it{should belong_to :weapon}
+    end
+
+    describe '#damage_type' do
+      it{should belong_to :damage_type}
+    end
+
+    describe '#conditions' do
+      it{should have_many :conditions}
+    end
+  end
 end

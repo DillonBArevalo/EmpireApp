@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.integer  "active_action_reduction"
     t.integer  "budget_reduction"
     t.integer  "energy_pool_reduction"
-    t.integer  "dodge_energy_mod_penalty"
+    t.decimal  "dodge_energy_mod_penalty"
     t.integer  "dodge_die_size_reduction"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
@@ -88,8 +88,8 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.integer  "charisma"
     t.integer  "energy_budget_level_bonus"
     t.integer  "energy_pool_level_bonus"
-    t.integer  "attacks_available"
-    t.integer  "blocks_available"
+    t.integer  "total_skill_points"
+    t.integer  "available_skill_points"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.index ["user_id"], name: "index_characters_on_user_id", using: :btree
