@@ -1,0 +1,7 @@
+<h1> <%= @user.username %>'s Page </h1>
+
+<h2> Characters: </h2>
+
+<% @characters.each do |character| %>
+  <%= character.name %> <br>
+<% end %>
