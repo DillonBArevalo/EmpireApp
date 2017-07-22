@@ -1,0 +1,11 @@
+<h1>Login</h1>
+
+<%= render '/errors' %>
+
+<%= form_for @user, url: login_path, method: 'post' do |f| %>
+  <%= f.label :Username %>
+  <%= f.text_field :username %>
+  <%= f.label :Password %>
+  <%= f.password_field :password %>
+  <%= f.submit 'login' %>
+<% end %>
