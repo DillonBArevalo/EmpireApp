@@ -6,15 +6,13 @@ class SessionsController < ApplicationController
 
   # post /login
   def create
-    p 'made it to create'
-    @user = User.find_by(params[:username])
-    if @user && @user.password == params[:password]
-      p 'success'
+    @user = User.find_by(username: login_params[:username])
+    if @user && @user.try(:authenticate, login_params[:password])
       session[:id] = @user.id
       redirect_to @user
     else
       @errors = ['Username or password is incorrect!']
-      p @errors
+      @user = User.new({username: login_params[:username]}) unless @user
       render 'new'
     end
   end
@@ -22,7 +20,6 @@ class SessionsController < ApplicationController
   # delete /logout
   def destroy
     session[:id] = nil
-
     redirect_to '/'
   end
 
@@ -31,4 +28,5 @@ class SessionsController < ApplicationController
   def login_params
     params.require(:user).permit(:username, :password)
   end
+
 end
