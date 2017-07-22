@@ -32,3 +32,13 @@
 .errors {
   color: red;
 }
+
+#nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#nav * {
+
+  padding: 5px;
+}
