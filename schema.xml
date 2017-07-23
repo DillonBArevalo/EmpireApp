@@ -171,7 +171,7 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="dodge_energy_mod_penalty" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
+<datatype>DECIMAL</datatype>
 <default>NULL</default></row>
 <row name="dodge_die_size_reduction" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -188,6 +188,9 @@
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <row name="description" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+<default>NULL</default></row>
+<row name="motto" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
@@ -355,7 +358,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1160" y="60" name="skills">
+<table x="1160" y="40" name="skills">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -364,6 +367,9 @@
 <default>NULL</default><relation table="character_classes" row="id" />
 <relation table="weapon_classes" row="id" />
 </row>
+<row name="skillable_type" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <row name="base_class_skill" null="1" autoincrement="0">
 <datatype>bit</datatype>
 <default>NULL</default></row>
@@ -373,7 +379,10 @@
 <row name="tactical_maneuver_dex_bonus" null="1" autoincrement="0">
 <datatype>bit</datatype>
 <default>NULL</default></row>
-<row name="skillable_type" null="1" autoincrement="0">
+<row name="is_weapon_boost" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="weapon_class" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
