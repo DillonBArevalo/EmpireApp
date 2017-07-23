@@ -98,7 +98,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1160" y="490" name="characters">
+<table x="1160" y="510" name="characters">
 <row name="creator_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="users" row="id" />
@@ -364,7 +364,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1160" y="40" name="skills">
+<table x="1160" y="20" name="skills">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -386,6 +386,9 @@
 <datatype>bit</datatype>
 <default>NULL</default></row>
 <row name="is_weapon_boost" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="passive" null="1" autoincrement="0">
 <datatype>bit</datatype>
 <default>NULL</default></row>
 <row name="weapon_class" null="1" autoincrement="0">
@@ -424,11 +427,14 @@
 <row name="bonus_blocks" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="attack_energy_mod_boost" null="1" autoincrement="0">
+<datatype>DECIMAL</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="850" y="130" name="obtained_skills">
+<table x="850" y="110" name="obtained_skills">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>

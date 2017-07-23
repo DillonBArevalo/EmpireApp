@@ -29,7 +29,7 @@ Condition.create!(name: "Shock", effect_description: "Shock is triggered by any 
 
 # Character Classes
 warrior = CharacterClass.create!(name: "Warrior", description: "A Warrior’s primary focus is damage. They usually prefer class 1 and 3 types of weapons (explained in the weapons section), but are known to make good use out of anything they can get their hands on. Warriors use all types of armor as they vary from savage barbarians who get stronger from massive surges of adrenaline upon becoming hurt to tactical powerhouses who subtly shift their position to allow blows to glance off their heavy armor while dishing out massive damage with maximum prejudice. A Warrior’s passive skills primarily focus on improving their damage (though not so much their accuracy), their damage resistance, and modifying their energy. Their active class skills include such things as incredibly powerful strikes aimed at weapons to disarm, flurries of attacks that have a chance of denying their opponent their next offensive round, and energy manipulation such as sacrificing any defensive allocation to gain additional budget for their offensive allocation.Warriors are recommended to have high Strength and Dexterity.", motto: "The best defense is a good offense!")
-soldier = CharacterClass.create!(name: 'Soldier', description: "A Soldier lives and dies by his shield. Often sporting heavy armor and using a variety of weapons (and not uncommonly being trained in more than one) the Soldier’s true strength is in his shield arm. Preferring defense to offense the Soldier strikes when his opponent is off balance, not leaving the safety of his shield unless he knows he has a solid advantage. Soldiers are almost never surprised and are nearly always prepared to defend themselves. Soldiers range from being loners who do not trust others to watch their backs to being a team based tank, making shield walls and using formations to avoid the perils of being flanked. A Soldier’s passive skills primarily focus on resistance to negative positioning conditions, improved defense, and combat readiness. Soldier active skills include such things as sacrificing offensive rounds to advance with their shield on defensive rounds in order to catch enemies off balance, taking defensive actions to protect party members instead of or in addition to themselves, and transitioning defense points that never ended up being used into attacks in the following round.", motto: "Perhaps the pen is mightier than the sword, perhaps it isn’t. I do not know. What I can tell you, however, is that the shield is mightier than the sword.")
+soldier = CharacterClass.create!(name: 'Soldier', description: "A Soldier lives and dies by their shield. Often sporting heavy armor and using a variety of weapons (and not uncommonly being trained in more than one) the Soldier’s true strength is in their shield arm. Preferring defense to offense the Soldier strikes when their opponent is off balance, not leaving the safety of their shield unless they know they have a solid advantage. Soldiers are almost never surprised and are nearly always prepared to defend themselves. Soldiers range from being loners who do not trust others to watch their backs to being a team based tank, making shield walls and using formations to avoid the perils of being flanked. A Soldier’s passive skills primarily focus on resistance to negative positioning conditions, improved defense, and combat readiness. Soldier active skills include such things as sacrificing offensive rounds to advance with their shield on defensive rounds in order to catch enemies off balance, taking defensive actions to protect party members instead of or in addition to themselves, and transitioning defense points that never ended up being used into attacks in the following round.", motto: "Perhaps the pen is mightier than the sword, perhaps it isn’t. I do not know. What I can tell you, however, is that the shield is mightier than the sword.")
 
 # Weapon Types
 sword = WeaponType.create!(name: "Sword")
@@ -106,7 +106,149 @@ damage_types.each_with_index do |type, idx|
 end
 
 # Class Skills
+warrior.skills.create!(base_class_skill: true, display_description: true, name: "Always Swinging", description: "If the Warrior uses more energy in their offensive round than in their defensive round, they gain extra energy from their pool to spend on their offensive round. +1 energy at every 10th Skill Points Invested.")
+warrior.skills.create!(base_class_skill: true, display_description: true, name: "Thrill of the Fight", description: "When outnumbered (engaged in melee combat with more than one combatant), the Warrior multiplies their bonus from Always Swinging by the number of targets they face. Doesn’t increase pool size. +100 percent per enemy when outnumbered.")
 
+aggression = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: 0, name: "Aggression", description: "Base Damage increase for a specified weapon class, levels are class independent. +1 per level.", ranks_available: 8, damage_boost: 1)
+[1, 3, 5, 7, 9, 11, 13, 15].each_with_index do |cost, idx|
+  aggression.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+wild_strikes = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: 0, name: "Wild Strikes", description: "Damage dice size increase for a specified weapon class, levels are class independent. +d2 per level.", ranks_available: 7, damage_die_boost: 2)
+[2, 3, 5, 8, 13, 21, 34].each_with_index do |cost, idx|
+  wild_strikes.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+a_rush = warrior.skills.create!(base_class_skill: false, passive: true, display_description: true, name: "Adrenaline Rush", description: "If the Warrior takes minor injuries (damage without status effect; status effect cancels), they gain a stack of Adrenaline Rush. +2 Energy Budget/+2 Base Damage per stack per level,", ranks_available: 5)
+[5,8,13,21, 34].each_with_index do |cost, idx|
+  a_rush.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+b_s = warrior.skills.create!(base_class_skill: false, passive: true, display_description: true, name: "Battle Sense", description: "If the Warrior is actively engaged with enemies in melee range but out of their line of vision, they may still apply dodge and Glancing Blows defense against attacks from those enemies.", ranks_available: 1)
+b_s.skill_costs.create!(rank: 1, cost: 20)
+
+s_a_t_c_r = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, name: "Swift as the Coursing River", description: "Gain additional attacks at the lowest achieved cost for the given weapon (that is, apply all other skill bonuses). +1 attack possible per level.", ranks_available: 2, bonus_attacks: 1)
+[30, 60].each_with_index do |cost, idx|
+  s_a_t_c_r.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+p_p = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, name: "Power Proficiency", description: "Class 1 Weapons become more effective in the hands of a skilled Warrior. +1 Base Accuracy/+1 Base Damage per level.", ranks_available: 6, tactical_maneuver_dex_bonus: false, is_weapon_boost: true, weapon_class: 1, damage_boost: 1, accuracy_boost: 1)
+[1,3,5,7,9,11].each_with_index do |cost, idx|
+  p_p.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+f_r = warrior.skills.create!(base_class_skill: false, passive: true, display_description: true, name: "Final Rush", description: "If a Warrior with Final Rush is damaged such that they would normally die (unless the wound actively inhibits their action, such as spinal, brain or tendon damage) the Warrior is allowed 2 extra cycles of combat before they drop.", ranks_available: 1)
+[20].each_with_index do |cost, idx|
+  f_r.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+l_r = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, name: "Lightning Reflexes", description: "A Warrior adds his Dex Dice to a Tactical Maneuver check made that would result in a Jump Round.", ranks_available: 1, tactical_maneuver_dex_bonus: true)
+[20].each_with_index do |cost, idx|
+  l_r.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+m_g = warrior.skills.create!(base_class_skill: false, display_description: true, name: "Meat Grinder", description: "On killing an enemy, gain a certain amount of energy into the budget from the pool. This energy can be used to attack the enemy directly behind the dead one. Automatic step forward. +50 percent of previous attack, +50 percent to Engage check.", ranks_available: 1)
+[10].each_with_index do |cost, idx|
+  m_g.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s = warrior.skills.create!(base_class_skill: false, display_description: true, name: "Steamroll", description: "Use 100 percent of round budget in offense to unleash an extra attack at normal cost. If none of the attacks end in defeat for the Warrior, the defender cannot allocate points to their next offensive round.", ranks_available: 1)
+[20].each_with_index do |cost, idx|
+  s.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+b = warrior.skills.create!(base_class_skill: false, display_description: true, name: "Backlash", description: "Upon taking any number of attacks which don’t apply a status effect, the Warrior may unleash a single attack at half again the energy expended during their next offensive round.", ranks_available: 1)
+[25].each_with_index do |cost, idx|
+  b.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+c = warrior.skills.create!(base_class_skill: false, display_description: true, name: "CHAAAARGE!", description: "If the Warrior sprints at maximum speed during their active movement round they may use their entire energy budget in a single attack at half again damage following a successful Engage Check (with a +4 bonus to the TM). Following the attack, the Warrior may make another TM check at +2 to move into their opponent’s square, putting the opponent Off-Balance with a Clear Victory, and knocking them Prone with Strong or Better (use the same margins as in the Jump round).", ranks_available: 1)
+[50].each_with_index do |cost, idx|
+  c.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+m_f = warrior.skills.create!(base_class_skill: false, display_description: true, name: "Measured Ferocity", description: "The Warrior takes a reduction of 2 to his Energy Budget for the next three cycles but gains +4 damage to any attacks made on the fourth cycle (does not stack with itself). The second and third tiers of this skill reduce the number of reduced energy cycles by 1 each upgrade. The final level makes the damage buff last for two cycles.", ranks_available: 4)
+[5, 10, 10, 30].each_with_index do |cost, idx|
+  m_f.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+soldier.skills.create!(base_class_skill: true, display_description: true, name: "Master of Defense", description: "If the Soldier uses more energy in their defensive round than in their offensive round, they gain extra energy from their pool to spend on their defensive round. + 1 energy at every 10th point in the Soldier class.")
+soldier.skills.create!(base_class_skill: true, display_description: true, name: "Firm Footing", description: "The Soldier is harder to knock off balance or knock prone. This does not affect their mobility in combat. +1 to defense against the Off Balance and Prone conditions (Margin of Overwhelming Victory and damage conditions) per 10 skill points.")
+
+s_f = soldier.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Shield Fighter", description: "Soldiers are more effective with shields than anyone else. They gain a flat bonus when defending with a shield. +1 Base Defense per level", ranks_available: 8, is_weapon_boost: true, weapon_class: shields.id, defense_boost: 1)
+[1,3,5,7,9,11,13,15].each_with_index do |cost, idx|
+  s_f.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+b_b = soldier.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Better Blocker", description: "Increasing dice size by d2 for blocking with a shield per level.", ranks_available: 7, defense_die_boost: 2)
+[2,4,6,8, 10, 12, 14].each_with_index do |cost, idx|
+  b_b.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s_w = soldier.skills.create!(base_class_skill: false, display_description: true, passive: true, name: "Shield Wielder", description: "Shield bashes and punches can be executed without canceling the ability for the shield to block in the coming defensive round. Instead, reduce the energy mod on the subsequent defense with the shield by 0.25.", ranks_available: 1)
+[15].each_with_index do |cost, idx|
+  s_w.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+w_o_f = soldier.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Wall of Force", description: "Adds 0.5 Energy modifier to bashing on a wielded shield.", ranks_available: 1, is_weapon_boost: true, weapon_class: shields.id, attack_energy_mod_boost: 0.5)
+[30].each_with_index do |cost, idx|
+  w_o_f.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+a = soldier.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Armored", description: "Soldiers have a passive bonus to their armor’s defense. This only applies to attacks within their field of vision. +2 Passive Defense per level.", ranks_available: 8, armor_defense_boost: 2)
+[2,4,6,8,10,12,14,16].each_with_index do |cost, idx|
+  a.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+pha = soldier.skills.create!(base_class_skill: false, display_description: true, passive: true, name: "Phalanx", description: "(Group Skill) If at least two Soldiers in a line with Phalanx are next to each other they both gain a bonus to their shield defense. Does not defend against bull rush checks. +2 Base Defense per adjacent soldier (max 2) per level.", ranks_available: 5)
+[3,5,8,13,21].each_with_index do |cost, idx|
+  pha.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+d_t = soldier.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Defensive Training", description: "Soldier gains additional blocks at the lowest achieved cost for the given equipment (that is, apply all other skill bonuses), limited to their field of vision. +1 block per weapon per cycle.", ranks_available: 2, bonus_blocks: 1)
+[30, 60].each_with_index do |cost, idx|
+  d_t.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+w_f_t_r_m = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Wait for the Right Moment", description: "If a Soldier spends 3/4 or more of their energy budget in their defensive round, they get a bonus to their chance to inflict positioning errors upon their opponent. Moves Off Balance trigger to Strong then Clear victory.", ranks_available: 2)
+[20, 50].each_with_index do |cost, idx|
+  w_f_t_r_m.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s_i_t_r_m = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Strike in the Right Moment", description: "If a Soldier using Wait for the Right Moment inflicts a positioning error upon their opponent, they may strike a single blow on their offensive round with a bonus of half the energy used in Wait for the Right Moment.", ranks_available: 1)
+[20].each_with_index do |cost, idx|
+  s_i_t_r_m.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+g = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Guardian", description: "A Soldier with Guardian may use one or more of their blocks for an adjacent ally, though the ally and striking opponent must be in the soldier’s field of vision and be adjacent (they get to choose during their defensive round to whom their blocks are allocated, though each piece of equipment may only be applied to one character).", ranks_available: 1)
+[15].each_with_index do |cost, idx|
+  g.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+b = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Bulwark", description: "Soldier hunkers down, cannot move, and uses his shield to fend off projectiles. Bulwark gives a bonus to defense against physical attack as well, but all energy must be allocated to the defensive round to use Bulwark. Base +10 percent of active defense to passive defense as a bonus, double bonus against projectiles, each level gains +5 percent additional bonus", ranks_available: 6)
+[5,8,13,21,34,55].each_with_index do |cost, idx|
+  b.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+t = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Testudo", description: "You may move one square with Bulwark active during each Movement Round, and can move as one with allied Soldiers with Testudo. Successful TMs result in Jump-margin Shield Bash against the opponent and pushes the opponent back a square.", ranks_available: 1)
+[20].each_with_index do |cost, idx|
+  t.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+k_h_w_h_d = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Kick Him While He’s Down (KHWHD)", description: "If an opponent is off balance or prone the a Soldier with this skill may make an attack at a flat reduced accuracy (-10, -7, -4, -1 after rolling and allocating (though the choice must be made before rolling)) for, if the attack succeeds, a further MoV shift in their favor in addition to the OB/Prone status.", ranks_available: 5)
+[25, 10, 5, 5].each_with_index do |cost, idx|
+  k_h_w_h_d.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+f = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Followup", description: "A Soldier may make an attack with their other hand in addition to a shield bash in one offensive round (using at maximum half of the energy put into the bash). Limited to One-Handed Class 1,2, 7 and 8 weapons. +10 percent energy from bash into the next attack. This can be paired with KHWHD", ranks_available: 5)
+[2,4,6,8,10].each_with_index do |cost, idx|
+  f.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+c_t = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Changing Tides", description: "The Soldier modifies his energy budget for the next four cycles. Cycle 1: -4, Cycle 2: -2, Cycle 3: +2, Cycle 4: +4 (does not stack with itself). Upgrades scale as follows: the first upgrade removes cycle 1, the second adds an additional cycle at the end with +6 energy", ranks_available: 3)
+[5, 10, 30].each_with_index do |cost, idx|
+  c_t.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
 
 # Weapon Skills
 
