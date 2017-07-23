@@ -284,7 +284,7 @@ s = class1.skills.create!(base_class_skill: false, display_description: false, n
 end
 
 s_s = class1.skills.create!(base_class_skill: false, display_description: false, name: "Skilled Striker", description: "The cost for additional attacks with Class 1 weapons is reduced by 2 percent per tier (ex: 35 percent becomes 33 percent).", ranks_available: 3, attack_cost_reduction: 2, is_weapon_boost: true, weapon_class: class1.id)
-[10, 20, 30]..each_with_index do |cost, idx|
+[10, 20, 30].each_with_index do |cost, idx|
   s_s.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
@@ -300,7 +300,7 @@ par = class2.skills.create!(base_class_skill: false, display_description: false,
   par.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-d_t = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Defensive Training", description: "Gain extra blocks with Class 2 weapons at that weapon’s multiple block cost. +1 block per level ", ranks_available: 2, is_weapon_boost: true, weapon_class: class2.id bonus_blocks: 1)
+d_t = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Defensive Training", description: "Gain extra blocks with Class 2 weapons at that weapon’s multiple block cost. +1 block per level ", ranks_available: 2, is_weapon_boost: true, weapon_class: class2.id, bonus_blocks: 1)
 [20, 40].each_with_index do |cost, idx|
   d_t.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
@@ -337,7 +337,7 @@ end
 
 
 
-d_t = shields.skills.create!(base_class_skill: false, display_description: false, name: "Defensive Training", description: "Gain extra blocks with shields at that shield's multiple block cost. +1 block per level ", ranks_available: 2, is_weapon_boost: true, weapon_class: shields.id bonus_blocks: 1)
+d_t = shields.skills.create!(base_class_skill: false, display_description: false, name: "Defensive Training", description: "Gain extra blocks with shields at that shield's multiple block cost. +1 block per level ", ranks_available: 2, is_weapon_boost: true, weapon_class: shields.id, bonus_blocks: 1)
 [20, 40].each_with_index do |cost, idx|
   d_t.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
