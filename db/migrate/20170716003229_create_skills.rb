@@ -8,7 +8,7 @@ class CreateSkills < ActiveRecord::Migration[5.0]
       t.text :description
       t.boolean :passive, default: false
       t.boolean :tactical_maneuver_dex_bonus, default: false
-      t.boolean :is_weapon_boost
+      t.boolean :is_weapon_boost, default: false
       t.integer :weapon_class
       t.integer :ranks_available, default: 0
       t.integer :damage_boost, default: 0
@@ -20,6 +20,8 @@ class CreateSkills < ActiveRecord::Migration[5.0]
       t.integer :bonus_attacks, default: 0
       t.integer :bonus_blocks, default: 0
       t.decimal :attack_energy_mod_boost, default: 0
+      t.integer :attack_cost_reduction, default: 0
+      t.integer :defense_cost_reduction, default: 0
 
       t.timestamps
     end

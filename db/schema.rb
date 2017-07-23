@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.decimal  "energy_modifier"
     t.integer  "die_number"
     t.integer  "die_size"
+    t.integer  "attack_bonus",           default: 0
     t.integer  "damage_dice"
     t.integer  "damage_die_size"
     t.integer  "strength_damage_bonus"
@@ -72,6 +73,7 @@ ActiveRecord::Schema.define(version: 20170716043007) do
   create_table "character_classes", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
+    t.string   "motto"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -201,7 +203,10 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.integer  "skillable_id"
     t.string   "name"
     t.text     "description"
+    t.boolean  "passive",                     default: false
     t.boolean  "tactical_maneuver_dex_bonus", default: false
+    t.boolean  "is_weapon_boost",             default: false
+    t.integer  "weapon_class"
     t.integer  "ranks_available",             default: 0
     t.integer  "damage_boost",                default: 0
     t.integer  "damage_die_boost",            default: 0
@@ -211,6 +216,9 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.integer  "armor_defense_boost",         default: 0
     t.integer  "bonus_attacks",               default: 0
     t.integer  "bonus_blocks",                default: 0
+    t.decimal  "attack_energy_mod_boost",     default: "0.0"
+    t.integer  "attack_cost_reduction",       default: 0
+    t.integer  "defense_cost_reduction",      default: 0
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
     t.index ["skillable_type", "skillable_id"], name: "index_skills_on_skillable_type_and_skillable_id", using: :btree
@@ -259,8 +267,9 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.integer  "extra_attack_cost"
     t.integer  "extra_block_cost"
     t.integer  "hands_used"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.decimal  "dodge_energy_mod_penalty", default: "0.0"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.index ["user_id"], name: "index_weapons_on_user_id", using: :btree
     t.index ["weapon_type_id"], name: "index_weapons_on_weapon_type_id", using: :btree
   end

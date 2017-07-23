@@ -251,4 +251,98 @@ c_t = soldier.skills.create!(base_class_skill: false, display_description: true,
 end
 
 # Weapon Skills
+class1.skills.create!(base_class_skill: true, display_description: false, passive: true, name: "Bring the Hurt", description: "For every ten skill points spent on Class 1 weapon skills, all Class 1 weapons gain +2 to damage.", damage_boost: 2)
 
+p_a = class1.skills.create!(base_class_skill: false, display_description: true, name: "Power Attack", description: "Invest more points in offense than defense and gain bonus damage on your attack. If Power Attack is used it must be the only attack in that offensive round. +1 base damage per level.", ranks_available: 10)
+[1,1,2,3,5,8,13,21,34,55].each_with_index do |cost, idx|
+  p_a.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s = class1.skills.create!(base_class_skill: false, display_description: true, name: "Sweep", description: "Low angled attack made to knock out the legs. Different margins of victory mean different levels of debuffs from off balance to prone. 1/2 damage on successful attack, Strong victory causes Off Balance, Overwhelming causes Prone. Can’t be used in successive offensive rounds (note that it can be used multiple times within one round).", ranks_available: 1)
+[15].each_with_index do |cost, idx|
+  s.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+o = class1.skills.create!(base_class_skill: false, display_description: true, name: "Overhead", description: "All opponents gain an accuracy bonus on you during your next defensive round. Deal significantly improved damage and gain a bonus against armor for the hit. Must be used with Power Attack. +25 percent accuracy for enemies, +50 percent total damage before DR.", ranks_available: 1)
+[15].each_with_index do |cost, idx|
+  o.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s_u = class1.skills.create!(base_class_skill: false, display_description: true, name: "Step Up", description: "Used with Power Attack and/or Overhead: Take a step forward making an Engage check (Opponent can respond with a step back, if able, by making a Disengage check) and gain a bonus to damage on a power attack. +100 percent damage, put Off Balance in next defensive round.", ranks_available: 1)
+[20].each_with_index do |cost, idx|
+  s_u.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+d_t = class1.skills.create!(base_class_skill: false, display_description: false, name: "Defensive Training", description: "Gain extra blocks with Class 1 weapons at that weapon’s multiple block cost. (note, Defensive training and Swift do not transfer between classes (not that any skills do…)) +1 block per level.", ranks_available: 2, is_weapon_boost: true, weapon_class: class1.id, bonus_blocks: 1)
+[30, 50].each_with_index do |cost, idx|
+  d_t.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s = class1.skills.create!(base_class_skill: false, display_description: false, name: "Swift", description: "Gain an additional attack with Class 1 weapons at that weapon’s multiple attack cost.", ranks_available: 1, is_weapon_boost: true, weapon_class: class1.id, bonus_attacks: 1)
+[20].each_with_index do |cost, idx|
+  s.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s_s = class1.skills.create!(base_class_skill: false, display_description: false, name: "Skilled Striker", description: "The cost for additional attacks with Class 1 weapons is reduced by 2 percent per tier (ex: 35 percent becomes 33 percent).", ranks_available: 3, attack_cost_reduction: 2, is_weapon_boost: true, weapon_class: class1.id)
+[10, 20, 30]..each_with_index do |cost, idx|
+  s_s.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s_b = class1.skills.create!(base_class_skill: false, display_description: false, name: "Skilled Blocker", description: "The cost for additional blocks with Class 1 weapons is reduced by 2 percent per tier (ex: 35 percent becomes 33 percent).", ranks_available: 3, defense_cost_reduction: 2, is_weapon_boost: true, weapon_class: class1.id)
+[10, 20, 30].each_with_index do |cost, idx|
+  s_b.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+class2.skills.create!(base_class_skill: true, display_description: false, name: "Balanced Fighter", description: "For every 10 points spent in Class 2 weapons, gain +1 to each attack and defense.", accuracy_boost: 1, defense_boost: 1)
+
+par = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Parry", description: "Gain a bonus to defense with a Class 2 weapon. +1 to base defense per level", ranks_available: 7, defense_boost: 1, is_weapon_boost: true, weapon_class: class2.id)
+[3,5,8,13,21,34,55].each_with_index do |cost, idx|
+  par.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+d_t = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Defensive Training", description: "Gain extra blocks with Class 2 weapons at that weapon’s multiple block cost. +1 block per level ", ranks_available: 2, is_weapon_boost: true, weapon_class: class2.id bonus_blocks: 1)
+[20, 40].each_with_index do |cost, idx|
+  d_t.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+rip = class2.skills.create!(base_class_skill: false, display_description: true, name: "Riposte", description: "Following a successful block of Clear or higher MoV, Attacks with a Class 2 weapon get a bonus to attack. Clear grants +25 percent next attack total, Strong +50 percent, Overwhelming +100 percent", ranks_available: 1)
+[25].each_with_index do |cost, idx|
+  rip.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+pre = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Precision", description: "Bonus to attack with Class 2 weapons. +1 base attack per level", ranks_available: 9, is_weapon_boost: true, weapon_class: class2.id)
+[1,2,3,5,8,13,21,34,55].each_with_index do |cost, idx|
+  pre.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Swift", description: "Gain additional attacks with Class 2 weapons at that weapon’s multiple attack cost. +1 attack per level.", ranks_available: 2, bonus_attacks: 1, is_weapon_boost: true, weapon_class: class2.id)
+[30, 60].each_with_index do |cost, idx|
+  s.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s_s = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Skilled Striker", description: "The cost for additional attacks with Class 2 weapons is reduced by 3 percent per tier (ex: 25 percent becomes 22 percent).", ranks_available: 3,  attack_cost_reduction: 3, is_weapon_boost: true, weapon_class: class2.id)
+[10, 20, 30].each_with_index do |cost, idx|
+  s_s.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s_b = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Skilled Blocker", description: "The cost for additional blocks with Class 2 weapons is reduced by 3 percent per tier (ex: 25 percent becomes 22 percent).", ranks_available: 3, defense_cost_reduction: 2, is_weapon_boost: true, weapon_class: class2.id)
+[10, 20, 30].each_with_index do |cost, idx|
+  s_b.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+l_s = class2.skills.create!(base_class_skill: false, display_description: true, name: "Leap Strike", description: "A quick leap forward to hopefully catch your opponent by surprise. Opponent must make a reflex check in addition to a block check. If the reflex check fails the block is drastically weakened by 50 percent, if the reflex check is made, your accuracy is decreased by 50 percent. Begins at DEXx5, decreases by one per additional level.")
+[4,8,16,32].each_with_index do |cost, idx|
+  l_s.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+
+
+d_t = shields.skills.create!(base_class_skill: false, display_description: false, name: "Defensive Training", description: "Gain extra blocks with shields at that shield's multiple block cost. +1 block per level ", ranks_available: 2, is_weapon_boost: true, weapon_class: shields.id bonus_blocks: 1)
+[20, 40].each_with_index do |cost, idx|
+  d_t.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+s_b = shields.skills.create!(base_class_skill: false, display_description: false, name: "Skilled Blocker", description: "The cost for additional blocks with shields is reduced by 3 percent per tier (ex: 25 percent becomes 22 percent).", ranks_available: 3, defense_cost_reduction: 2, is_weapon_boost: true, weapon_class: shields.id)
+[10, 20, 30].each_with_index do |cost, idx|
+  s_b.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
