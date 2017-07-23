@@ -10,6 +10,7 @@ class CreateAttackOptions < ActiveRecord::Migration[5.0]
       t.decimal :energy_modifier
       t.integer :die_number
       t.integer :die_size
+      t.integer :attack_bonus, default: 0
       t.integer :damage_dice
       t.integer :damage_die_size
       t.integer :strength_damage_bonus

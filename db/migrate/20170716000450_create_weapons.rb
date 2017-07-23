@@ -12,6 +12,7 @@ class CreateWeapons < ActiveRecord::Migration[5.0]
       t.integer :extra_attack_cost
       t.integer :extra_block_cost
       t.integer :hands_used
+      t.decimal :dodge_energy_mod_penalty, default: 0
 
       t.timestamps
     end

@@ -91,6 +91,9 @@
 <row name="hands_used" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="dodge_energy_mod_penalty" null="1" autoincrement="0">
+<datatype>DECIMAL</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -333,6 +336,9 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="die_size" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="attack_bonus" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="damage_dice" null="1" autoincrement="0">

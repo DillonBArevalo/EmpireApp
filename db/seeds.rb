@@ -39,10 +39,74 @@ axe = WeaponType.create!(name: 'Axe')
 club = WeaponType.create!(name: 'Club')
 pick = WeaponType.create!(name: 'War pick')
 
-# Weapons
-battle_axe = Weapon.create!(user_id: core_user.id, weapon_type_id: axe.id, name: 'Battle Axe', description: 'A large, 2 handed axe with heavy cutting power and good reach. A Dane Axe is a good example.', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2)
-war_pick = Weapon.create!(user_id: core_user.id, weapon_type_id: pick.id, name: 'War Pick', description: 'A large, 2 handed haft with a spike protruding from one side at the end. Many war hammers feature such a pick.', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 35, hands_used: 2)
+# Weapons and attack options
+battle_axe = Weapon.create!(user_id: core_user.id, weapon_type_id: axe.id, name: 'Battle Axe', description: 'A large, 2 handed axe with heavy cutting power and good reach. A Dane Axe is a good example.', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)
+WeaponClassesWeapon.create!(weapon_class_id: class1.id, weapon_id: battle_axe.id)
+b_a_attack1 = AttackOption.create!(name: 'Chop', weapon_id: battle_axe.id, damage_type_id: bludgeoning_slashing.id, strength_dice: 2, energy_modifier: 2, die_number: 1, die_size: 8, damage_dice: 1, damage_die_size: 6, strength_damage_bonus: 2, flat_damage_bonus: 8)
+AttackOptionsCondition.create!(attack_option_id: b_a_attack1.id, condition_id: wounded.id, threshold: 15)
+AttackOptionsCondition.create!(attack_option_id: b_a_attack1.id, condition_id: severed_tendon.id, threshold: 30)
+
+war_pick = Weapon.create!(user_id: core_user.id, weapon_type_id: pick.id, name: 'War Pick', description: 'A large, 2 handed haft with a spike protruding from one side at the end. Many war hammers feature such a pick.', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 35, hands_used: 2, dodge_energy_mod_penalty: 0.5)
+WeaponClassesWeapon.create!(weapon_class_id: class1.id, weapon_id: war_pick.id)
+w_p_attack1 = AttackOption.create!(name: 'Impale', weapon_id: war_pick.id, damage_type_id: bludgeoning_piercing.id, strength_dice: 2, energy_modifier: 1.5, die_number: 1, die_size: 8, damage_dice: 1, damage_die_size: 10, strength_damage_bonus: 2, flat_damage_bonus: 15)
+AttackOptionsCondition.create!(attack_option_id: w_p_attack1.id, condition_id: off_balance.id, threshold: 20)
+AttackOptionsCondition.create!(attack_option_id: w_p_attack1.id, condition_id: bleeding.id, threshold: 30)
+
 falchion = Weapon.create!(user_id: core_user.id, weapon_type_id: sword.id, name: 'falchion', description: 'A medium length, slightly curved, broad bladed, heavy sword meant for brutal chops that can cleave through armor and sever limbs.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 27, hands_used: 1)
+WeaponClassesWeapon.create!(weapon_class_id: class1.id, weapon_id: falchion.id)
+f_attack1 = AttackOption.create!(name: 'Chop', weapon_id: falchion.id, damage_type_id: bludgeoning_slashing.id, strength_dice: 1, dexterity_dice: 1, energy_modifier: 1.5, die_number: 1, die_size: 8, damage_dice: 1, damage_die_size: 8, strength_damage_bonus: 2, flat_damage_bonus: 12)
+AttackOptionsCondition.create!(attack_option_id: f_attack1.id, condition_id: wounded.id, threshold: 12)
+AttackOptionsCondition.create!(attack_option_id: f_attack1.id, condition_id: severed_tendon.id, threshold: 25)
+
 hand_axe = Weapon.create!(user_id: core_user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)
+WeaponClassesWeapon.create!(weapon_class_id: class2.id, weapon_id: hand_axe.id)
+h_a_attack1 = AttackOption.create!(name: 'Chop', weapon_id: hand_axe.id, damage_type_id: slashing.id, strength_dice: 1, dexterity_dice: 1, energy_modifier: 2, die_number: 1, die_size: 10, damage_dice: 1, damage_die_size: 6, strength_damage_bonus: 4, dexterity_damage_bonus: 6, flat_damage_bonus: 8)
+AttackOptionsCondition.create!(attack_option_id: h_a_attack1.id, condition_id: bleeding.id, threshold: 12)
+AttackOptionsCondition.create!(attack_option_id: h_a_attack1.id, condition_id: wounded.id, threshold: 20)
+
 mace = Weapon.create!(user_id: core_user.id, weapon_type_id: club.id, name: 'Mace', description: 'A metal weight on the end of a handle maces come in many shapes and sizes. They all specialize in dealing massive impact damage with a head heavy, powerful strike.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 35, extra_attack_cost: 30, hands_used: 1)
-side_sword = Weapon.create!(user_id: core_user.id, weapon_type_id: sword.id, name: 'Side Sword', description: 'A well balanced, straight, tapering sword. Fairly thin and mobile it can both cut and stab fairly well but does not excel in any specific category.', defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 8, defense_energy_modifier: 1.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)
+WeaponClassesWeapon.create!(weapon_class_id: class1.id, weapon_id: mace.id)
+m_attack1 = AttackOption.create!(name: 'Smash', weapon_id: mace.id, damage_type_id: bludgeoning.id, strength_dice: 2, energy_modifier: 1.5, die_number: 1, die_size: 4, damage_dice: 1, damage_die_size: 4, strength_damage_bonus: 2, flat_damage_bonus: 15)
+AttackOptionsCondition.create!(attack_option_id: m_attack1.id, condition_id: off_balance.id, threshold: 20)
+AttackOptionsCondition.create!(attack_option_id: m_attack1.id, condition_id: broken_bone.id, threshold: 25)
+
+side_sword = Weapon.create!(user_id: core_user.id, weapon_type_id: sword.id, name: 'Side Sword', description: 'A well balanced, straight, tapering sword. Fairly thin and mobile it can both cut and stab fairly well but does not excel in any specific category. It does currently have the best defense of any weapon (excepting shields, which are currently weapons) and is the only weapon with two attack options right now.', defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 8, defense_energy_modifier: 1.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)
+WeaponClassesWeapon.create!(weapon_class_id: class2.id, weapon_id: side_sword.id)
+s_s_attack1 = AttackOption.create!(name: 'Cut', weapon_id: side_sword.id, damage_type_id: slashing.id, dexterity_dice: 2, energy_modifier: 2, die_number: 1, die_size: 6, damage_dice: 1, damage_die_size: 4, strength_damage_bonus: 4, dexterity_damage_bonus: 6, flat_damage_bonus: 8)
+AttackOptionsCondition.create!(attack_option_id: s_s_attack1.id, condition_id: bleeding.id, threshold: 8)
+AttackOptionsCondition.create!(attack_option_id: s_s_attack1.id, condition_id: wounded.id, threshold: 15)
+
+s_s_attack2 = AttackOption.create!(name: 'Stab', weapon_id: side_sword.id, damage_type_id: piercing.id, dexterity_dice: 2, energy_modifier: 2, die_number: 1, die_size: 6, damage_dice: 1, damage_die_size: 6, strength_damage_bonus: 6, dexterity_damage_bonus: 4, flat_damage_bonus: 4)
+AttackOptionsCondition.create!(attack_option_id: s_s_attack2.id, condition_id: bleeding.id, threshold: 12)
+AttackOptionsCondition.create!(attack_option_id: s_s_attack2.id, condition_id: wounded.id, threshold: 20)
+
+# Shields
+light_shield = Weapon.create!(user_id: core_user.id, weapon_type_id: light_shield.id, name: 'Light Shield', description: 'A small, nimble shield that responds well to energy input but has bad base defense numbers.', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 4, defense_energy_modifier: 2, extra_block_cost: 30, hands_used: 1)
+WeaponClassesWeapon.create!(weapon_class_id: shields.id, weapon_id: light_shield.id)
+AttackOption.create!(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone.", weapon_id: light_shield.id, damage_type_id: bludgeoning.id, energy_modifier: 1.5, die_number: 1, die_size: 4, attack_bonus: 10, damage_dice: 0, damage_die_size: 0, strength_damage_bonus: 0, dexterity_damage_bonus: 0, flat_damage_bonus: 0)
+
+heavy_shield = Weapon.create!(user_id: core_user.id, weapon_type_id: heavy_shield.id, name: 'War Pick', description: 'A large shield with excellent coverage that responds poorly to energy input but has good base defense numbers.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 15, defense_energy_modifier: 1.5, extra_block_cost: 25, hands_used: 1)
+WeaponClassesWeapon.create!(weapon_class_id: shields.id, weapon_id: heavy_shield.id)
+AttackOption.create!(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone.", weapon_id: heavy_shield.id, damage_type_id: bludgeoning.id, energy_modifier: 1, die_number: 1, die_size: 6, attack_bonus: 15, damage_dice: 0, damage_die_size: 0, strength_damage_bonus: 0, dexterity_damage_bonus: 0, flat_damage_bonus: 0)
+
+# Armor
+leather_armor = Armor.create!(user_id: core_user.id, name: "Leather Armor", description: "Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won't do much against heavy attacks.", armor_type_id: light_armor.id, passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)
+scale_mail = Armor.create!(user_id: core_user.id, name: "Scale Mail", description: "Small plates of metal that overlap like a dragon's scales. Surprisingly maneuverable for the amount of protection it affords but it's never going to match the truly heavy armors in terms of defensive numbers.", armor_type_id: medium_armor.id, passive_defense_bonus: 15, active_action_reduction: 5, budget_reduction: 4, energy_pool_reduction: 20, dodge_die_size_reduction: 4, dodge_energy_mod_penalty: 0.5)
+plate_mail = Armor.create!(user_id: core_user.id, name: "Full Plate Armor", description: "Classic full plate armor. Covering your entire body with sheets of metal makes you incredibly hard to damage but it does affect both your mobility and your vision. It is tiring and hot to fight in full plate, but the defensive boosts are well worth it.", armor_type_id: heavy_armor.id, passive_defense_bonus: 22, active_action_reduction: 8, budget_reduction: 7, energy_pool_reduction: 35, dodge_die_size_reduction: 6, dodge_energy_mod_penalty: 1)
+
+# DR
+ldr = [3, 1, 0, 2, 0]
+sdr = [8, 6, 4, 5, 2]
+pdr = [12, 11, 8, 9, 5]
+damage_types = [slashing, piercing, bludgeoning, bludgeoning_slashing, bludgeoning_piercing]
+damage_types.each_with_index do |type, idx|
+  DamageResistance.create!(armor_id: leather_armor.id, damage_type_id: type.id, amount: ldr[idx])
+  DamageResistance.create!(armor_id: scale_mail.id, damage_type_id: type.id, amount: sdr[idx])
+  DamageResistance.create!(armor_id: plate_mail.id, damage_type_id: type.id, amount: pdr[idx])
+end
+
+# Class Skills
+
+
+# Weapon Skills
+
