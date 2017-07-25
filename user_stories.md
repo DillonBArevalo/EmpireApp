@@ -4,6 +4,7 @@
 
 ### Completed:
 
+* Create or log into an account
 
 ### Incomplete:
 
@@ -13,7 +14,6 @@
 
 #### MVP:
 
-* Create or log into an account
 * Create an admin account if they have a code for it (ajax it onto the form with a button?)
 * View rules and information about the game pertaining to their character/equipment creation
 * Create a character with basic stats, name, and race
