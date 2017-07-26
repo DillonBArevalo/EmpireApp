@@ -54,13 +54,36 @@ class Character < ApplicationRecord
   end
 
 
-  # def equip_weapon(weapon)
-  #   current_weapons = self.eqiupped_weapons.select {|weapon| weapon.weapon_class.name != 'Shields'}
+# UNNECESSARY?
+  # def obtain_weapon(weapon)
+  #   self.weapons << weapon
   # end
 
-  # def equip_shield(shield)
-
+  # def drop_weapon(weapon)
+  #   self.weapons.delete(weapon)
   # end
+
+  # def obtain_armor(armor)
+  #   self.armors << armor
+  # end
+
+  # def drop_armor(armor)
+  #   self.armors.delete(armor)
+  # end
+
+  def equip_weapon(weapon)
+    remove_weapon
+    add_weapon(weapon)
+  end
+
+  def equip_shield(shield)
+    remove_weapon(true)
+    add_weapon(shield)
+  end
+
+  def equip_armor(armor)
+
+  end
 
   # def obtain_skill(skill)
 
@@ -87,6 +110,10 @@ class Character < ApplicationRecord
 
   # end
 
+  # def class_skills_bonus
+
+  # end
+
   def tactical_maneuver
     "#{self.dexterity} + 1d20"
   end
@@ -99,8 +126,31 @@ class Character < ApplicationRecord
     end
   end
 
+  def free_hands
+    2 - self.equipped_weapons.reduce(0) {|hands,w| hands + w.hands_used}
+  end
 
 private
+
+  def add_weapon(weapon)
+    if free_hands >= weapon.hands_used
+      self.equipped_weapons << weapon
+      true
+    else
+      false
+    end
+  end
+
+  def remove_weapon(shield=false)
+    if shield
+      equipped_shield = self.equipped_weapons.select {|weapon| weapon.is_shield?}[0]
+      self.equipped_weapons.delete(equipped_shield) if equipped_shield
+    else
+      other = self.equipped_weapons.select {|weapon| !weapon.is_shield?}[0]
+      self.equipped_weapons.delete(other) if other
+    end
+  end
+
 
 # Add skills!
   # def attack_dice(attack_option)

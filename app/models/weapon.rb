@@ -18,4 +18,8 @@ class Weapon < ApplicationRecord
   has_many :obtained_weapons
   has_many :inventories, through: :obtained_weapons
 
+
+  def is_shield?
+    !self.weapon_classes.select {|type| type.name == 'Shields'}.empty?
+  end
 end

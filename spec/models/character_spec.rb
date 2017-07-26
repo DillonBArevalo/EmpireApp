@@ -64,6 +64,29 @@ RSpec.describe Character, type: :model do
   end
 
   xdescribe '#obtain_skill' do
+    it 'should return a hash with keys status and messages' do
+      expect(character.obtain_skill(Skill.first).keys).to eq([:status, :messages])
+    end
+
+    it 'should return an array of error strings if it failed (status == false)' do
+      response = character.obtain_skill(Skill.first)
+      expect(response[:status]).to be false
+      expect(response[:messages]).to be_kind_of(Array)
+      expect(response[:messages][0]).to be_kind_of(String)
+    end
+
+    it 'should return the appropriate error messages upon: insufficient skill points, maximum skill level achieved, '
+  end
+
+  # xdescribe '#obtain_armor' do
+
+  # end
+
+  # xdescribe '#obtain_weapon' do
+
+  # end
+
+  xdescribe 'class_skills_bonus' do
 
   end
 
@@ -84,7 +107,45 @@ RSpec.describe Character, type: :model do
     end
   end
 
-  xdescribe '#equip_weapon' do
+  describe '#equip_weapon' do
+    it 'returns false if weapon could not be equipped (not enough hands)' do
+      shields = WeaponClass.new(name: 'Shields')
+      shield = Weapon.new(name: 'Light Shield', description: '', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 4, defense_energy_modifier: 2, extra_block_cost: 30, hands_used: 1)
+      shield.weapon_classes << shields
+      b_axe = Weapon.new(name: 'Battle Axe', description: '', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)
+      character.equip_shield(shield)
+      expect(character.equip_weapon(b_axe)).to be false
+    end
+    it 'adds an equipped weapon to character.equipped_weapons' do
+      b_axe = Weapon.new(name: 'Battle Axe', description: '', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)
+      character.equip_weapon(b_axe)
+      expect(character.equipped_weapons).to include(b_axe)
+    end
+    it 'will remove currently equipped weapon if incompatible (2 non-shields)' do
+      b_axe = Weapon.new(name: 'Battle Axe', description: '', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)
+      character.equip_weapon(b_axe)
+      h_axe = Weapon.new(name: 'Hand Axe', description: "", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)
+      character.equip_weapon(h_axe)
+      expect(character.equipped_weapons).to include(h_axe)
+      expect(character.equipped_weapons.length).to eq(1)
+    end
+  end
+
+  xdescribe '#equip_shield' do
+  end
+
+  describe '#free_hands' do
+    it 'returns the number of free hands a character has' do
+      expect(character.free_hands).to eq(2)
+
+      shield = Weapon.new(hands_used: 1)
+      character.equipped_weapons << shield
+      expect(character.free_hands).to eq(1)
+
+      h_axe = Weapon.new(name: 'Hand Axe', description: "", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)
+      character.equipped_weapons << h_axe
+      expect(character.free_hands).to eq(0)
+    end
   end
 
   xdescribe '#generate_attack_string' do
