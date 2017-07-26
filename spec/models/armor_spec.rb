@@ -31,4 +31,8 @@ RSpec.describe Armor, type: :model do
       it{should have_many :users}
     end
   end
+
+  xdescribe '#dr_string' do
+
+  end
 end
