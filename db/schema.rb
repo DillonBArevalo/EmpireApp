@@ -88,12 +88,13 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.integer  "intelligence"
     t.integer  "wisdom"
     t.integer  "charisma"
-    t.integer  "energy_budget_level_bonus"
-    t.integer  "energy_pool_level_bonus"
-    t.integer  "total_skill_points"
-    t.integer  "available_skill_points"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "energy_budget_level_bonus",     default: 0
+    t.integer  "energy_pool_level_bonus",       default: 0
+    t.integer  "total_skill_points",            default: 0
+    t.integer  "available_skill_points",        default: 0
+    t.integer  "unspent_energy_upgrade_points", default: 0
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.index ["user_id"], name: "index_characters_on_user_id", using: :btree
   end
 
@@ -207,7 +208,7 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.boolean  "tactical_maneuver_dex_bonus", default: false
     t.boolean  "is_weapon_boost",             default: false
     t.integer  "weapon_class"
-    t.integer  "ranks_available",             default: 0
+    t.integer  "ranks_available",             default: 1
     t.integer  "damage_boost",                default: 0
     t.integer  "damage_die_boost",            default: 0
     t.integer  "accuracy_boost",              default: 0
