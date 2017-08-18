@@ -98,7 +98,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1170" y="530" name="characters">
+<table x="1160" y="530" name="characters">
 <row name="creator_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="users" row="id" />
@@ -142,6 +142,9 @@
 <row name="available_skill_points" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="unspent_energy_upgrade_points" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -183,7 +186,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1420" y="230" name="character_classes">
+<table x="1470" y="240" name="character_classes">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -232,7 +235,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1380" y="520" name="obtained_character_classes">
+<table x="1410" y="510" name="obtained_character_classes">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -534,7 +537,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1420" y="80" name="skill_costs">
+<table x="1510" y="40" name="skill_costs">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
