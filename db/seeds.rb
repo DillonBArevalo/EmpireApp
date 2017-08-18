@@ -85,7 +85,7 @@ light_shield = Weapon.create!(user_id: core_user.id, weapon_type_id: light_shiel
 WeaponClassesWeapon.create!(weapon_class_id: shields.id, weapon_id: light_shield.id)
 AttackOption.create!(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone.", weapon_id: light_shield.id, damage_type_id: bludgeoning.id, energy_modifier: 1.5, die_number: 1, die_size: 4, attack_bonus: 10, damage_dice: 0, damage_die_size: 0, strength_damage_bonus: 0, dexterity_damage_bonus: 0, flat_damage_bonus: 0)
 
-heavy_shield = Weapon.create!(user_id: core_user.id, weapon_type_id: heavy_shield.id, name: 'War Pick', description: 'A large shield with excellent coverage that responds poorly to energy input but has good base defense numbers.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 15, defense_energy_modifier: 1.5, extra_block_cost: 25, hands_used: 1)
+heavy_shield = Weapon.create!(user_id: core_user.id, weapon_type_id: heavy_shield.id, name: 'Heavy Shield', description: 'A large shield with excellent coverage that responds poorly to energy input but has good base defense numbers.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 15, defense_energy_modifier: 1.5, extra_block_cost: 25, hands_used: 1)
 WeaponClassesWeapon.create!(weapon_class_id: shields.id, weapon_id: heavy_shield.id)
 AttackOption.create!(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone.", weapon_id: heavy_shield.id, damage_type_id: bludgeoning.id, energy_modifier: 1, die_number: 1, die_size: 6, attack_bonus: 15, damage_dice: 0, damage_die_size: 0, strength_damage_bonus: 0, dexterity_damage_bonus: 0, flat_damage_bonus: 0)
 
@@ -109,14 +109,24 @@ end
 warrior.skills.create!(base_class_skill: true, display_description: true, name: "Always Swinging", description: "If the Warrior uses more energy in their offensive round than in their defensive round, they gain extra energy from their pool to spend on their offensive round. +1 energy at every 10th Skill Points Invested.")
 warrior.skills.create!(base_class_skill: true, display_description: true, name: "Thrill of the Fight", description: "When outnumbered (engaged in melee combat with more than one combatant), the Warrior multiplies their bonus from Always Swinging by the number of targets they face. Doesn’t increase pool size. +100 percent per enemy when outnumbered.")
 
-aggression = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: 0, name: "Aggression", description: "Base Damage increase for a specified weapon class, levels are class independent. +1 per level.", ranks_available: 8, damage_boost: 1)
+aggression1 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class1.id, name: "Aggression (Class 1)", description: "Base Damage increase for a specified weapon class (Class 1). +1 per level.", ranks_available: 8, damage_boost: 1)
 [1, 3, 5, 7, 9, 11, 13, 15].each_with_index do |cost, idx|
-  aggression.skill_costs.create!(rank: (idx + 1), cost: cost)
+  aggression1.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-wild_strikes = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: 0, name: "Wild Strikes", description: "Damage dice size increase for a specified weapon class, levels are class independent. +d2 per level.", ranks_available: 7, damage_die_boost: 2)
+wild_strikes1 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class1.id, name: "Wild Strikes (Class 1)", description: "Damage dice size increase for a specified weapon class (Class 1). +d2 per level.", ranks_available: 7, damage_die_boost: 2)
 [2, 3, 5, 8, 13, 21, 34].each_with_index do |cost, idx|
-  wild_strikes.skill_costs.create!(rank: (idx + 1), cost: cost)
+  wild_strikes1.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+aggression2 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class2.id, name: "Aggression (Class 2)", description: "Base Damage increase for a specified weapon class (Class 2). +1 per level.", ranks_available: 8, damage_boost: 1)
+[1, 3, 5, 7, 9, 11, 13, 15].each_with_index do |cost, idx|
+  aggression2.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+wild_strikes2 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class2.id, name: "Wild Strikes (Class 2)", description: "Damage dice size increase for a specified weapon class (Class 2). +d2 per level.", ranks_available: 7, damage_die_boost: 2)
+[2, 3, 5, 8, 13, 21, 34].each_with_index do |cost, idx|
+  wild_strikes2.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
 a_rush = warrior.skills.create!(base_class_skill: false, passive: true, display_description: true, name: "Adrenaline Rush", description: "If the Warrior takes minor injuries (damage without status effect; status effect cancels), they gain a stack of Adrenaline Rush. +2 Energy Budget/+2 Base Damage per stack per level,", ranks_available: 5)

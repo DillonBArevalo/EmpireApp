@@ -23,6 +23,7 @@
 - also have a db of results from fights pointing to characters that competed and results.
 - maybe have a whole statistics resource with searching (ransack?)
 - maybe have some kind of character/equipment liking system?
+- Note that currently equipped weapons are included in inventory!
 
 
 ## skill stat categories:
@@ -47,3 +48,7 @@ A LOT OF THESE DON'T MATTER FOR JUST THE CHARACTER CREATOR. ONLY PASSIVE STAT BO
 - add dependent true to associations? Think through which ones
 - depending on what I want the user page to look like i might have to add more associations to it. Might need things like inventories, weapons used, classes used, etc. stats things
 
+## Random notes:
+
+- decided on adding energy boosts upon getting more skill points, not upon getting more skills!
+- DON'T HAVE A WAY TO TRACK BCS FOR WEAPONS! NEED OBTAINED WEAPON SKILLS TABLE
