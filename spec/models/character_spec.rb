@@ -206,13 +206,19 @@ RSpec.describe Character, type: :model do
     end
   end
 
-  xdescribe '#add_skill_points' do
+  describe '#add_skill_points' do
+    it 'adds to available skill points' do
+      expect{saved_character.add_skill_points(10)}.to change{saved_character.available_skill_points}.from(0).to(10)
+    end
 
+    it 'adds to total skill points' do
+      expect{saved_character.add_skill_points(10)}.to change{saved_character.total_skill_points}.from(0).to(10)
+    end
+
+    it 'adds an appropriate amount of new unspent energy points' do
+      expect{saved_character.add_skill_points(10)}.to change{saved_character.unspent_energy_upgrade_points}.from(0).to(2)
+    end
   end
-
-  # xdescribe 'class_skills_bonus' do
-
-  # end
 
   describe '#tactical_maneuver' do
     it 'adds a d20 to the dex score' do
@@ -221,44 +227,94 @@ RSpec.describe Character, type: :model do
   end
 
   describe '#jump' do
+    let(:character_class){CharacterClass.create(name: 'class', description: 'desc', motto: 'motto')}
+    let(:skill){character_class.skills.create(tactical_maneuver_dex_bonus: true)}
+    let!(:rank){skill.skill_costs.create(rank: 1, cost: 1)}
     it 'gives the same number as #tactical_maneuver without the relevant skill' do
       expect(character.jump).to eq(character.tactical_maneuver)
     end
 
-    xit 'adds a dex die with the relevant skill' do
-      character.obtain_skill(Skill.find_by(name: 'Lightning Reflexes'))
-      expect(character.jump).to eq(character.tactical_maneuver + ' + 1d4')
+    it 'adds a dex die with the relevant skill' do
+      saved_character.add_skill_points(50)
+      saved_character.obtain_character_class(character_class)
+      saved_character.obtain_skill(skill)
+      expect(saved_character.jump).to eq(character.tactical_maneuver + ' + 1d4')
     end
   end
+  describe 'equipping' do
+    let(:shields) {WeaponClass.new(name: 'Shields')}
+    let(:shield) {Weapon.new(name: 'Light Shield', description: 'desc', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 4, defense_energy_modifier: 2, extra_block_cost: 30, hands_used: 1)}
+    let(:shield2) {Weapon.new(name: 'heavy Shield', description: 'desc', defense_die_number: 4, defense_die_size: 4, flat_defense_bonus: 4, defense_energy_modifier: 2, extra_block_cost: 30, hands_used: 1)}
+    let(:b_axe) {Weapon.new(name: 'Battle Axe', description: 'desc', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)}
+    let(:h_axe) {Weapon.new(name: 'Hand Axe', description: 'desc', defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
 
-  describe '#equip_weapon' do
-    it 'returns false if weapon could not be equipped (not enough hands)' do
-      shields = WeaponClass.new(name: 'Shields')
-      shield = Weapon.new(name: 'Light Shield', description: '', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 4, defense_energy_modifier: 2, extra_block_cost: 30, hands_used: 1)
-      shield.weapon_classes << shields
-      b_axe = Weapon.new(name: 'Battle Axe', description: '', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)
-      character.equip_shield(shield)
-      expect(character.equip_weapon(b_axe)).to be false
-    end
-    it 'adds an equipped weapon to character.equipped_weapons' do
-      b_axe = Weapon.new(name: 'Battle Axe', description: '', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)
-      character.equip_weapon(b_axe)
-      expect(character.equipped_weapons).to include(b_axe)
-    end
-    it 'removes currently equipped weapon if incompatible (2 non-shields)' do
-      b_axe = Weapon.new(name: 'Battle Axe', description: '', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)
-      character.equip_weapon(b_axe)
-      h_axe = Weapon.new(name: 'Hand Axe', description: "", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)
-      character.equip_weapon(h_axe)
-      expect(character.equipped_weapons).to include(h_axe)
-      expect(character.equipped_weapons.length).to eq(1)
-    end
-  end
+    xdescribe '#remove_weapon' do
 
-  xdescribe '#equip_shield' do
-  end
+    end
 
-  xdescribe '#equip_armor' do
+    describe '#equip_weapon' do
+      it 'returns false if weapon could not be equipped (not enough hands)' do
+        shield.weapon_classes << shields
+        character.equip_shield(shield)
+        expect(character.equip_weapon(b_axe)).to be false
+      end
+      it 'adds an equipped weapon to character.equipped_weapons' do
+        character.equip_weapon(b_axe)
+        expect(character.equipped_weapons).to include(b_axe)
+      end
+      it 'removes currently equipped weapon if incompatible (2 non-shields)' do
+        character.equip_weapon(b_axe)
+        character.equip_weapon(h_axe)
+        expect(character.equipped_weapons).to include(h_axe)
+        expect(character.equipped_weapons.length).to eq(1)
+      end
+    end
+
+    describe '#equip_shield' do
+        before(:each){shield.weapon_classes << shields}
+      it 'returns false if shield could not be equipped (not enough hands)' do
+        character.equip_weapon(b_axe)
+        expect(character.equip_shield(shield)).to be false
+      end
+      it 'adds an equipped shield to character.equipped_weapons' do
+        character.equip_shield(shield)
+        expect(character.equipped_weapons).to include(shield)
+      end
+      it 'removes currently equipped shield if it exists' do
+        character.equip_shield(shield)
+        character.equip_shield(shield2)
+        expect(character.equipped_weapons).to include(shield2)
+        expect(character.equipped_weapons.length).to eq(1)
+      end
+    end
+
+    describe 'equipping armor' do
+      let(:armor_type) {ArmorType.create(name: 'a-t')}
+      let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: "Leather Armor", description: "Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won't do much against heavy attacks.", passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
+      let(:armor2) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: "Padded Armor", description: "Thick cloth formed into a gambeson. Substantially more protective than no armor, but won't do much against heavy attacks.", passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
+      describe '#remove_armor' do
+        it 'removes armor' do
+          saved_character.equip_armor(armor)
+          expect(saved_character.equipped_armor).to eq armor
+          saved_character.remove_armor
+          expect(saved_character.equipped_armor).to be nil
+        end
+      end
+
+      describe '#equip_armor' do
+        it 'sets a given armor to be that characters equipped armor' do
+          saved_character.equip_armor(armor)
+          expect(saved_character.equipped_armor).to eq armor
+        end
+
+        it 'removes the armor the user was previously wearing' do
+          saved_character.equip_armor(armor)
+          saved_character.remove_armor
+          saved_character.equip_armor(armor2)
+          expect(saved_character.equipped_armor).not_to eq armor
+        end
+      end
+    end
 
   end
 
@@ -300,4 +356,8 @@ RSpec.describe Character, type: :model do
   xdescribe '#generate_defense_string' do
 
   end
+
+  # xdescribe 'class_skills_bonus' do
+
+  # end
 end

@@ -57,18 +57,25 @@ class Character < ApplicationRecord
 
 
 # can unequip and not reequip if fail to eqiup new weapon... fix?
+# DOES NOT PERSIST WITHOUT A SAVE
   def equip_weapon(weapon)
     remove_weapon
     add_weapon(weapon)
   end
 
+# DOES NOT PERSIST WITHOUT A SAVE
   def equip_shield(shield)
     remove_weapon(true)
     add_weapon(shield)
   end
 
-  def equip_armor(armor)
+  def remove_armor
+    self.equipped_armor = nil
+  end
 
+# DOES NOT PERSIST WITHOUT A SAVE
+  def equip_armor(armor)
+    self.equipped_armor = armor
   end
 
   def obtain_character_class(character_class)
@@ -157,6 +164,16 @@ class Character < ApplicationRecord
     self.increment!(:available_skill_points, new_points)
   end
 
+  def remove_weapon(shield=false)
+    if shield
+      equipped_shield = self.equipped_weapons.select {|weapon| weapon.is_shield?}[0]
+      self.equipped_weapons.delete(equipped_shield) if equipped_shield
+    else
+      other = self.equipped_weapons.select {|weapon| !weapon.is_shield?}[0]
+      self.equipped_weapons.delete(other) if other
+    end
+  end
+
 private
 
   def obtain_all_bcs(character_class)
@@ -225,15 +242,6 @@ private
     end
   end
 
-  def remove_weapon(shield=false)
-    if shield
-      equipped_shield = self.equipped_weapons.select {|weapon| weapon.is_shield?}[0]
-      self.equipped_weapons.delete(equipped_shield) if equipped_shield
-    else
-      other = self.equipped_weapons.select {|weapon| !weapon.is_shield?}[0]
-      self.equipped_weapons.delete(other) if other
-    end
-  end
 
 
 # Add skills!
