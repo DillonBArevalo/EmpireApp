@@ -10,7 +10,7 @@ RSpec.describe Character, type: :model do
     it{should have_one :inventory}
     it{should have_many :weapons}
     it{should have_many :armors}
-    it{should have_one :equipped_armor}
+    it{should belong_to :equipped_armor}
     it{should have_many :equipped_weapons}
     it{should have_many :attack_options}
     it{should have_many :class_bcs}

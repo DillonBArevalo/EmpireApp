@@ -5,8 +5,7 @@ class Armor < ApplicationRecord
   has_many :damage_resistances
   # has_many :damage_types, through: :damage_resistances
 
-  has_many :equipped_armors
-  has_many :characters, through: :equipped_armors
+  has_many :characters, foreign_key: :equipped_armor_id
 
   has_many :obtained_armors
   has_many :inventories, through: :obtained_armors

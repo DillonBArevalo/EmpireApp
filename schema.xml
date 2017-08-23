@@ -98,7 +98,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1160" y="530" name="characters">
+<table x="1160" y="540" name="characters">
 <row name="creator_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="users" row="id" />
@@ -145,6 +145,10 @@
 <row name="unspent_energy_upgrade_points" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="equipped_armor_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="armors" row="id" />
+</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -219,22 +223,6 @@
 <part>id</part>
 </key>
 </table>
-<table x="920" y="800" name="equipped_armors">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="character_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="characters" row="id" />
-</row>
-<row name="armor_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="armors" row="id" />
-</row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
 <table x="1410" y="510" name="obtained_character_classes">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
@@ -254,7 +242,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="970" y="640" name="inventories">
+<table x="1000" y="640" name="inventories">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -266,7 +254,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="760" y="570" name="obtained_weapons">
+<table x="780" y="570" name="obtained_weapons">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -282,7 +270,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="760" y="670" name="obtained_armors">
+<table x="780" y="660" name="obtained_armors">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -466,7 +454,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="150" y="740" name="damage_types">
+<table x="150" y="720" name="damage_types">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -480,7 +468,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="150" y="840" name="damage_resistances">
+<table x="150" y="820" name="damage_resistances">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -526,7 +514,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="760" y="890" name="armor_types">
+<table x="760" y="870" name="armor_types">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>

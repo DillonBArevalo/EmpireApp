@@ -19,8 +19,7 @@ class Character < ApplicationRecord
   has_many :obtained_armors, through: :inventory
   has_many :armors, through: :obtained_armors
 
-  has_one :equipped_a, class_name: 'EquippedArmor'
-  has_one :equipped_armor, through: :equipped_a, source: :armor
+  belongs_to :equipped_armor, class_name: 'Armor', optional: true
 
   has_many :equipped_w, class_name: 'EquippedWeapon'
   has_many :equipped_weapons, through: :equipped_w, source: :weapon

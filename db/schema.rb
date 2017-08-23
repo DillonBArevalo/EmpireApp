@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20170716043007) do
 
   create_table "characters", force: :cascade do |t|
     t.integer  "user_id"
+    t.integer  "equipped_armor_id"
     t.string   "name"
     t.text     "description"
     t.integer  "strength"
@@ -95,6 +96,7 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.integer  "unspent_energy_upgrade_points", default: 0
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
+    t.index ["equipped_armor_id"], name: "index_characters_on_equipped_armor_id", using: :btree
     t.index ["user_id"], name: "index_characters_on_user_id", using: :btree
   end
 
@@ -121,15 +123,6 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-  end
-
-  create_table "equipped_armors", force: :cascade do |t|
-    t.integer  "character_id"
-    t.integer  "armor_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.index ["armor_id"], name: "index_equipped_armors_on_armor_id", using: :btree
-    t.index ["character_id"], name: "index_equipped_armors_on_character_id", using: :btree
   end
 
   create_table "equipped_weapons", force: :cascade do |t|

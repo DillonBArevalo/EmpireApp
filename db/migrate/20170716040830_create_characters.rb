@@ -2,6 +2,7 @@ class CreateCharacters < ActiveRecord::Migration[5.0]
   def change
     create_table :characters do |t|
       t.references :user
+      t.references :equipped_armor, references: :armor
       t.string :name
       t.text :description
       t.integer :strength
