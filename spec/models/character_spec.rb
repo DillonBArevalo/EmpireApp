@@ -6,6 +6,7 @@ RSpec.describe Character, type: :model do
     it{should have_many :character_classes}
     it{should have_many :possible_class_skills}
     it{should have_many :improved_weapon_classes}
+    it{should have_many :displaying_skills}
     it{should have_many :skills}
     it{should have_one :inventory}
     it{should have_many :weapons}
@@ -98,7 +99,7 @@ RSpec.describe Character, type: :model do
         saved_character.add_skill_points(5)
         saved_character.obtain_character_class(character_class)
         response = saved_character.obtain_skill(class_skill)
-        expect(response[:messages][0]).to eq("You don't have enough skill points to obtain the next rank of this skill")
+        expect(response[:messages][0]).to eq('You don\'t have enough skill points to obtain the next rank of this skill')
         saved_character.add_skill_points(30)
         saved_character.obtain_skill(class_skill)
         saved_character.obtain_skill(class_skill)
@@ -141,7 +142,7 @@ RSpec.describe Character, type: :model do
 
       it 'notes the affected weapon class on the obtained skill if applicable' do
         saved_character.obtain_skill(class_skill)
-        expect(saved_character.obtained_skills.last.applicable_weapon_class_id).to eq 1
+        expect(saved_character.obtained_skills.find_by(skill_id: class_skill.id).applicable_weapon_class_id).to eq 1
       end
 
       it 'creates a new obtained skill if not obtained yet' do
@@ -169,14 +170,14 @@ RSpec.describe Character, type: :model do
         saved_character.available_skill_points = 4
         response = saved_character.obtain_character_class(character_class)
         expect(response[:status]).to be false
-        expect(response[:messages]).to eq(["test does not have enough available skill points (you have 4) to obtain this class (requires 5)"])
+        expect(response[:messages]).to eq(['test does not have enough available skill points (you have 4) to obtain this class (requires 5)'])
       end
       it 'returns status false with an appropriate message you already have the class' do
         saved_character.available_skill_points = 10
         saved_character.obtain_character_class(character_class)
         response = saved_character.obtain_character_class(character_class)
         expect(response[:status]).to be false
-        expect(response[:messages]).to eq(["test already has the class Ex class"])
+        expect(response[:messages]).to eq(['test already has the class Ex class'])
       end
     end
 
@@ -185,7 +186,7 @@ RSpec.describe Character, type: :model do
         saved_character.available_skill_points = 10
         response = saved_character.obtain_character_class(character_class)
         expect(response[:status]).to be true
-        expect(response[:messages]).to eq(["test has obtained the class Ex class and the associated base class skills!"])
+        expect(response[:messages]).to eq(['test has obtained the class Ex class and the associated base class skills!'])
       end
       it 'subtracts 5 from the available_skill_points of the character' do
         saved_character.available_skill_points = 10
@@ -241,6 +242,7 @@ RSpec.describe Character, type: :model do
       expect(saved_character.jump).to eq(character.tactical_maneuver + ' + 1d4')
     end
   end
+
   describe 'equipping' do
     let(:shields) {WeaponClass.new(name: 'Shields')}
     let(:shield) {Weapon.new(name: 'Light Shield', description: 'desc', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 4, defense_energy_modifier: 2, extra_block_cost: 30, hands_used: 1)}
@@ -248,8 +250,21 @@ RSpec.describe Character, type: :model do
     let(:b_axe) {Weapon.new(name: 'Battle Axe', description: 'desc', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 30, hands_used: 2, dodge_energy_mod_penalty: 0.5)}
     let(:h_axe) {Weapon.new(name: 'Hand Axe', description: 'desc', defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
 
-    xdescribe '#remove_weapon' do
+    describe '#remove_weapon' do
+      it 'removes a character\'s equipped weapon if no parameter is passed' do
+        character.equip_weapon(b_axe)
+        expect(character.equipped_weapons).to include(b_axe)
+        character.remove_weapon
+        expect(character.equipped_weapons).to be_empty
+      end
 
+      it 'removes a character\'s equipped shield if true is passed' do
+        shield.weapon_classes << shields
+        character.equip_weapon(shield)
+        expect(character.equipped_weapons).to include(shield)
+        character.remove_weapon(true)
+        expect(character.equipped_weapons).to be_empty
+      end
     end
 
     describe '#equip_weapon' do
@@ -290,8 +305,8 @@ RSpec.describe Character, type: :model do
 
     describe 'equipping armor' do
       let(:armor_type) {ArmorType.create(name: 'a-t')}
-      let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: "Leather Armor", description: "Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won't do much against heavy attacks.", passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
-      let(:armor2) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: "Padded Armor", description: "Thick cloth formed into a gambeson. Substantially more protective than no armor, but won't do much against heavy attacks.", passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
+      let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: 'Leather Armor', description: 'Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won\'t do much against heavy attacks.', passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
+      let(:armor2) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: 'Padded Armor', description: 'Thick cloth formed into a gambeson. Substantially more protective than no armor, but won\'t do much against heavy attacks.', passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
       describe '#remove_armor' do
         it 'removes armor' do
           saved_character.equip_armor(armor)
@@ -326,26 +341,41 @@ RSpec.describe Character, type: :model do
       character.equipped_weapons << shield
       expect(character.free_hands).to eq(1)
 
-      h_axe = Weapon.new(name: 'Hand Axe', description: "", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)
+      h_axe = Weapon.new(name: 'Hand Axe', description: 'A small axe', defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)
       character.equipped_weapons << h_axe
       expect(character.free_hands).to eq(0)
     end
   end
 
   xdescribe '#generate_attack_string' do
+
     it 'generates an appropriate attack string without skills' do
 
     end
+
     describe 'stat dice effects' do
+
       it 'adds to the number of dice if the stat die is of the same size as the attack die' do
 
       end
+
       it 'adds new dice if the stat die is of a different size to the attack die' do
 
       end
+
       it 'adds multiple new dice if strength and dex dice are different (in order of str then dex)' do
 
       end
+    end
+
+    describe 'skill bonuses' do
+
+      it 'boosts base attack'
+
+      it 'boosts energy modifiers (for a shield bash)'
+
+      it 'multiplies bonuses by rank'
+
     end
   end
 

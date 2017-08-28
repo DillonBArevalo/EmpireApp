@@ -13,7 +13,7 @@ RSpec.describe Condition, type: :model do
     end
 
     describe '#weapons' do
-      p 'THIS SEEMS TO FAIL IN IRB! FAILED TEST BEFORE SHOULDA MATCHERS TOO. MAYBE A REAL ISSUE HERE?'
+      # p 'THIS SEEMS TO FAIL IN IRB! FAILED TEST BEFORE SHOULDA MATCHERS TOO. MAYBE A REAL ISSUE HERE?'
       it{should have_many :weapons}
     end
 

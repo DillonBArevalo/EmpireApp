@@ -6,9 +6,10 @@ class Character < ApplicationRecord
   has_many :possible_class_skills, through: :character_classes, source: :skills
 # make possible skills method that gets all weapon skills and all possible_class_skills
 
-  has_many :obtained_skills
+  has_many :obtained_skills, -> { order 'skill_id ASC' }
   has_many :improved_weapon_classes, through: :obtained_skills, source: :applicable_weapon_class
-  has_many :skills, through: :obtained_skills
+  has_many :skills, -> { order 'id ASC' }, through: :obtained_skills
+  has_many :displaying_skills, -> {where display_description: true}, through: :obtained_skills, source: :skill
   has_many :class_bcs, through: :character_classes, source: :bcs
 
   has_one :inventory
@@ -30,19 +31,23 @@ class Character < ApplicationRecord
 
 # EXTRA STATS
   def active_defense_bonus
-    ((self.constitution + self.dexterity)/2.0).ceil - 3
+    equipped_armor ? debuff = equipped_armor.active_action_reduction : debuff = 0
+    ((self.constitution + self.dexterity)/2.0).ceil - 3 - debuff
   end
 
   def active_offense_bonus
-    ((self.strength + self.dexterity)/2.0).ceil
+    equipped_armor ? debuff = equipped_armor.active_action_reduction : debuff = 0
+    ((self.strength + self.dexterity)/2.0).ceil - debuff
   end
 
   def energy_budget
-    self.strength + self.dexterity - 6 + self.energy_budget_level_bonus.to_i
+    equipped_armor ? debuff = equipped_armor.budget_reduction : debuff = 0
+    self.strength + self.dexterity - 6 + self.energy_budget_level_bonus.to_i - debuff
   end
 
   def energy_pool
-    10 * (self.strength + self.dexterity + ((self.constitution)/2.0).ceil) + self.energy_pool_level_bonus.to_i
+    equipped_armor ? debuff = equipped_armor.energy_pool_reduction : debuff = 0
+    10 * (self.strength + self.dexterity + ((self.constitution)/2.0).ceil) + self.energy_pool_level_bonus.to_i - debuff
   end
 
   def hit_points
@@ -54,44 +59,7 @@ class Character < ApplicationRecord
   end
 
 
-
-# can unequip and not reequip if fail to eqiup new weapon... fix?
-# DOES NOT PERSIST WITHOUT A SAVE
-  def equip_weapon(weapon)
-    remove_weapon
-    add_weapon(weapon)
-  end
-
-# DOES NOT PERSIST WITHOUT A SAVE
-  def equip_shield(shield)
-    remove_weapon(true)
-    add_weapon(shield)
-  end
-
-  def remove_armor
-    self.equipped_armor = nil
-  end
-
-# DOES NOT PERSIST WITHOUT A SAVE
-  def equip_armor(armor)
-    self.equipped_armor = armor
-  end
-
-  def obtain_character_class(character_class)
-    if ObtainedCharacterClass.find_by(character_class_id: character_class.id, character_id: self.id)
-      {status: false, messages: ["#{self.name} already has the class #{character_class.name}"]}
-    elsif self.available_skill_points < 5
-      {status: false, messages: ["#{self.name} does not have enough available skill points (you have #{self.available_skill_points}) to obtain this class (requires 5)"]}
-    else
-      self.obtained_character_classes.create(character_class_id: character_class.id, invested_points: 5)
-      self.increment!(:available_skill_points, -5)
-      obtain_all_bcs(character_class)
-      {status: true, messages: ["#{self.name} has obtained the class #{character_class.name} and the associated base class skills!"]}
-    end
-  end
-
-# Add skills!
-  def obtain_skill(skill, weapon_class=nil)
+  def obtain_skill(skill)
     join = ObtainedSkill.find_by(character_id: self.id, skill_id: skill.id)
     response = {status: true, messages: []}
 
@@ -117,29 +85,24 @@ class Character < ApplicationRecord
     response
   end
 
-  # def generate_attack_string(attack_option)
-  #   base = self.active_offense_bonus
-  #   base += attack_option.attack_bonus
-  #   e_mod = attack_option.energy_modifier
-  #   # if attack_option.weapon.weapon_types.any? {|type| type.name = "Shield" }
-  #     # if self.skills
+  def obtain_character_class(character_class)
+    if ObtainedCharacterClass.find_by(character_class_id: character_class.id, character_id: self.id)
+      {status: false, messages: ["#{self.name} already has the class #{character_class.name}"]}
+    elsif self.available_skill_points < 5
+      {status: false, messages: ["#{self.name} does not have enough available skill points (you have #{self.available_skill_points}) to obtain this class (requires 5)"]}
+    else
+      self.obtained_character_classes.create(character_class_id: character_class.id, invested_points: 5)
+      self.increment!(:available_skill_points, -5)
+      obtain_all_bcs(character_class)
+      {status: true, messages: ["#{self.name} has obtained the class #{character_class.name} and the associated base class skills!"]}
+    end
+  end
 
-  #   # end
-  #   dice = attack_dice(attack_option)
-  #   "#{e_mod} x Energy Input + #{base} + #{dice}"
-  # end
-
-  # def generate_damage_string(attack_option)
-
-  # end
-
-  # def generate_defense_string(weapon)
-
-  # end
-
-  # def class_skills_bonus
-
-  # end
+  def add_skill_points(new_points)
+    add_to_energy_upgrade_points(new_points)
+    self.increment!(:total_skill_points, new_points)
+    self.increment!(:available_skill_points, new_points)
+  end
 
   def tactical_maneuver
     "#{self.dexterity} + 1d20"
@@ -153,16 +116,6 @@ class Character < ApplicationRecord
     end
   end
 
-  def free_hands
-    2 - self.equipped_weapons.reduce(0) {|hands,w| hands + w.hands_used}
-  end
-
-  def add_skill_points(new_points)
-    add_to_energy_upgrade_points(new_points)
-    self.increment!(:total_skill_points, new_points)
-    self.increment!(:available_skill_points, new_points)
-  end
-
   def remove_weapon(shield=false)
     if shield
       equipped_shield = self.equipped_weapons.select {|weapon| weapon.is_shield?}[0]
@@ -173,39 +126,58 @@ class Character < ApplicationRecord
     end
   end
 
+# can unequip and not reequip if fail to eqiup new weapon... fix?
+# DOES NOT PERSIST WITHOUT A SAVE
+  def equip_weapon(weapon)
+    remove_weapon
+    add_weapon(weapon)
+  end
+
+# DOES NOT PERSIST WITHOUT A SAVE
+  def equip_shield(shield)
+    remove_weapon(true)
+    add_weapon(shield)
+  end
+
+  def remove_armor
+    self.equipped_armor = nil
+  end
+
+# DOES NOT PERSIST WITHOUT A SAVE
+  def equip_armor(armor)
+    self.equipped_armor = armor
+  end
+
+  def free_hands
+    2 - self.equipped_weapons.reduce(0) {|hands,w| hands + w.hands_used}
+  end
+
+  def generate_attack_string(attack_option)
+    weapon_class_ids = attack_option.weapon_classes.map {|w_class| w_class.id}
+    skills_ranks = skills_ranks_hash
+    base = self.active_offense_bonus + attack_option.attack_bonus + skills_bonus(skills_ranks, :attack_bonus, weapon_class_ids)
+    e_mod = attack_option.energy_modifier + skills_bonus(skills_ranks, :attack_energy_mod_boost, weapon_class_ids)
+    dice = attack_dice(attack_option)
+    "#{e_mod} x Energy Input + #{base} + #{dice}"
+  end
+
+  def generate_damage_string(attack_option)
+
+  end
+
+  def generate_defense_string(weapon)
+
+  end
+
+  def multi_attack_numbers_and_cost(attack_option)
+
+  end
+
+
 private
 
-  def obtain_all_bcs(character_class)
-    character_class.bcs.each do |skill|
-      self.obtained_skills.create(skill_id: skill.id, ranks: 1)
-    end
-  end
-
-  def increase_class_stat_points(skill, cost)
-    if skill.skillable_type = "CharacterClass"
-      class_id = skill.skillable_id
-      obtained_class = ObtainedCharacterClass.find_by(character_id: self.id, character_class_id: class_id)
-      add_points_to_class(obtained_class, cost)
-    end
-  end
-
-  # Add to bcs then add to invested points
-  def add_points_to_class(obtained_character_class, cost)
-    # grab ranks
-    current_sp_mod_5 = obtained_character_class.invested_points % 5
-    additional_ranks = (current_sp_mod_5 + cost)/5
-
-    # level up bcs
-    bcs = self.class_bcs.select {|skill| skill.skillable_id == obtained_character_class.character_class_id}
-    obtained_bcs = bcs.map {|skill| ObtainedSkill.find_by(skill_id: skill.id, character_id: self.id)}
-    obtained_bcs.each {|obtained_skill| obtained_skill.increment!(:ranks, additional_ranks)}
-
-    # add to invested points
-    obtained_character_class.increment!(:invested_points, cost)
-  end
-
   def check_class(response, skill)
-    if skill.skillable_type = "CharacterClass"
+    if skill.skillable_type = 'CharacterClass'
       unless self.possible_class_skills.exists?(skill.id)
         response[:status] = false
         response[:messages] << 'You do not have the class required to obtain this skill'
@@ -228,7 +200,36 @@ private
     rank = (join ? join.ranks : 0)
     if skill.cost_at_rank(rank + 1) > self.available_skill_points
       response[:status] = false
-      response[:messages] << "You don't have enough skill points to obtain the next rank of this skill"
+      response[:messages] << 'You don\'t have enough skill points to obtain the next rank of this skill'
+    end
+  end
+
+  def increase_class_stat_points(skill, cost)
+    if skill.skillable_type = 'CharacterClass'
+      class_id = skill.skillable_id
+      obtained_class = ObtainedCharacterClass.find_by(character_id: self.id, character_class_id: class_id)
+      add_points_to_class(obtained_class, cost)
+    end
+  end
+
+  # Add to bcs then add to invested points
+  def add_points_to_class(obtained_character_class, cost)
+    # grab ranks
+    current_sp_mod_5 = obtained_character_class.invested_points % 5
+    additional_ranks = (current_sp_mod_5 + cost)/5
+
+    # level up bcs
+    bcs = self.class_bcs.select {|skill| skill.skillable_id == obtained_character_class.character_class_id}
+    obtained_bcs = bcs.map {|skill| ObtainedSkill.find_by(skill_id: skill.id, character_id: self.id)}
+    obtained_bcs.each {|obtained_skill| obtained_skill.increment!(:ranks, additional_ranks)}
+
+    # add to invested points
+    obtained_character_class.increment!(:invested_points, cost)
+  end
+
+  def obtain_all_bcs(character_class)
+    character_class.bcs.each do |skill|
+      self.obtained_skills.create(skill_id: skill.id, ranks: 1)
     end
   end
 
@@ -241,30 +242,31 @@ private
     end
   end
 
+  def skills_bonus(skills, stat, w_class_ids)
+    skills.reduce(0) do |base, (skill, obtained_skill)|
+      if !obtained_skill.weapon_class_id || w_class_ids.include?(obtained_skill.weapon_lass_id)
+        base + (skill[stat] * obtained_skill.rank)
+      else
+        base
+      end
+    end
+  end
 
+  def attack_dice(attack_option)
+    # make a hash
+    size_number_hash = Hash.new(0)
+    size_number_hash[stat_die(self.strength)] += attack_option.strength_dice
+    size_number_hash[stat_die(self.dexterity)] += attack_option.dexterity_dice
+    size_number_hash[attack_option.die_size] += attack_option.die_number
 
-# Add skills!
-  # def attack_dice(attack_option)
-  #   die_size = attack_option.die_size
-  #   die_number = attack_option.die_number
-  #   second_die_number = 0
-  #   third_die_number = 0
-  #   str_die_size = stat_die(self.strength)
-  #   dex_die_size = stat_die(self.dexterity)
-  #   if die_size == str_die_size
-  #     die_number += attack_option.strength_dice
-  #   else
-  #     second_die_number = attack_option.strength_dice
-  #   end
-  #   if die_size == dex_die_size
-  #     die_number += attack_option.dexterity_dice
-  #   elsif dex_die_size == str_die_size
-  #     second_die_number += attack_option.dexterity_dice
-  #   else
-  #     third_die_number +=attack_option.dexterity_dice
-  #   end
-  #   "#{die_string(die_number, die_size, true)}#{die_string(second_die_number, str_die_size, true)}#{die_string(third_die_number, dex_die_size, true)}"
-  # end
+    #GET REST OF THE DIE POSSIBILITIES!
+
+    convert_hash_to_dice(size_number_hash)
+  end
+
+  def convert_hash_to_dice(die_hash)
+    die_hash.to_a.map { |pair| die_string(pair[1], pair[0])}.join(' + ')
+  end
 
   def add_to_energy_upgrade_points(new_points)
     current_sp_mod_5 = self.total_skill_points  % 5
@@ -294,6 +296,10 @@ private
     else
       10
     end
+  end
+
+  def skills_ranks_hash
+    skills.zip(obtained_skills).to_h
   end
 
 end
