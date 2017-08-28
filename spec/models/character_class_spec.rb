@@ -10,5 +10,9 @@ RSpec.describe CharacterClass, type: :model do
     describe '#skills' do
       it{should have_many :skills}
     end
+
+    describe '#bcs' do
+      it{should have_many :bcs}
+    end
   end
 end

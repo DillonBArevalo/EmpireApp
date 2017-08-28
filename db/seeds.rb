@@ -4,7 +4,7 @@ core_user = User.create!(username: 'Empire: core', email: 'dillonbarevalo@gmail.
 # Weapon Classes
 class1 = WeaponClass.create!(name: 'Power Weapons', description: "These weapons include such things as axes, clubs, and heavy swords. The trees for power weapons are fairly minimal and scale off of strength. These weapons are strong without any skills spent in them with average to high attack and high damage. Type 1 Weapons are wielded with either 1 or 2 hands, depending on the weapon. These weapons are somewhat lacking in defense, but to a low level character, the offensive capabilities they have are simply devastating. The problem with Class 1 weapons is they have few skills to boost their attack and few skills which add meaningful tactical choices, making them scale very poorly into the late game. No matter how high their damage gets, if you can’t hit someone, you can’t hurt them.")
 class2 = WeaponClass.create!(name: "Finesse Weapons", description: "Type 2 weapons are one handed weapons that can be wielded by themselves, with another weapon (not yet), or with a shield. These weapons are often difficult to use initially but scale very well when skill points are sunk into them. They scale off of either dexterity and strength, or one of the two. Class 2 weapons have low damage and low attack numbers initially (though they usually have fairly high defensive numbers) but can scale the attack extremely well and damage numbers fairly well. What they lack in early game strength they make up for in both late game strength and the defensive capabilities (especially when coupled with a shield) to get you there.")
-shields = WeaponClass.create!(name: 'shields', description: "Ultimately probably won't be a weapon class, but at the moment the website is young enough that I haven't separated them yet. It's a shield, silly.")
+shields = WeaponClass.create!(name: 'Shields', description: "Ultimately probably won't be a weapon class, but at the moment the website is young enough that I haven't separated them yet. It's a shield, silly.")
 
 # Damage Types
 slashing = DamageType.create!(name: 'slashing', description: 'A cut without much impact behind it. Think the cut of a light sword.')
@@ -85,7 +85,7 @@ light_shield = Weapon.create!(user_id: core_user.id, weapon_type_id: light_shiel
 WeaponClassesWeapon.create!(weapon_class_id: shields.id, weapon_id: light_shield.id)
 AttackOption.create!(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone.", weapon_id: light_shield.id, damage_type_id: bludgeoning.id, energy_modifier: 1.5, die_number: 1, die_size: 4, attack_bonus: 10, damage_dice: 0, damage_die_size: 0, strength_damage_bonus: 0, dexterity_damage_bonus: 0, flat_damage_bonus: 0)
 
-heavy_shield = Weapon.create!(user_id: core_user.id, weapon_type_id: heavy_shield.id, name: 'War Pick', description: 'A large shield with excellent coverage that responds poorly to energy input but has good base defense numbers.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 15, defense_energy_modifier: 1.5, extra_block_cost: 25, hands_used: 1)
+heavy_shield = Weapon.create!(user_id: core_user.id, weapon_type_id: heavy_shield.id, name: 'Heavy Shield', description: 'A large shield with excellent coverage that responds poorly to energy input but has good base defense numbers.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 15, defense_energy_modifier: 1.5, extra_block_cost: 25, hands_used: 1)
 WeaponClassesWeapon.create!(weapon_class_id: shields.id, weapon_id: heavy_shield.id)
 AttackOption.create!(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone.", weapon_id: heavy_shield.id, damage_type_id: bludgeoning.id, energy_modifier: 1, die_number: 1, die_size: 6, attack_bonus: 15, damage_dice: 0, damage_die_size: 0, strength_damage_bonus: 0, dexterity_damage_bonus: 0, flat_damage_bonus: 0)
 
@@ -109,14 +109,24 @@ end
 warrior.skills.create!(base_class_skill: true, display_description: true, name: "Always Swinging", description: "If the Warrior uses more energy in their offensive round than in their defensive round, they gain extra energy from their pool to spend on their offensive round. +1 energy at every 10th Skill Points Invested.")
 warrior.skills.create!(base_class_skill: true, display_description: true, name: "Thrill of the Fight", description: "When outnumbered (engaged in melee combat with more than one combatant), the Warrior multiplies their bonus from Always Swinging by the number of targets they face. Doesn’t increase pool size. +100 percent per enemy when outnumbered.")
 
-aggression = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: 0, name: "Aggression", description: "Base Damage increase for a specified weapon class, levels are class independent. +1 per level.", ranks_available: 8, damage_boost: 1)
+aggression1 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class1.id, name: "Aggression (Class 1)", description: "Base Damage increase for a specified weapon class (Class 1). +1 per level.", ranks_available: 8, damage_boost: 1)
 [1, 3, 5, 7, 9, 11, 13, 15].each_with_index do |cost, idx|
-  aggression.skill_costs.create!(rank: (idx + 1), cost: cost)
+  aggression1.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-wild_strikes = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: 0, name: "Wild Strikes", description: "Damage dice size increase for a specified weapon class, levels are class independent. +d2 per level.", ranks_available: 7, damage_die_boost: 2)
+wild_strikes1 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class1.id, name: "Wild Strikes (Class 1)", description: "Damage dice size increase for a specified weapon class (Class 1). +d2 per level.", ranks_available: 7, damage_die_boost: 2)
 [2, 3, 5, 8, 13, 21, 34].each_with_index do |cost, idx|
-  wild_strikes.skill_costs.create!(rank: (idx + 1), cost: cost)
+  wild_strikes1.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+aggression2 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class2.id, name: "Aggression (Class 2)", description: "Base Damage increase for a specified weapon class (Class 2). +1 per level.", ranks_available: 8, damage_boost: 1)
+[1, 3, 5, 7, 9, 11, 13, 15].each_with_index do |cost, idx|
+  aggression2.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+wild_strikes2 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class2.id, name: "Wild Strikes (Class 2)", description: "Damage dice size increase for a specified weapon class (Class 2). +d2 per level.", ranks_available: 7, damage_die_boost: 2)
+[2, 3, 5, 8, 13, 21, 34].each_with_index do |cost, idx|
+  wild_strikes2.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
 a_rush = warrior.skills.create!(base_class_skill: false, passive: true, display_description: true, name: "Adrenaline Rush", description: "If the Warrior takes minor injuries (damage without status effect; status effect cancels), they gain a stack of Adrenaline Rush. +2 Energy Budget/+2 Base Damage per stack per level,", ranks_available: 5)
@@ -251,24 +261,24 @@ c_t = soldier.skills.create!(base_class_skill: false, display_description: true,
 end
 
 # Weapon Skills
-class1.skills.create!(base_class_skill: true, display_description: false, passive: true, name: "Bring the Hurt", description: "For every ten skill points spent on Class 1 weapon skills, all Class 1 weapons gain +2 to damage.", damage_boost: 2)
+class1.skills.create!(base_class_skill: true, display_description: false, passive: true, is_weapon_boost: true, weapon_class: class1.id, name: "Bring the Hurt", description: "For every ten skill points spent on Class 1 weapon skills, all Class 1 weapons gain +2 to damage.", damage_boost: 2)
 
-p_a = class1.skills.create!(base_class_skill: false, display_description: true, name: "Power Attack", description: "Invest more points in offense than defense and gain bonus damage on your attack. If Power Attack is used it must be the only attack in that offensive round. +1 base damage per level.", ranks_available: 10)
+p_a = class1.skills.create!(base_class_skill: false, display_description: true, name: "Power Attack", description: "Invest more points in offense than defense and gain bonus damage on your attack. If Power Attack is used it must be the only attack in that offensive round. +1 base damage per level.", is_weapon_boost: true, weapon_class: class1.id, ranks_available: 10)
 [1,1,2,3,5,8,13,21,34,55].each_with_index do |cost, idx|
   p_a.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-s = class1.skills.create!(base_class_skill: false, display_description: true, name: "Sweep", description: "Low angled attack made to knock out the legs. Different margins of victory mean different levels of debuffs from off balance to prone. 1/2 damage on successful attack, Strong victory causes Off Balance, Overwhelming causes Prone. Can’t be used in successive offensive rounds (note that it can be used multiple times within one round).", ranks_available: 1)
+s = class1.skills.create!(base_class_skill: false, display_description: true, name: "Sweep", description: "Low angled attack made to knock out the legs. Different margins of victory mean different levels of debuffs from off balance to prone. 1/2 damage on successful attack, Strong victory causes Off Balance, Overwhelming causes Prone. Can’t be used in successive offensive rounds (note that it can be used multiple times within one round).", is_weapon_boost: true, weapon_class: class1.id, ranks_available: 1)
 [15].each_with_index do |cost, idx|
   s.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-o = class1.skills.create!(base_class_skill: false, display_description: true, name: "Overhead", description: "All opponents gain an accuracy bonus on you during your next defensive round. Deal significantly improved damage and gain a bonus against armor for the hit. Must be used with Power Attack. +25 percent accuracy for enemies, +50 percent total damage before DR.", ranks_available: 1)
+o = class1.skills.create!(base_class_skill: false, display_description: true, name: "Overhead", description: "All opponents gain an accuracy bonus on you during your next defensive round. Deal significantly improved damage and gain a bonus against armor for the hit. Must be used with Power Attack. +25 percent accuracy for enemies, +50 percent total damage before DR.", is_weapon_boost: true, weapon_class: class1.id, ranks_available: 1)
 [15].each_with_index do |cost, idx|
   o.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-s_u = class1.skills.create!(base_class_skill: false, display_description: true, name: "Step Up", description: "Used with Power Attack and/or Overhead: Take a step forward making an Engage check (Opponent can respond with a step back, if able, by making a Disengage check) and gain a bonus to damage on a power attack. +100 percent damage, put Off Balance in next defensive round.", ranks_available: 1)
+s_u = class1.skills.create!(base_class_skill: false, display_description: true, name: "Step Up", description: "Used with Power Attack and/or Overhead: Take a step forward making an Engage check (Opponent can respond with a step back, if able, by making a Disengage check) and gain a bonus to damage on a power attack. +100 percent damage, put Off Balance in next defensive round.", is_weapon_boost: true, weapon_class: class1.id, ranks_available: 1)
 [20].each_with_index do |cost, idx|
   s_u.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
@@ -293,7 +303,7 @@ s_b = class1.skills.create!(base_class_skill: false, display_description: false,
   s_b.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-class2.skills.create!(base_class_skill: true, display_description: false, name: "Balanced Fighter", description: "For every 10 points spent in Class 2 weapons, gain +1 to each attack and defense.", accuracy_boost: 1, defense_boost: 1)
+class2.skills.create!(base_class_skill: true, display_description: false, name: "Balanced Fighter", description: "For every 10 points spent in Class 2 weapons, gain +1 to each attack and defense.", is_weapon_boost: true, weapon_class: class2.id, accuracy_boost: 1, defense_boost: 1)
 
 par = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Parry", description: "Gain a bonus to defense with a Class 2 weapon. +1 to base defense per level", ranks_available: 7, defense_boost: 1, is_weapon_boost: true, weapon_class: class2.id)
 [3,5,8,13,21,34,55].each_with_index do |cost, idx|
@@ -305,7 +315,7 @@ d_t = class2.skills.create!(base_class_skill: false, display_description: false,
   d_t.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-rip = class2.skills.create!(base_class_skill: false, display_description: true, name: "Riposte", description: "Following a successful block of Clear or higher MoV, Attacks with a Class 2 weapon get a bonus to attack. Clear grants +25 percent next attack total, Strong +50 percent, Overwhelming +100 percent", ranks_available: 1)
+rip = class2.skills.create!(base_class_skill: false, display_description: true, name: "Riposte", description: "Following a successful block of Clear or higher MoV, Attacks with a Class 2 weapon get a bonus to attack. Clear grants +25 percent next attack total, Strong +50 percent, Overwhelming +100 percent", is_weapon_boost: true, weapon_class: class2.id, ranks_available: 1)
 [25].each_with_index do |cost, idx|
   rip.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
@@ -330,7 +340,7 @@ s_b = class2.skills.create!(base_class_skill: false, display_description: false,
   s_b.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-l_s = class2.skills.create!(base_class_skill: false, display_description: true, name: "Leap Strike", description: "A quick leap forward to hopefully catch your opponent by surprise. Opponent must make a reflex check in addition to a block check. If the reflex check fails the block is drastically weakened by 50 percent, if the reflex check is made, your accuracy is decreased by 50 percent. Begins at DEXx5, decreases by one per additional level.")
+l_s = class2.skills.create!(base_class_skill: false, display_description: true, name: "Leap Strike", description: "A quick leap forward to hopefully catch your opponent by surprise. Opponent must make a reflex check in addition to a block check. If the reflex check fails the block is drastically weakened by 50 percent, if the reflex check is made, your accuracy is decreased by 50 percent. Begins at DEXx5, decreases by one per additional level.", is_weapon_boost: true, weapon_class: class2.id, ranks_available: 4)
 [4,8,16,32].each_with_index do |cost, idx|
   l_s.skill_costs.create!(rank: (idx + 1), cost: cost)
 end

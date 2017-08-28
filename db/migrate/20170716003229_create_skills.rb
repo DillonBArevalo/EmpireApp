@@ -10,7 +10,7 @@ class CreateSkills < ActiveRecord::Migration[5.0]
       t.boolean :tactical_maneuver_dex_bonus, default: false
       t.boolean :is_weapon_boost, default: false
       t.integer :weapon_class
-      t.integer :ranks_available, default: 0
+      t.integer :ranks_available, default: 1
       t.integer :damage_boost, default: 0
       t.integer :damage_die_boost, default: 0
       t.integer :accuracy_boost, default: 0
