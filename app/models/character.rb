@@ -80,7 +80,7 @@ class Character < ApplicationRecord
     # remove used sp from available_skill_points
     cost = skill.cost_at_rank(join.ranks)
     self.increment!(:available_skill_points, -cost)
-    increase_class_stat_points(skill, cost)
+    increase_class_stat_points(skill, cost) if skill.skillable_type == 'CharacterClass'
     response[:messages] << "#{self.name} successfully obtained #{skill.name} at rank #{join.ranks} for #{cost} skill points."
     response
   end
@@ -155,7 +155,7 @@ class Character < ApplicationRecord
   def generate_attack_string(attack_option)
     weapon_class_ids = attack_option.weapon_classes.map {|w_class| w_class.id}
     skills_ranks = skills_ranks_hash
-    base = self.active_offense_bonus + attack_option.attack_bonus + skills_bonus(skills_ranks, :attack_bonus, weapon_class_ids)
+    base = self.active_offense_bonus + attack_option.attack_bonus + skills_bonus(skills_ranks, :accuracy_boost, weapon_class_ids)
     e_mod = attack_option.energy_modifier + skills_bonus(skills_ranks, :attack_energy_mod_boost, weapon_class_ids)
     dice = attack_dice(attack_option)
     "#{e_mod} x Energy Input + #{base} + #{dice}"
@@ -177,7 +177,7 @@ class Character < ApplicationRecord
 private
 
   def check_class(response, skill)
-    if skill.skillable_type = 'CharacterClass'
+    if skill.skillable_type == 'CharacterClass'
       unless self.possible_class_skills.exists?(skill.id)
         response[:status] = false
         response[:messages] << 'You do not have the class required to obtain this skill'
@@ -244,8 +244,8 @@ private
 
   def skills_bonus(skills, stat, w_class_ids)
     skills.reduce(0) do |base, (skill, obtained_skill)|
-      if !obtained_skill.weapon_class_id || w_class_ids.include?(obtained_skill.weapon_lass_id)
-        base + (skill[stat] * obtained_skill.rank)
+      if !obtained_skill.applicable_weapon_class_id || w_class_ids.include?(obtained_skill.applicable_weapon_class_id)
+        base + (skill[stat] * obtained_skill.ranks)
       else
         base
       end

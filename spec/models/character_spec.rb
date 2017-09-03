@@ -120,6 +120,12 @@ RSpec.describe Character, type: :model do
         expect(response[:messages]).to eq(["#{saved_character.name} successfully obtained #{class_skill.name} at rank 1 for 10 skill points."])
       end
 
+      it 'works with weapon skills' do
+        response = saved_character.obtain_skill(weapon_skill)
+        expect(response[:status]).to be true
+        expect(response[:messages]).to eq(["#{saved_character.name} successfully obtained #{weapon_skill.name} at rank 1 for 10 skill points."])
+      end
+
       # need bcs instantiated
       it 'levels up BCS if appropriate' do
         bcs = saved_character.class_bcs
@@ -347,34 +353,91 @@ RSpec.describe Character, type: :model do
     end
   end
 
-  xdescribe '#generate_attack_string' do
+  describe '#generate_attack_string' do
+
+    let(:axe) {WeaponType.create(name: 'Axe')}
+    let(:hand_axe)  {Weapon.create(user_id: user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
+    let(:class2) {WeaponClass.create(name: "Finesse Weapons", description: "Type 2 weapons are one handed weapons that can be wielded by themselves, with another weapon (not yet), or with a shield. These weapons are often difficult to use initially but scale very well when skill points are sunk into them. They scale off of either dexterity and strength, or one of the two. Class 2 weapons have low damage and low attack numbers initially (though they usually have fairly high defensive numbers) but can scale the attack extremely well and damage numbers fairly well. What they lack in early game strength they make up for in both late game strength and the defensive capabilities (especially when coupled with a shield) to get you there.")}
+    let(:attack_option)  {AttackOption.new(name: 'Chop', weapon_id: hand_axe.id, strength_dice: 1, dexterity_dice: 1, energy_modifier: 2, die_number: 1, die_size: 10, damage_dice: 1, damage_die_size: 6, strength_damage_bonus: 4, dexterity_damage_bonus: 6, flat_damage_bonus: 8)}
+    let(:armor_type) {ArmorType.create(name: 'a-t')}
+    let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: 'Leather Armor', description: 'Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won\'t do much against heavy attacks.', passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
+
+    before(:each) do
+      WeaponClassesWeapon.create(weapon_class_id: class2.id, weapon_id: hand_axe.id)
+      saved_character.equip_weapon(hand_axe)
+    end
 
     it 'generates an appropriate attack string without skills' do
+      expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 10 + 2d4 + 1d10')
+    end
+
+    it 'is affected by armor' do
+      saved_character.equip_armor(armor)
+      expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 8 + 2d4 + 1d10')
 
     end
 
     describe 'stat dice effects' do
 
       it 'adds to the number of dice if the stat die is of the same size as the attack die' do
-
+        attack_option.die_size = 4
+        expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 10 + 3d4')
       end
 
       it 'adds new dice if the stat die is of a different size to the attack die' do
-
+        attack_option.strength_dice = 0
+        expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 10 + 1d4 + 1d10')
       end
 
       it 'adds multiple new dice if strength and dex dice are different (in order of str then dex)' do
-
+        saved_character.strength = 16
+        expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 13 + 1d8 + 1d4 + 1d10')
       end
+
     end
 
     describe 'skill bonuses' do
 
-      it 'boosts base attack'
+      let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing!', motto: 'I help make sure things work!')}
+      let(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'a skill for testing!', is_weapon_boost: true, weapon_class: class2.id, ranks_available: 2, passive: true, accuracy_boost: 5)}
+      let!(:class_skill_cost1) {class_skill.skill_costs.create({rank: 1, cost: 10})}
+      let!(:class_skill_cost2) {class_skill.skill_costs.create({rank: 2, cost: 4})}
 
-      it 'boosts energy modifiers (for a shield bash)'
+      before(:each) do
+        saved_character.add_skill_points(100)
+        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_skill(class_skill)
+      end
 
-      it 'multiplies bonuses by rank'
+      it 'won\'t affect an attack done by a weapon of the wrong class' do
+        saved_character.obtained_skills.find_by(skill_id: class_skill.id).update(applicable_weapon_class_id: 0)
+        class_skill.update(weapon_class: 0)
+        expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 10 + 2d4 + 1d10')
+      end
+
+      it 'will affect an attack done by a weapon it is specifically targeting' do
+        expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 15 + 2d4 + 1d10')
+      end
+
+      it 'will affect an attack done by a weapon if the skill doesn\'t target any weapon class' do
+        saved_character.obtained_skills.find_by(skill_id: class_skill.id).update(applicable_weapon_class_id: nil)
+        class_skill.update(weapon_class: nil, is_weapon_boost: false)
+        expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 15 + 2d4 + 1d10')
+      end
+
+      it 'boosts base attack' do
+        expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 15 + 2d4 + 1d10')
+      end
+
+      it 'boosts energy modifiers (currently only for a shield bash, but should work with any weapon if there is a skill for it)' do
+        class_skill.update(accuracy_boost: 0, attack_energy_mod_boost: 1.2)
+        expect(saved_character.generate_attack_string(attack_option)).to eq('3.2 x Energy Input + 10 + 2d4 + 1d10')
+      end
+
+      it 'multiplies bonuses by rank' do
+        saved_character.obtain_skill(class_skill)
+        expect(saved_character.generate_attack_string(attack_option)).to eq('2.0 x Energy Input + 20 + 2d4 + 1d10')
+      end
 
     end
   end
