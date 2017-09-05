@@ -386,7 +386,6 @@ RSpec.describe Character, type: :model do
         end
       end
     end
-
   end
 
   describe '#free_hands' do
@@ -495,6 +494,81 @@ RSpec.describe Character, type: :model do
   describe '#generate_damage_string' do
     let(:axe) {WeaponType.create(name: 'Axe')}
     let(:hand_axe)  {Weapon.create(user_id: user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
+    let(:damage_type) {DamageType.create(name: 'slashing', description: 'slaaaash')}
+    let(:attack_option)  {AttackOption.new(name: 'Chop', damage_type_id: damage_type.id, weapon_id: hand_axe.id, strength_dice: 1, dexterity_dice: 1, energy_modifier: 2, die_number: 1, die_size: 10, damage_dice: 1, damage_die_size: 6, strength_damage_bonus: 4, dexterity_damage_bonus: 6, flat_damage_bonus: 8)}
+    let(:class2) {WeaponClass.create(name: "Finesse Weapons", description: "Type 2 weapons are one handed weapons that can be wielded by themselves, with another weapon (not yet), or with a shield. These weapons are often difficult to use initially but scale very well when skill points are sunk into them. They scale off of either dexterity and strength, or one of the two. Class 2 weapons have low damage and low attack numbers initially (though they usually have fairly high defensive numbers) but can scale the attack extremely well and damage numbers fairly well. What they lack in early game strength they make up for in both late game strength and the defensive capabilities (especially when coupled with a shield) to get you there.")}
+
+    before(:each) do
+      WeaponClassesWeapon.create(weapon_class_id: class2.id, weapon_id: hand_axe.id)
+      saved_character.equip_weapon(hand_axe)
+    end
+
+    it 'generates an appropriate damage string without skills' do
+      expect(saved_character.generate_damage_string(attack_option)).to eq('13 + 1d6 slashing')
+    end
+
+    describe 'stat effects' do
+
+      it 'changes based on strength or dex' do
+        saved_character.strength = 13
+        expect(saved_character.generate_damage_string(attack_option)).to eq('14 + 1d6 slashing')
+      end
+
+      it 'won\'t change if the divisor is nil' do
+        attack_option.strength_damage_bonus = nil
+        expect(saved_character.generate_damage_string(attack_option)).to eq('10 + 1d6 slashing')
+      end
+    end
+
+    describe 'skill bonuses' do
+
+      let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing!', motto: 'I help make sure things work!')}
+      let(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'a skill for testing!', is_weapon_boost: true, weapon_class: class2.id, ranks_available: 2, passive: true, damage_boost: 5)}
+      let!(:class_skill_cost1) {class_skill.skill_costs.create({rank: 1, cost: 10})}
+      let!(:class_skill_cost2) {class_skill.skill_costs.create({rank: 2, cost: 4})}
+
+      before(:each) do
+        saved_character.add_skill_points(100)
+        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_skill(class_skill)
+      end
+
+      it 'won\'t affect a damage done by a weapon of the wrong class' do
+        saved_character.obtained_skills.find_by(skill_id: class_skill.id).update(applicable_weapon_class_id: 0)
+        class_skill.update(weapon_class: 0)
+        expect(saved_character.generate_damage_string(attack_option)).to eq('13 + 1d6 slashing')
+      end
+
+      it 'will affect an attack done by a weapon it is specifically targeting' do
+        expect(saved_character.generate_damage_string(attack_option)).to eq('18 + 1d6 slashing')
+      end
+
+      it 'will affect a damage done by a weapon if the skill doesn\'t target any weapon class' do
+        saved_character.obtained_skills.find_by(skill_id: class_skill.id).update(applicable_weapon_class_id: nil)
+        class_skill.update(weapon_class: nil, is_weapon_boost: false)
+        expect(saved_character.generate_damage_string(attack_option)).to eq('18 + 1d6 slashing')
+      end
+
+      it 'boosts base damage' do
+        expect(saved_character.generate_damage_string(attack_option)).to eq('18 + 1d6 slashing')
+      end
+
+      it 'boosts die size for damage' do
+        class_skill.update(damage_boost: 0, damage_die_boost: 2)
+        expect(saved_character.generate_damage_string(attack_option)).to eq('13 + 1d8 slashing')
+      end
+
+      it 'multiplies bonuses by rank' do
+        saved_character.obtain_skill(class_skill)
+        expect(saved_character.generate_damage_string(attack_option)).to eq('23 + 1d6 slashing')
+      end
+
+    end
+  end
+
+  describe '#generate_defense_string' do
+    let(:axe) {WeaponType.create(name: 'Axe')}
+    let(:hand_axe)  {Weapon.create(user_id: user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
     let(:class2) {WeaponClass.create(name: "Finesse Weapons", description: "Type 2 weapons are one handed weapons that can be wielded by themselves, with another weapon (not yet), or with a shield. These weapons are often difficult to use initially but scale very well when skill points are sunk into them. They scale off of either dexterity and strength, or one of the two. Class 2 weapons have low damage and low attack numbers initially (though they usually have fairly high defensive numbers) but can scale the attack extremely well and damage numbers fairly well. What they lack in early game strength they make up for in both late game strength and the defensive capabilities (especially when coupled with a shield) to get you there.")}
     let(:armor_type) {ArmorType.create(name: 'a-t')}
     let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: 'Leather Armor', description: 'Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won\'t do much against heavy attacks.', passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
@@ -545,7 +619,7 @@ RSpec.describe Character, type: :model do
         expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 12 + 1d4 + 1d6 (+ passive defense (0) if block fails)')
       end
 
-      it 'will affect an attack done by a weapon it is specifically targeting' do
+      it 'will affect a block done by a weapon it is specifically targeting' do
         expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 17 + 1d4 + 1d6 (+ passive defense (0) if block fails)')
       end
 
@@ -572,11 +646,136 @@ RSpec.describe Character, type: :model do
     end
   end
 
-  xdescribe '#generate_defense_string' do
 
+  describe 'multi_attack_numbers_and_cost' do
+    let(:axe) {WeaponType.create(name: 'Axe')}
+    let(:hand_axe)  {Weapon.create(user_id: user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
+
+    context 'without skills' do
+      it 'prints the default message' do
+        expect(character.multi_attack_numbers_and_cost(hand_axe)).to eq('1')
+      end
+    end
+
+    context 'with skills' do
+      let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing!', motto: 'I help make sure things work!')}
+      let(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'a skill for testing!', ranks_available: 2, passive: true, bonus_attacks: 1)}
+      let!(:class_skill_cost1) {class_skill.skill_costs.create({rank: 1, cost: 10})}
+
+      before(:each) do
+        saved_character.add_skill_points(100)
+        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_skill(class_skill)
+      end
+
+      it 'can add extra attacks with the right skills' do
+        expect(saved_character.multi_attack_numbers_and_cost(hand_axe)).to eq('1 + 1 at the cost of 4 energy each')
+      end
+
+      it 'will modify extra attack cost based on max energy budget (by stats)' do
+        saved_character.update(strength: 18, dexterity: 18, energy_budget_level_bonus: 10)
+        expect(saved_character.multi_attack_numbers_and_cost(hand_axe)).to eq('1 + 1 at the cost of 10 energy each')
+      end
+
+      it 'can make those attacks cheaper' do
+        class_skill.update(attack_cost_reduction: 15)
+        expect(saved_character.multi_attack_numbers_and_cost(hand_axe)).to eq('1 + 1 at the cost of 2 energy each')
+      end
+    end
   end
 
-  xdescribe '#dodge_numbers' do
+  describe '#total_blocks' do
+    let(:axe) {WeaponType.create(name: 'Axe')}
+    let(:shield_type) {WeaponType.create(name: 'shield')}
+    let(:hand_axe)  {Weapon.create(user_id: user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
+    let(:shields) {WeaponClass.create(name: 'Shields')}
+    let(:shield) {Weapon.create(user_id: user.id, weapon_type_id: shield_type.id, name: 'Light Shield', description: 'desc', defense_die_number: 1, defense_die_size: 10, flat_defense_bonus: 4, defense_energy_modifier: 2, extra_block_cost: 30, hands_used: 1)}
+    let(:class2) {WeaponClass.create(name: "Finesse Weapons", description: "Type 2 weapons are one handed weapons that can be wielded by themselves, with another weapon (not yet), or with a shield. These weapons are often difficult to use initially but scale very well when skill points are sunk into them. They scale off of either dexterity and strength, or one of the two. Class 2 weapons have low damage and low attack numbers initially (though they usually have fairly high defensive numbers) but can scale the attack extremely well and damage numbers fairly well. What they lack in early game strength they make up for in both late game strength and the defensive capabilities (especially when coupled with a shield) to get you there.")}
+    let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing!', motto: 'I help make sure things work!')}
+    let(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'a skill for testing!', is_weapon_boost: true, weapon_class: class2.id, ranks_available: 2, passive: true, bonus_blocks: 1)}
+    let!(:class_skill_cost1) {class_skill.skill_costs.create({rank: 1, cost: 10})}
+    let(:class_skill2) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'a skill for testing!', is_weapon_boost: true, weapon_class: shields.id, ranks_available: 2, passive: true, bonus_blocks: 1)}
+    let!(:class_skill2_cost1) {class_skill2.skill_costs.create({rank: 1, cost: 10})}
 
+    before(:each) do
+      WeaponClassesWeapon.create(weapon_class_id: class2.id, weapon_id: hand_axe.id)
+      WeaponClassesWeapon.create(weapon_class_id: shields.id, weapon_id: shield.id)
+    end
+
+    it 'returns the number of weapons you have equipped + panic' do
+      expect(character.total_blocks).to eq('0 + 0 panic block(s) for half your next offense budget')
+      character.equip_weapon(hand_axe)
+      expect(character.total_blocks).to eq('1 + 1 panic block(s) for half your next offense budget')
+      character.equip_shield(shield)
+      expect(character.total_blocks).to eq('2 + 2 panic block(s) for half your next offense budget')
+    end
+
+    it 'is affected by skills on either equipped weapon' do
+      saved_character.equip_weapon(hand_axe)
+      saved_character.equip_shield(shield)
+      saved_character.add_skill_points(100)
+      saved_character.obtain_character_class(character_class)
+      saved_character.obtain_skill(class_skill)
+      saved_character.obtain_skill(class_skill2)
+      expect(saved_character.total_blocks).to eq('4 + 2 panic block(s) for half your next offense budget')
+    end
+  end
+
+  describe '#multi_block_numbers_and_cost' do
+    let(:axe) {WeaponType.create(name: 'Axe')}
+    let(:hand_axe)  {Weapon.create(user_id: user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
+
+    context 'without skills' do
+      it 'prints the default message' do
+        expect(character.multi_block_numbers_and_cost(hand_axe)).to eq('1 + 1 panic at the cost of half your next offense budget')
+      end
+    end
+
+    context 'with skills' do
+      let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing!', motto: 'I help make sure things work!')}
+      let(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'a skill for testing!', ranks_available: 2, passive: true, bonus_blocks: 1)}
+      let!(:class_skill_cost1) {class_skill.skill_costs.create({rank: 1, cost: 10})}
+
+      before(:each) do
+        saved_character.add_skill_points(100)
+        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_skill(class_skill)
+      end
+
+      it 'can add extra blocks with the right skills' do
+        expect(saved_character.multi_block_numbers_and_cost(hand_axe)).to eq('1 + 1 at the cost of 4 energy each + 1 panic at the cost of half your next offense budget')
+      end
+
+      it 'will modify extra block cost based on max energy budget (by stats)' do
+        saved_character.update(strength: 18, dexterity: 18, energy_budget_level_bonus: 10)
+        expect(saved_character.multi_block_numbers_and_cost(hand_axe)).to eq('1 + 1 at the cost of 10 energy each + 1 panic at the cost of half your next offense budget')
+      end
+
+      it 'can make those blocks cheaper' do
+        class_skill.update(defense_cost_reduction: 15)
+        expect(saved_character.multi_block_numbers_and_cost(hand_axe)).to eq('1 + 1 at the cost of 2 energy each + 1 panic at the cost of half your next offense budget')
+      end
+    end
+  end
+
+  describe '#dodge_numbers' do
+    let(:axe) {WeaponType.create(name: 'Axe')}
+    let(:hand_axe)  {Weapon.create(user_id: user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1, dodge_energy_mod_penalty: 0.5)}
+    let(:armor_type) {ArmorType.create(name: 'a-t')}
+    let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: 'Leather Armor', description: 'Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won\'t do much against heavy attacks.', passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0.5)}
+
+    it 'generates an appropriate dodge string without skills or armor' do
+      expect(character.dodge_numbers).to eq('2 x Energy Input + 12 + 1d4 + 1d10')
+    end
+
+    it 'is reduced by armor' do
+      saved_character.equip_armor(armor)
+      expect(saved_character.dodge_numbers).to eq('1.5 x Energy Input + 10 + 1d4 + 1d8')
+    end
+
+    it 'is reduced by weapons' do
+      saved_character.equip_weapon(hand_axe)
+      expect(saved_character.dodge_numbers).to eq('1.5 x Energy Input + 12 + 1d4 + 1d10')
+    end
   end
 end

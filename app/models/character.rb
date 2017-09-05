@@ -167,7 +167,15 @@ class Character < ApplicationRecord
   end
 
   def generate_damage_string(attack_option)
+    weapon_class_ids = attack_option.weapon_classes.map {|w_class| w_class.id}
+    skills_ranks = skills_ranks_hash
 
+    attack_option.strength_damage_bonus ? (str_bonus = (self.strength / attack_option.strength_damage_bonus.to_f).ceil) : (str_bonus = 0)
+    attack_option.dexterity_damage_bonus ? (dex_bonus = (self.dexterity / attack_option.dexterity_damage_bonus.to_f).ceil) : (dex_bonus = 0)
+    base = str_bonus + dex_bonus + attack_option.flat_damage_bonus + skills_bonus(skills_ranks, :damage_boost, weapon_class_ids)
+    dice = die_string(attack_option.damage_dice, (attack_option.damage_die_size + skills_bonus(skills_ranks, :damage_die_boost, weapon_class_ids)))
+
+    "#{base} + #{dice} #{attack_option.damage_type.name}"
   end
 
   def generate_defense_string(weapon)
@@ -182,12 +190,58 @@ class Character < ApplicationRecord
     "#{e_mod} x Energy Input + #{base} + #{dice} (+ passive defense (#{passive_def}) if block fails)"
   end
 
-  def multi_attack_numbers_and_cost(attack_option)
+  def multi_attack_numbers_and_cost(weapon)
+    skills_ranks = skills_ranks_hash
+    weapon_class_ids = weapon.weapon_classes.map {|w_class| w_class.id}
 
+    extra = skills_bonus(skills_ranks, :bonus_attacks, weapon_class_ids)
+
+    bonus =  (energy_budget * (weapon.extra_attack_cost - skills_bonus(skills_ranks, :attack_cost_reduction, weapon_class_ids)) / 100.0).ceil
+    if extra > 0
+      "1 + #{extra} at the cost of #{bonus} energy each"
+    else
+      '1'
+    end
+  end
+
+# note, if a weapon is dual classed, you get extra potential blocks for it? hmmmm....
+# also note, only works because no dual wielding. otherwise would need to revisit
+  def total_blocks
+    weapon_class_ids = self.equipped_weapons.reduce([]) do |acc, weapon|
+      acc + weapon.weapon_classes.map {|w_class| w_class.id}
+    end
+    skills_hash = skills_ranks_hash
+    total = self.equipped_weapons.length + skills_bonus(skills_hash, :bonus_blocks, weapon_class_ids)
+    "#{total} + #{self.equipped_weapons.length} panic block(s) for half your next offense budget"
+  end
+
+  def multi_block_numbers_and_cost(weapon)
+    skills_ranks = skills_ranks_hash
+    weapon_class_ids = weapon.weapon_classes.map {|w_class| w_class.id}
+
+    extra = skills_bonus(skills_ranks, :bonus_blocks, weapon_class_ids)
+    bonus =  (energy_budget * (weapon.extra_block_cost - skills_bonus(skills_ranks, :defense_cost_reduction, weapon_class_ids)) / 100.0).ceil
+
+    if extra > 0
+      "1 + #{extra} at the cost of #{bonus} energy each + 1 panic at the cost of half your next offense budget"
+    else
+      "1 + 1 panic at the cost of half your next offense budget"
+    end
   end
 
   def dodge_numbers
-
+    if self.equipped_armor
+      armor_debuff = self.equipped_armor.dodge_die_size_reduction
+      emod_debuff = self.equipped_armor.dodge_energy_mod_penalty
+    else
+      armor_debuff = 0
+      emod_debuff = 0
+    end
+    weapon_emod_debuff = self.equipped_weapons.reduce(0) {|sum, weapon| sum + weapon.dodge_energy_mod_penalty}
+    dice = dodge_dice(armor_debuff)
+    emod = 2 - emod_debuff - weapon_emod_debuff
+    base = (self.dexterity / 2.0).ceil + self.active_defense_bonus
+    "#{emod} x Energy Input + #{base} + #{dice}"
   end
 
 private
@@ -287,6 +341,14 @@ private
     convert_hash_to_dice(size_number_hash)
   end
 
+  def dodge_dice(armor_debuff)
+    size_number_hash = Hash.new(0)
+    size_number_hash[stat_die(self.dexterity)] += 1
+    size_number_hash[(10 - armor_debuff)] += 1
+
+    convert_hash_to_dice(size_number_hash)
+  end
+
   def convert_hash_to_dice(die_hash)
     die_hash.to_a.map { |pair| die_string(pair[1], pair[0])}.join(' + ')
   end
@@ -316,13 +378,15 @@ private
       6
     elsif stat <=16
       8
-    else
+    elsif stat <=19
       10
+    else
+      12
     end
   end
 
   def skills_ranks_hash
-    skills.zip(obtained_skills).to_h
+    @skills_hash ||= skills.zip(obtained_skills).to_h
   end
 
 end
