@@ -244,6 +244,11 @@ class Character < ApplicationRecord
     "#{emod} x Energy Input + #{base} + #{dice}"
   end
 
+  def possible_skills
+    class_ids = self.character_classes.map {|ch_class| ch_class.id}
+    Skill.all.reject {|skill| skill.skillable_type == 'CharacterClass' && !class_ids.include?(skill.skillable_id)}
+  end
+
 private
 
   def check_class(response, skill)

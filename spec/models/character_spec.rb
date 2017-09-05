@@ -778,4 +778,21 @@ RSpec.describe Character, type: :model do
       expect(saved_character.dodge_numbers).to eq('1.5 x Energy Input + 12 + 1d4 + 1d10')
     end
   end
+
+  describe '#possible_skills' do
+    let(:weapon_class) {WeaponClass.create(name: 'weapon class', description: 'a weapon class!')}
+    let!(:weapon_skill) {weapon_class.skills.create(name: 'tester weapon skill', description: 'a weapon skill for testing!', ranks_available: 2, passive: true, accuracy_boost: 5)}
+    let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing', motto: 'I help make sure things work!')}
+    let!(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'boosts armor!', ranks_available: 1, passive: true, armor_defense_boost: 5)}
+
+    it 'lists all weapon skills and all class skills of a class the character has' do
+      saved_character.add_skill_points(100)
+      saved_character.obtain_character_class(character_class)
+      expect(saved_character.possible_skills).to eq([weapon_skill, class_skill])
+    end
+
+    it 'rejects class skills the character doesn\'t have' do
+      expect(character.possible_skills).to eq([weapon_skill])
+    end
+  end
 end
