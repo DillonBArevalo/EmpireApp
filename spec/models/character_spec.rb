@@ -22,10 +22,18 @@ RSpec.describe Character, type: :model do
   let(:character) {Character.new(name: 'test', description: 'tester', strength: 10, dexterity: 10, constitution: 10)}
 
   describe 'Extra stats' do
+    let(:armor_type) {ArmorType.create(name: 'a-t')}
+    let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: 'Leather Armor', description: 'Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won\'t do much against heavy attacks.', passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
+
     describe '#active_defense_bonus' do
       it 'returns an integer active_defense_bonus' do
         expect(character.active_defense_bonus.integer?).to be true
         expect(character.active_defense_bonus).to eq(7)
+      end
+
+      it 'is debuffed by armor' do
+        saved_character.equip_armor(armor)
+        expect(saved_character.active_defense_bonus).to eq(5)
       end
     end
     describe '#active_offense_bonus' do
@@ -33,15 +41,26 @@ RSpec.describe Character, type: :model do
         expect(character.active_offense_bonus.integer?).to be true
         expect(character.active_offense_bonus).to eq(10)
       end
+
+      it 'is debuffed by armor' do
+        saved_character.equip_armor(armor)
+        expect(saved_character.active_offense_bonus).to eq(8)
+      end
     end
     describe '#energy_budget' do
       it 'returns an integer energy_budget' do
         expect(character.energy_budget.integer?).to be true
         expect(character.energy_budget).to eq(14)
       end
+
       it 'is modified by an energy_budget_level_bonus' do
         character.energy_budget_level_bonus = 10
         expect(character.energy_budget).to eq(24)
+      end
+
+      it 'is debuffed by armor' do
+        saved_character.equip_armor(armor)
+        expect(saved_character.energy_budget).to eq(12)
       end
     end
     describe '#energy_pool' do
@@ -49,9 +68,15 @@ RSpec.describe Character, type: :model do
         expect(character.energy_pool.integer?).to be true
         expect(character.energy_pool).to eq(250)
       end
+
       it 'is modified by an energy_pool_level_bonus' do
         character.energy_pool_level_bonus = 100
         expect(character.energy_pool).to eq(350)
+      end
+
+      it 'is debuffed by armor' do
+        saved_character.equip_armor(armor)
+        expect(saved_character.energy_pool).to eq(240)
       end
     end
     describe '#hit_points' do
@@ -64,6 +89,31 @@ RSpec.describe Character, type: :model do
       it 'returns an integer move_speed' do
         expect(character.move_speed.integer?).to be true
         expect(character.move_speed).to eq(2)
+      end
+    end
+
+    describe '#passive_defense' do
+      let(:armor_type) {ArmorType.create(name: 'a-t')}
+      let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: 'Leather Armor', description: 'Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won\'t do much against heavy attacks.', passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
+      let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing', motto: 'I help make sure things work!')}
+      let(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'boosts armor!', ranks_available: 1, passive: true, armor_defense_boost: 5)}
+      let!(:class_skill_cost1) {class_skill.skill_costs.create({rank: 1, cost: 10})}
+
+      it 'returns 0 without armor' do
+        expect(character.passive_defense).to eq(0)
+      end
+      it 'returns the passive defense boost with armor' do
+        character.equip_armor(armor)
+        expect(character.passive_defense).to eq(10)
+      end
+
+
+      it 'benefits from skills that boost passive def' do
+        saved_character.equip_armor(armor)
+        saved_character.add_skill_points(100)
+        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_skill(class_skill)
+        expect(saved_character.passive_defense).to eq(15)
       end
     end
   end
@@ -442,15 +492,91 @@ RSpec.describe Character, type: :model do
     end
   end
 
-  xdescribe '#generate_damage_string' do
+  describe '#generate_damage_string' do
+    let(:axe) {WeaponType.create(name: 'Axe')}
+    let(:hand_axe)  {Weapon.create(user_id: user.id, weapon_type_id: axe.id, name: 'Hand Axe', description: "A small, one handed axe that can strike with precision and efficiency. Its head heavy nature make its chops surprisingly powerful.", defense_die_number: 1, defense_die_size: 6, flat_defense_bonus: 5, defense_energy_modifier: 0.5, extra_block_cost: 25, extra_attack_cost: 25, hands_used: 1)}
+    let(:class2) {WeaponClass.create(name: "Finesse Weapons", description: "Type 2 weapons are one handed weapons that can be wielded by themselves, with another weapon (not yet), or with a shield. These weapons are often difficult to use initially but scale very well when skill points are sunk into them. They scale off of either dexterity and strength, or one of the two. Class 2 weapons have low damage and low attack numbers initially (though they usually have fairly high defensive numbers) but can scale the attack extremely well and damage numbers fairly well. What they lack in early game strength they make up for in both late game strength and the defensive capabilities (especially when coupled with a shield) to get you there.")}
+    let(:armor_type) {ArmorType.create(name: 'a-t')}
+    let(:armor) {Armor.create(user_id: user.id, armor_type_id: armor_type.id, name: 'Leather Armor', description: 'Thick but flexible and light leather fitted into a suit of armor. Substantially more protective than no armor, but won\'t do much against heavy attacks.', passive_defense_bonus: 10, active_action_reduction: 2, budget_reduction: 2, energy_pool_reduction: 10, dodge_die_size_reduction: 2, dodge_energy_mod_penalty: 0)}
 
+    before(:each) do
+      WeaponClassesWeapon.create(weapon_class_id: class2.id, weapon_id: hand_axe.id)
+      saved_character.equip_weapon(hand_axe)
+    end
+
+    it 'generates an appropriate defense string without skills' do
+      expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 12 + 1d4 + 1d6 (+ passive defense (0) if block fails)')
+    end
+
+    it 'is affected by armor (reduction in flat and added passive)' do
+      saved_character.equip_armor(armor)
+      expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 10 + 1d4 + 1d6 (+ passive defense (10) if block fails)')
+    end
+
+    describe 'stat dice effects' do
+
+      it 'adds to the number of dice if the stat die is of the same size as the attack die' do
+        saved_character.constitution = 12
+        expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 13 + 2d6 (+ passive defense (0) if block fails)')
+      end
+
+      it 'adds new dice if the stat die is of a different size to the attack die' do
+        saved_character.constitution = 16
+        expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 15 + 1d8 + 1d6 (+ passive defense (0) if block fails)')
+      end
+    end
+
+    describe 'skill bonuses' do
+
+      let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing!', motto: 'I help make sure things work!')}
+      let(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'a skill for testing!', is_weapon_boost: true, weapon_class: class2.id, ranks_available: 2, passive: true, defense_boost: 5)}
+      let!(:class_skill_cost1) {class_skill.skill_costs.create({rank: 1, cost: 10})}
+      let!(:class_skill_cost2) {class_skill.skill_costs.create({rank: 2, cost: 4})}
+
+      before(:each) do
+        saved_character.add_skill_points(100)
+        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_skill(class_skill)
+      end
+
+      it 'won\'t affect a defense done by a weapon of the wrong class' do
+        saved_character.obtained_skills.find_by(skill_id: class_skill.id).update(applicable_weapon_class_id: 0)
+        class_skill.update(weapon_class: 0)
+        expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 12 + 1d4 + 1d6 (+ passive defense (0) if block fails)')
+      end
+
+      it 'will affect an attack done by a weapon it is specifically targeting' do
+        expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 17 + 1d4 + 1d6 (+ passive defense (0) if block fails)')
+      end
+
+      it 'will affect a defense done by a weapon if the skill doesn\'t target any weapon class' do
+        saved_character.obtained_skills.find_by(skill_id: class_skill.id).update(applicable_weapon_class_id: nil)
+        class_skill.update(weapon_class: nil, is_weapon_boost: false)
+        expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 17 + 1d4 + 1d6 (+ passive defense (0) if block fails)')
+      end
+
+      it 'boosts base defense' do
+        expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 17 + 1d4 + 1d6 (+ passive defense (0) if block fails)')
+      end
+
+      it 'boosts die size for a block' do
+        class_skill.update(defense_boost: 0, defense_die_boost: 2)
+        expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 12 + 1d4 + 1d8 (+ passive defense (0) if block fails)')
+      end
+
+      it 'multiplies bonuses by rank' do
+        saved_character.obtain_skill(class_skill)
+        expect(saved_character.generate_defense_string(hand_axe)).to eq('0.5 x Energy Input + 22 + 1d4 + 1d6 (+ passive defense (0) if block fails)')
+      end
+
+    end
   end
 
   xdescribe '#generate_defense_string' do
 
   end
 
-  # xdescribe 'class_skills_bonus' do
+  xdescribe '#dodge_numbers' do
 
-  # end
+  end
 end

@@ -58,6 +58,10 @@ class Character < ApplicationRecord
     ((self.strength + self.dexterity)/10.0).ceil
   end
 
+  def passive_defense(skills_hash = skills_ranks_hash)
+    equipped_armor ? (equipped_armor.passive_defense_bonus + skills_bonus(skills_hash, :armor_defense_boost)) : 0
+  end
+
 
   def obtain_skill(skill)
     join = ObtainedSkill.find_by(character_id: self.id, skill_id: skill.id)
@@ -152,6 +156,7 @@ class Character < ApplicationRecord
     2 - self.equipped_weapons.reduce(0) {|hands,w| hands + w.hands_used}
   end
 
+# boosting dice is currently all funky
   def generate_attack_string(attack_option)
     weapon_class_ids = attack_option.weapon_classes.map {|w_class| w_class.id}
     skills_ranks = skills_ranks_hash
@@ -166,13 +171,24 @@ class Character < ApplicationRecord
   end
 
   def generate_defense_string(weapon)
+    skills_ranks = skills_ranks_hash
+    weapon_class_ids = weapon.weapon_classes.map {|w_class| w_class.id}
 
+    dice = defense_dice(weapon, weapon_class_ids, skills_ranks)
+    base = self.active_defense_bonus + weapon.flat_defense_bonus + skills_bonus(skills_ranks, :defense_boost, weapon_class_ids)
+    e_mod = weapon.defense_energy_modifier
+    passive_def = self.passive_defense(skills_ranks)
+    # if a hit, then add passive defense note this on display
+    "#{e_mod} x Energy Input + #{base} + #{dice} (+ passive defense (#{passive_def}) if block fails)"
   end
 
   def multi_attack_numbers_and_cost(attack_option)
 
   end
 
+  def dodge_numbers
+
+  end
 
 private
 
@@ -242,7 +258,7 @@ private
     end
   end
 
-  def skills_bonus(skills, stat, w_class_ids)
+  def skills_bonus(skills, stat, w_class_ids = [])
     skills.reduce(0) do |base, (skill, obtained_skill)|
       if !obtained_skill.applicable_weapon_class_id || w_class_ids.include?(obtained_skill.applicable_weapon_class_id)
         base + (skill[stat] * obtained_skill.ranks)
@@ -253,13 +269,20 @@ private
   end
 
   def attack_dice(attack_option)
-    # make a hash
     size_number_hash = Hash.new(0)
     size_number_hash[stat_die(self.strength)] += attack_option.strength_dice
     size_number_hash[stat_die(self.dexterity)] += attack_option.dexterity_dice
     size_number_hash[attack_option.die_size] += attack_option.die_number
 
-    #GET REST OF THE DIE POSSIBILITIES!
+    #GET REST OF THE DIE POSSIBILITIES! ??
+
+    convert_hash_to_dice(size_number_hash)
+  end
+
+  def defense_dice(weapon, weapon_ids, skills_hash = skills_ranks_hash)
+    size_number_hash = Hash.new(0)
+    size_number_hash[stat_die(self.constitution)] += 1
+    size_number_hash[weapon.defense_die_size + skills_bonus(skills_hash, :defense_die_boost, weapon_ids)] += weapon.defense_die_number
 
     convert_hash_to_dice(size_number_hash)
   end

@@ -190,7 +190,7 @@ s_f = soldier.skills.create!(base_class_skill: false, display_description: false
   s_f.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-b_b = soldier.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Better Blocker", description: "Increasing dice size by d2 for blocking with a shield per level.", ranks_available: 7, defense_die_boost: 2)
+b_b = soldier.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Better Blocker", description: "Increasing dice size by d2 for blocking with a shield per level.", is_weapon_boost: true, weapon_class: shields.id, ranks_available: 7, defense_die_boost: 2)
 [2,4,6,8, 10, 12, 14].each_with_index do |cost, idx|
   b_b.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
