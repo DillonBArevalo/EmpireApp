@@ -13,5 +13,7 @@ RSpec.describe AttackOption, type: :model do
     describe '#conditions' do
       it{should have_many :conditions}
     end
+
+    it{should have_many :weapon_classes}
   end
 end
