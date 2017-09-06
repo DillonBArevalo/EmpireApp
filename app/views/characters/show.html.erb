@@ -1,0 +1,25 @@
+<h1>Character Show</h1>
+
+<h2><%= @character.name %></h2>
+
+<p><%= @character.description %></p>
+<ul class='stats flex-row'>
+  <div class='flex-column'>
+    <li><strong>Primary Stats:</strong></li>
+    <li>Strength: <%= @character.strength %></li>
+    <li>Dexterity: <%= @character.dexterity %></li>
+    <li>Constitution: <%= @character.constitution %></li>
+    <li>Intelligence: <%= @character.intelligence %></li>
+    <li>Wisdom: <%= @character.wisdom %></li>
+    <li>Charisma: <%= @character.charisma %></li>
+  </div>
+  <div class='flex-column'>
+    <li><strong>Secondary Stats</strong></li>
+    <li>Active Defense Bonus: <%= @character.active_defense_bonus %></li>
+    <li>Active Offense Bonus <%= @character.active_offense_bonus %></li>
+    <li>Energy Budget <%= @character.energy_budget %></li>
+    <li>Energy Pool <%= @character.energy_pool %></li>
+    <li>Hit Points <%= @character.hit_points %></li>
+    <li>Move Speed <%= @character.move_speed %></li>
+  </div>
+</ul>

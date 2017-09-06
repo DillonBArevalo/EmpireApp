@@ -26,7 +26,7 @@ class Character < ApplicationRecord
   has_many :attack_options, through: :equipped_weapons
 
   # validations
-  validates :strength, :dexterity, :constitution, :name, presence: true
+  validates :name, :description, :strength, :dexterity, :constitution, presence: true
 
 # EXTRA STATS
   def active_defense_bonus

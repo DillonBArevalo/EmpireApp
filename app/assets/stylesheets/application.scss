@@ -14,10 +14,22 @@
  *= require_self
  */
 
+ .stats {
+  width: 80%;
+  min-width: 350px;
+  max-width: 700px;
+ }
+
 .flex-row {
   display: flex;
+  justify-content: space-around;
 }
 
+.form-field {
+  padding: 5px;
+  display:flex;
+  align-items: center;
+}
 
 .flex-column {
   display: flex;
@@ -41,4 +53,8 @@
 #nav * {
 
   padding: 5px;
+}
+
+label {
+  padding-right: 5px;
 }

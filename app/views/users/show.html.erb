@@ -3,5 +3,5 @@
 <h2> Characters: </h2>
 
 <% @characters.each do |character| %>
-  <%= character.name %> <br>
+  <%= link_to(character.name, character) %><br>
 <% end %>
