@@ -4,7 +4,6 @@ class Character < ApplicationRecord
   has_many :obtained_character_classes
   has_many :character_classes, through: :obtained_character_classes
   has_many :possible_class_skills, through: :character_classes, source: :skills
-# make possible skills method that gets all weapon skills and all possible_class_skills
 
   has_many :obtained_skills, -> { order 'skill_id ASC' }
   has_many :improved_weapon_classes, through: :obtained_skills, source: :applicable_weapon_class
@@ -130,7 +129,6 @@ class Character < ApplicationRecord
     end
   end
 
-# can unequip and not reequip if fail to eqiup new weapon... fix?
 # DOES NOT PERSIST WITHOUT A SAVE
   def equip_weapon(weapon)
     remove_weapon
@@ -144,12 +142,11 @@ class Character < ApplicationRecord
   end
 
   def remove_armor
-    self.equipped_armor = nil
+    self.update(equipped_armor: nil)
   end
 
-# DOES NOT PERSIST WITHOUT A SAVE
   def equip_armor(armor)
-    self.equipped_armor = armor
+    self.update(equipped_armor: armor)
   end
 
   def free_hands
@@ -158,7 +155,7 @@ class Character < ApplicationRecord
 
 # boosting dice is currently all funky
   def generate_attack_string(attack_option)
-    weapon_class_ids = attack_option.weapon_classes.map {|w_class| w_class.id}
+    weapon_class_ids = attack_option.weapon_class_ids
     skills_ranks = skills_ranks_hash
     base = self.active_offense_bonus + attack_option.attack_bonus + skills_bonus(skills_ranks, :accuracy_boost, weapon_class_ids)
     e_mod = attack_option.energy_modifier + skills_bonus(skills_ranks, :attack_energy_mod_boost, weapon_class_ids)
@@ -167,7 +164,7 @@ class Character < ApplicationRecord
   end
 
   def generate_damage_string(attack_option)
-    weapon_class_ids = attack_option.weapon_classes.map {|w_class| w_class.id}
+    weapon_class_ids = attack_option.weapon_class_ids
     skills_ranks = skills_ranks_hash
 
     attack_option.strength_damage_bonus ? (str_bonus = (self.strength / attack_option.strength_damage_bonus.to_f).ceil) : (str_bonus = 0)
@@ -180,7 +177,7 @@ class Character < ApplicationRecord
 
   def generate_defense_string(weapon)
     skills_ranks = skills_ranks_hash
-    weapon_class_ids = weapon.weapon_classes.map {|w_class| w_class.id}
+    weapon_class_ids = weapon.weapon_class_ids
 
     dice = defense_dice(weapon, weapon_class_ids, skills_ranks)
     base = self.active_defense_bonus + weapon.flat_defense_bonus + skills_bonus(skills_ranks, :defense_boost, weapon_class_ids)
@@ -192,7 +189,7 @@ class Character < ApplicationRecord
 
   def multi_attack_numbers_and_cost(weapon)
     skills_ranks = skills_ranks_hash
-    weapon_class_ids = weapon.weapon_classes.map {|w_class| w_class.id}
+    weapon_class_ids = weapon.weapon_class_ids
 
     extra = skills_bonus(skills_ranks, :bonus_attacks, weapon_class_ids)
 
@@ -208,7 +205,7 @@ class Character < ApplicationRecord
 # also note, only works because no dual wielding. otherwise would need to revisit
   def total_blocks
     weapon_class_ids = self.equipped_weapons.reduce([]) do |acc, weapon|
-      acc + weapon.weapon_classes.map {|w_class| w_class.id}
+      acc + weapon.weapon_class_ids
     end
     skills_hash = skills_ranks_hash
     total = self.equipped_weapons.length + skills_bonus(skills_hash, :bonus_blocks, weapon_class_ids)
@@ -217,7 +214,7 @@ class Character < ApplicationRecord
 
   def multi_block_numbers_and_cost(weapon)
     skills_ranks = skills_ranks_hash
-    weapon_class_ids = weapon.weapon_classes.map {|w_class| w_class.id}
+    weapon_class_ids = weapon.weapon_class_ids
 
     extra = skills_bonus(skills_ranks, :bonus_blocks, weapon_class_ids)
     bonus =  (energy_budget * (weapon.extra_block_cost - skills_bonus(skills_ranks, :defense_cost_reduction, weapon_class_ids)) / 100.0).ceil
@@ -245,7 +242,7 @@ class Character < ApplicationRecord
   end
 
   def possible_skills
-    class_ids = self.character_classes.map {|ch_class| ch_class.id}
+    class_ids = self.character_class_ids
     Skill.all.reject {|skill| skill.skillable_type == 'CharacterClass' && !class_ids.include?(skill.skillable_id)}
   end
 
