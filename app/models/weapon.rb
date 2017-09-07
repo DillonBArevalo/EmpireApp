@@ -18,6 +18,7 @@ class Weapon < ApplicationRecord
   has_many :obtained_weapons
   has_many :inventories, through: :obtained_weapons
 
+  validates :user, :weapon_type, :name, :description, :defense_die_number, :defense_die_size, :flat_defense_bonus, :defense_energy_modifier, :extra_attack_cost, :extra_block_cost, :hands_used, presence: true
 
   def is_shield?
     !self.weapon_classes.select {|type| type.name == 'Shields'}.empty?
