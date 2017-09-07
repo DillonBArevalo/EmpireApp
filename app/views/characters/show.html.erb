@@ -3,8 +3,8 @@
 <h2><%= @character.name %></h2>
 
 <p><%= @character.description %></p>
-<ul class='stats flex-row'>
-  <div class='flex-column'>
+<ul class='stats no-dots flex-row'>
+  <div class='flex-column padded'>
     <li><strong>Primary Stats:</strong></li>
     <li>Strength: <%= @character.strength %></li>
     <li>Dexterity: <%= @character.dexterity %></li>
@@ -13,7 +13,7 @@
     <li>Wisdom: <%= @character.wisdom %></li>
     <li>Charisma: <%= @character.charisma %></li>
   </div>
-  <div class='flex-column'>
+  <div class='flex-column padded'>
     <li><strong>Secondary Stats</strong></li>
     <li>Active Defense Bonus: <%= @character.active_defense_bonus %></li>
     <li>Active Offense Bonus <%= @character.active_offense_bonus %></li>
@@ -22,4 +22,17 @@
     <li>Hit Points <%= @character.hit_points %></li>
     <li>Move Speed <%= @character.move_speed %></li>
   </div>
+  <div class='flex-column padded'>
+    <li><strong>Combat Stats</strong></li>
+    <li>Tactical Maneuver: <%= @character.tactical_maneuver %></li>
+    <li>Jump: <%= @character.jump %></li>
+    <li>Total Blocks: <%= @character.total_blocks %></li>
+    <li>Dodge: <%= @character.dodge_numbers %></li>
+  </div>
+  <div class='flex-column padded'>
+    <li><strong>Equipment:</strong></li>
+  </div>
+
 </ul>
+
+

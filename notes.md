@@ -52,3 +52,4 @@ A LOT OF THESE DON'T MATTER FOR JUST THE CHARACTER CREATOR. ONLY PASSIVE STAT BO
 
 - decided on adding energy boosts upon getting more skill points, not upon getting more skills!
 - DON'T HAVE A WAY TO TRACK BCS FOR WEAPONS! NEED OBTAINED WEAPON SKILLS TABLE
+- perhaps stack one level deeper on errors? that way nested forms can have different error columns? or make the error partial take a local, that way i can pass multiple errors. that'd mean taking the if out though. either way!

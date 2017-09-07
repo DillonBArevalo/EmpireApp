@@ -14,15 +14,50 @@
  *= require_self
  */
 
- .stats {
+#nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#nav * {
+  padding: 5px;
+}
+
+.number-field {
+  width: 3em;
+}
+
+.half {
+  width: 50%;
+}
+
+.stats {
   width: 80%;
   min-width: 350px;
   max-width: 700px;
  }
 
+.no-pad {
+  padding: 0px;
+}
+
+ .no-dots {
+  list-style: none
+ }
+
+.padded {
+  padding: 0.5em;
+}
+
+.bold {
+  font-weight: bold;
+}
+
 .flex-row {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
+  flex-basis: 50%;
 }
 
 .form-field {
@@ -36,6 +71,10 @@
   flex-direction: column;
 }
 
+.left {
+  align-items: flex-start;
+}
+
 .center {
   align-items: center;
   justify-content: space-between;
@@ -43,16 +82,6 @@
 
 .errors {
   color: red;
-}
-
-#nav {
-  display: flex;
-  justify-content: flex-end;
-}
-
-#nav * {
-
-  padding: 5px;
 }
 
 label {
