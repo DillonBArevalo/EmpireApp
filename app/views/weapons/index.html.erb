@@ -1,0 +1,15 @@
+<h1>Weapons</h1>
+
+<%= link_to('Create a new weapon!', new_weapon_path) %>
+
+<ul class='flex-row no-dots weapon-classes-list'>
+  <% @weapon_classes.each do |weapon_class| %>
+    <li> <strong> <%= link_to(weapon_class.name, weapon_class) %> </strong>
+      <ul class='flex-column no-dots weapons-list no-pad'>
+        <% weapon_class.weapons.each do |weapon| %>
+          <li><%= link_to(weapon.name, weapon) %></li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>

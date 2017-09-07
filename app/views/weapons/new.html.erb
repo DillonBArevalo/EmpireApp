@@ -1,0 +1,121 @@
+<h1>Create a new weapon!</h1>
+
+<%= render '/errors' %>
+
+<div class='flex-column center'>
+
+<%= form_for @weapon, html: {class: 'flex-row left', id: nil} do |f| %>
+  <div class='flex-column left half'>
+    <label><span class='bold'>Weapon Details:</span></label>
+    <div class='form-field'>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :description %>
+      <%= f.text_area :description %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :weapon_type %>
+      <%= f.select :weapon_type_id, options_from_collection_for_select(@weapon_types, "id", "name") %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :weapon_class %>
+      <%= select_tag :weapon_class_id, options_from_collection_for_select(@weapon_classes, "id", "name") %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :defense_die_number %>
+      <%= f.number_field :defense_die_number, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :defense_die_size %>
+      <%= f.number_field :defense_die_size, in: 2..12, step: 2, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :flat_defense_bonus %>
+      <%= f.number_field :flat_defense_bonus, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :defense_energy_modifier %>
+      <%= f.number_field :defense_energy_modifier, in: 1..2, step: 0.5, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :extra_attack_cost %>
+      <%= f.number_field :extra_attack_cost, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :extra_block_cost %>
+      <%= f.number_field :extra_block_cost, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :hands_used %>
+      <%= f.number_field :hands_used, in: 1..2, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= f.label :dodge_energy_mod_penalty %>
+      <%= f.number_field :dodge_energy_mod_penalty, step: :any, class: 'number-field' %>
+    </div>
+  </div>
+
+  <div class='flex-column left half'>
+    <label><span class='bold'>Attack Option Details:</span></label>
+    <div class='form-field'>
+      <%= label_tag :name %>
+      <%= text_field_tag 'attack_option[name]', @attack_option.name %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :description %>
+      <%= text_area_tag 'attack_option[description]', @attack_option.description %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :damage_type %>
+      <%= select_tag 'attack_option[damage_type_id]',  options_from_collection_for_select(@damage_types, "id", "name") %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :strength_dice %>
+      <%= number_field_tag 'attack_option[strength_dice]', @attack_option.strength_dice, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :dexterity_dice %>
+      <%= number_field_tag 'attack_option[dexterity_dice]', @attack_option.dexterity_dice, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :energy_modifier %>
+      <%= number_field_tag 'attack_option[energy_modifier]', @attack_option.energy_modifier, in: 1..3, step: 0.5, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :attack_die_number %>
+      <%= number_field_tag 'attack_option[die_number]', @attack_option.die_number, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :attack_die_size %>
+      <%= number_field_tag 'attack_option[die_size]', @attack_option.die_size, in: 2..12, step: 2, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :attack_bonus %>
+      <%= number_field_tag 'attack_option[attack_bonus]', @attack_option.attack_bonus, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :damage_die_number %>
+      <%= number_field_tag 'attack_option[damage_dice]', @attack_option.damage_dice, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :damage_die_size %>
+      <%= number_field_tag 'attack_option[damage_die_size]', @attack_option.damage_die_size, in: 2..12, step: 2, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :strength_damage_bonus %>
+      <%= number_field_tag 'attack_option[strength_damage_bonus]', @attack_option.strength_damage_bonus, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :dexterity_damage_bonus %>
+      <%= number_field_tag 'attack_option[dexterity_damage_bonus]', @attack_option.dexterity_damage_bonus, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :flat_damage_bonus %>
+      <%= number_field_tag 'attack_option[flat_damage_bonus]', @attack_option.flat_damage_bonus, class: 'number-field' %>
+    </div>
+  </div>
+    <%= f.submit %>
+<% end %>
+</div>
