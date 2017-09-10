@@ -5,8 +5,8 @@ class Character < ApplicationRecord
   has_many :character_classes, through: :obtained_character_classes
   has_many :possible_class_skills, through: :character_classes, source: :skills
 
-  has_many :obtained_skills, -> { order 'skill_id ASC' }
   has_many :improved_weapon_classes, through: :obtained_skills, source: :applicable_weapon_class
+  has_many :obtained_skills, -> { order 'skill_id ASC' }
   has_many :skills, -> { order 'id ASC' }, through: :obtained_skills
   has_many :displaying_skills, -> {where display_description: true}, through: :obtained_skills, source: :skill
   has_many :class_bcs, through: :character_classes, source: :bcs
@@ -30,7 +30,7 @@ class Character < ApplicationRecord
 
 # EXTRA STATS
   def active_defense_bonus
-    equipped_armor ? debuff = equipped_armor.active_action_reduction : debuff = 0
+    debuff = equipped_armor ? equipped_armor.active_action_reduction : 0
     ((self.constitution + self.dexterity)/2.0).ceil - 3 - debuff
   end
 
@@ -40,12 +40,12 @@ class Character < ApplicationRecord
   end
 
   def energy_budget
-    equipped_armor ? debuff = equipped_armor.budget_reduction : debuff = 0
+    debuff = equipped_armor ? equipped_armor.budget_reduction : 0
     self.strength + self.dexterity - 6 + self.energy_budget_level_bonus.to_i - debuff
   end
 
   def energy_pool
-    equipped_armor ? debuff = equipped_armor.energy_pool_reduction : debuff = 0
+    debuff = equipped_armor ? equipped_armor.energy_pool_reduction : 0
     10 * (self.strength + self.dexterity + ((self.constitution)/2.0).ceil) + self.energy_pool_level_bonus.to_i - debuff
   end
 
@@ -257,7 +257,7 @@ private
     end
   end
 
-# return false if fails
+  # return false if fails
   def check_rank_available(response, skill, join)
     if join && (join.ranks == skill.ranks_available)
       response[:status] = false
