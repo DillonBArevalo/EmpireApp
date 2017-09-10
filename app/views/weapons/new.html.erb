@@ -1,6 +1,8 @@
 <h1>Create a new weapon!</h1>
-
-<%= render '/errors' %>
+<div class='flex-row center'>
+<%= render partial: '/errors', locals: {errors: @errors} %>
+<%= render partial: '/errors', locals: {errors: @errors2} %>
+</div>
 
 <div class='flex-column center'>
 
@@ -114,6 +116,23 @@
     <div class='form-field'>
       <%= label_tag :flat_damage_bonus %>
       <%= number_field_tag 'attack_option[flat_damage_bonus]', @attack_option.flat_damage_bonus, class: 'number-field' %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :condition_1_type %>
+      <%= select_tag 'condition1[condition_id]', options_from_collection_for_select(@conditions, "id", "name") %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :threshold_1 %>
+      <%= number_field_tag 'condition1[threshold]', @condition1 ? @condition1.threshold : 10, class: 'number-field' %>
+      <%= @condition1 ? @condition1.threshold : 10 %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :condition_2_type %>
+      <%= select_tag 'condition2[condition_id]', options_from_collection_for_select(@conditions, "id", "name") %>
+    </div>
+    <div class='form-field'>
+      <%= label_tag :threshold_2 %>
+      <%= number_field_tag 'condition2[threshold]', @condition2 ? @condition2.threshold : 20, class: 'number-field' %>
     </div>
   </div>
     <%= f.submit %>

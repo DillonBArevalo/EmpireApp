@@ -1,0 +1,49 @@
+<h1><%= @weapon.name %></h1>
+
+<p><%= @weapon.description %></p>
+  <h2>Example rolls:</h2>
+<ul class='no-dots'>
+  <li>Example block numbers: <%= @character.generate_defense_string(@weapon) %></li>
+  <% @attack_options.each do |attack_option| %>
+    <h3><%= attack_option.name %>:</h3>
+    <li>Example attack numbers: <%= @character.generate_attack_string(attack_option) %></li>
+    <li>Example damage numbers: <%= @character.generate_damage_string(attack_option) %></li>
+    <% attack_option.attack_options_conditions.each do |aoo_c| %>
+      <li>Will trigger <%= aoo_c.condition.name %> at <%= aoo_c.threshold %> points of damage</li>
+    <% end %>
+  <% end %>
+</ul>
+
+<h2>Stats:</h2>
+
+<ul class='no-dots weapon-stats'>
+  <li>Creator: <%= @weapon.user.username %></li>
+  <li>Weapon Type: <%= @weapon.weapon_type.name %></li>
+  <li>Defense die number: <%= @weapon.defense_die_number %></li>
+  <li>Defense die size: <%= @weapon.defense_die_size %></li>
+  <li>Flat defense bonus: <%= @weapon.flat_defense_bonus %></li>
+  <li>Defense energy modifier: <%= @weapon.defense_energy_modifier %></li>
+  <li>Extra attack cost: <%= @weapon.extra_attack_cost %></li>
+  <li>Extra Block Cost: <%= @weapon.extra_block_cost %></li>
+  <li>Hands required: <%= @weapon.hands_used %></li>
+  <li>Dodge energy modifier penalty: <%= @weapon.dodge_energy_mod_penalty %></li>
+</ul>
+<h2>Attack Options: </h2>
+<% @attack_options.each do |attack_option| %>
+<ul class='no-dots attack-option-stats'>
+  <h3><%= attack_option.name %>:</h3>
+  <li>Description: <%= attack_option.description %></li>
+  <li>Damage type: <%= attack_option.damage_type.name %></li>
+  <li>Strength dice: <%= attack_option.strength_dice %></li>
+  <li>Dexterity Dice: <%= attack_option.dexterity_dice %></li>
+  <li>Energy Modifier: <%= attack_option.energy_modifier %></li>
+  <li>Attack die number: <%= attack_option.die_number %></li>
+  <li>Attack die size: <%= attack_option.die_size %></li>
+  <li>Attack Bonus: <%= attack_option.attack_bonus %></li>
+  <li>Damage die number: <%= attack_option.damage_dice %></li>
+  <li>Damage die size: <%= attack_option.damage_die_size %></li>
+  <li>Strength damage bonus: STR/<%= attack_option.strength_damage_bonus %></li>
+  <li>Dexterity damage bonus: DEX/<%= attack_option.dexterity_damage_bonus %></li>
+  <li>Flat Damage Bonus: <%= attack_option.flat_damage_bonus %></li>
+</ul>
+<% end %>
