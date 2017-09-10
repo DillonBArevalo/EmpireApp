@@ -10,11 +10,11 @@ class2 = WeaponClass.create!(name: "Finesse Weapons", description: "Type 2 weapo
 shields = WeaponClass.create!(name: 'Shields', description: "Ultimately probably won't be a weapon class, but at the moment the website is young enough that I haven't separated them yet. It's a shield, silly.")
 
 # Damage Types
-slashing = DamageType.create!(name: 'slashing', description: 'A cut without much impact behind it. Think the cut of a light sword.')
-piercing = DamageType.create!(name: 'piercing', description: 'An impact with a sharp weapon, but not one with incredible mass behind it. Think arrow or rapier thrust.')
-bludgeoning = DamageType.create!(name: 'bludgeoning', description: 'A heavy impact where no sharp edge is present. Think clubs and hammers.')
-bludgeoning_slashing = DamageType.create!(name: 'bludgeoning/slashing', description: 'A heavy impact with an edged weapon. Think large axes or heavy swords. Less of a slice and more of a cleave.')
-bludgeoning_piercing = DamageType.create!(name: 'bludgeoning/piercing', description: 'An impact with a sharp point meant to penetrate. Think war picks and half swording.')
+slashing = DamageType.create!(name: 'Slashing', description: 'A cut without much impact behind it. Think the cut of a light sword.')
+piercing = DamageType.create!(name: 'Piercing', description: 'An impact with a sharp weapon, but not one with incredible mass behind it. Think arrow or rapier thrust.')
+bludgeoning = DamageType.create!(name: 'Bludgeoning', description: 'A heavy impact where no sharp edge is present. Think clubs and hammers.')
+bludgeoning_slashing = DamageType.create!(name: 'Bludgeoning/Slashing', description: 'A heavy impact with an edged weapon. Think large axes or heavy swords. Less of a slice and more of a cleave.')
+bludgeoning_piercing = DamageType.create!(name: 'Bludgeoning/Piercing', description: 'An impact with a sharp point meant to penetrate. Think war picks and half swording.')
 
 # Armor Types
 light_armor = ArmorType.create!(name: 'Light')

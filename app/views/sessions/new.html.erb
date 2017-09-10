@@ -1,6 +1,6 @@
 <h1>Login</h1>
 
-<%= render '/errors' %>
+<%= render partial: '/errors', locals: {errors: @errors} %>
 
 <%= form_for @user, url: login_path, method: 'post' do |f| %>
   <%= f.label :Username %>

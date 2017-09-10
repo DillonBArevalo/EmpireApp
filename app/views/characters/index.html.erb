@@ -1,7 +1,7 @@
 <h1>All Characters</h1>
 
-<ul id='characters-list'>
+<ul id='characters-list no-dots'>
 <% @characters.each do |character| %>
-  <li class='no-dot'><div class='character-card'><%= link_to(character, character.name) %></div></li>
+  <li><div class='character-card'><%= link_to(character.name, character) %></div></li>
 <% end %>
 </ul>
