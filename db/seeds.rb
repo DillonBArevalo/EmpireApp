@@ -117,14 +117,14 @@ aggression1 = warrior.skills.create!(base_class_skill: false, passive: true, dis
   aggression1.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-wild_strikes1 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class1.id, name: "Wild Strikes (Class 1)", description: "Damage dice size increase for a specified weapon class (Class 1). +d2 per level.", ranks_available: 7, damage_die_boost: 2)
-[2, 3, 5, 8, 13, 21, 34].each_with_index do |cost, idx|
-  wild_strikes1.skill_costs.create!(rank: (idx + 1), cost: cost)
-end
-
 aggression2 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class2.id, name: "Aggression (Class 2)", description: "Base Damage increase for a specified weapon class (Class 2). +1 per level.", ranks_available: 8, damage_boost: 1)
 [1, 3, 5, 7, 9, 11, 13, 15].each_with_index do |cost, idx|
   aggression2.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
+
+wild_strikes1 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class1.id, name: "Wild Strikes (Class 1)", description: "Damage dice size increase for a specified weapon class (Class 1). +d2 per level.", ranks_available: 7, damage_die_boost: 2)
+[2, 3, 5, 8, 13, 21, 34].each_with_index do |cost, idx|
+  wild_strikes1.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
 wild_strikes2 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class2.id, name: "Wild Strikes (Class 2)", description: "Damage dice size increase for a specified weapon class (Class 2). +d2 per level.", ranks_available: 7, damage_die_boost: 2)

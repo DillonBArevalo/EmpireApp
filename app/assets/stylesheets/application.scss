@@ -61,7 +61,7 @@
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  flex-basis: 50%;
+  // flex-basis: 50%; goes on child!
 }
 
 .form-field {
@@ -88,6 +88,22 @@
   color: red;
 }
 
+.pad-bottom {
+  padding-bottom: 10px;
+}
+
+.small-border {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+
 label {
   padding-right: 5px;
+}
+
+li {
+  flex-basis: 50%;
 }

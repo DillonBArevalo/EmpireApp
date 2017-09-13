@@ -4,6 +4,6 @@ class User < ApplicationRecord
   has_many :weapons
   has_many :armors
 
-  validates :username, presence: true, uniqueness: true
-  validates :name, :email, presence: true
+  validates :username, :email, presence: true, uniqueness: true
+  validates :name, presence: true
 end

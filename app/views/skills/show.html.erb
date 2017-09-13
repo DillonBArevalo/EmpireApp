@@ -1,0 +1,50 @@
+<h1><%= @skill.name %></h1>
+
+<label class='bold'>Description:</label><p><%= @skill.description %></p>
+
+<table >
+  <tr>
+    <th class='table-rank'>Rank</th>
+    <th class='table-cost'>Cost</th>
+  </tr>
+  <% @skill.skill_costs.each do |cost| %>
+  <tr>
+    <th class='table-rank'><%= cost.rank %></th>
+    <th class='table-cost'><%= cost.cost %></th>
+  </tr>
+  <% end %>
+</table>
+
+<!-- probably add number of ranks to obtain? -->
+<% if logged_in? && !@skill.base_class_skill %>
+  <label>Obtain this skill for one of your characters</label>
+  <table>
+    <tr>
+      <th class='table-skill-form'>character</th>
+      <th class='table-issues'>issues</th>
+    </tr>
+    <% @characters_skills.each do |character_skill| %>
+      <tr>
+        <td class='table-skill-form'>
+          <% if character_skill[1] %>
+
+            <%= form_for [character_skill[0], character_skill[1]] do |f| %>
+              <%= hidden_field_tag :skill_id, @skill.id %>
+              <%= f.submit character_skill[0].name, disabled: !character_skill[2][:status] %>
+            <% end %>
+          <% else %>
+            <%= form_for [character_skill[0], @obtained_skill] do |f| %>
+              <%= hidden_field_tag :skill_id, @skill.id %>
+              <%= f.submit character_skill[0].name, disabled: !character_skill[2][:status] %>
+            <% end %>
+          <% end %>
+        </td>
+        <td>
+          <% character_skill[2][:messages].each do |message| %>
+            <span class='table-issues'><%= message %></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

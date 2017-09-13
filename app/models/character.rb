@@ -67,10 +67,7 @@ class Character < ApplicationRecord
     response = {status: true, messages: []}
 
     # check permissions
-    check_class(response, skill)
-    if check_rank_available(response, skill, join)
-      check_enough_points(response, skill, join)
-    end
+    skill_obtainable(skill, join, response)
     return response unless response[:status]
 
     #add to ranks
@@ -84,7 +81,15 @@ class Character < ApplicationRecord
     cost = skill.cost_at_rank(join.ranks)
     self.increment!(:available_skill_points, -cost)
     increase_class_stat_points(skill, cost) if skill.skillable_type == 'CharacterClass'
-    response[:messages] << "#{self.name} successfully obtained #{skill.name} at rank #{join.ranks} for #{cost} skill points."
+    response[:messages] = ["#{self.name} successfully obtained #{skill.name} at rank #{join.ranks} for #{cost} skill points."]
+    response
+  end
+
+  def skill_obtainable(skill, join, response = {status: true, messages: []})
+    check_class(response, skill)
+    if check_rank_available(response, skill, join)
+      check_enough_points(response, skill, join)
+    end
     response
   end
 
