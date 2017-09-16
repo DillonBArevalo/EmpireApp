@@ -17,6 +17,7 @@ class CharactersController < ApplicationController
     @character = @user.characters.new(new_character_params)
 
     if @character.save
+      Inventory.create(character_id: @character.id)
       redirect_to @character
     else
       @errors = @character.errors.full_messages

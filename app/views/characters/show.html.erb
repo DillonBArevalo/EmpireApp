@@ -4,7 +4,7 @@
 
 <p><%= @character.description %></p>
 <ul class='stats no-dots flex-row'>
-  <div class='flex-column padded'>
+  <div class='flex-column padded border'>
     <li><strong>Primary Stats:</strong></li>
     <li>Strength: <%= @character.strength %></li>
     <li>Dexterity: <%= @character.dexterity %></li>
@@ -13,7 +13,7 @@
     <li>Wisdom: <%= @character.wisdom %></li>
     <li>Charisma: <%= @character.charisma %></li>
   </div>
-  <div class='flex-column padded'>
+  <div class='flex-column padded border'>
     <li><strong>Secondary Stats</strong></li>
     <li>Active Defense Bonus: <%= @character.active_defense_bonus %></li>
     <li>Active Offense Bonus <%= @character.active_offense_bonus %></li>
@@ -22,15 +22,31 @@
     <li>Hit Points <%= @character.hit_points %></li>
     <li>Move Speed <%= @character.move_speed %></li>
   </div>
-  <div class='flex-column padded'>
-    <li><strong>Combat Stats</strong></li>
+  <div class='flex-column padded border'>
+    <li class='bold'>Combat Stats</li>
     <li>Tactical Maneuver: <%= @character.tactical_maneuver %></li>
     <li>Jump: <%= @character.jump %></li>
     <li>Total Blocks: <%= @character.total_blocks %></li>
     <li>Dodge: <%= @character.dodge_numbers %></li>
   </div>
-  <div class='flex-column padded'>
+  <div class='flex-column padded border'>
     <li><strong>Equipment:</strong></li>
+    <% @character.equipped_weapons.each do |weapon| %>
+      <li class='bold'><%= weapon.name %></li>
+      <ul class='no-dots'>
+        <li class='bold'>Attacks</li>
+        <li>number: <%= @character.multi_attack_numbers_and_cost(weapon) %></li>
+        <% weapon.attack_options.each do |a_o| %>
+          <li class='bold'><%= a_o.name %></li>
+          <li>Attack: <%= @character.generate_attack_string(a_o) %></li>
+          <li>Damage: <%= @character.generate_damage_string(a_o) %></li>
+
+        <% end %>
+        <li class='bold'>blocks:</li>
+        <li>number: <%= @character.multi_block_numbers_and_cost(weapon) %></li>
+        <li>block: <%= @character.generate_defense_string(weapon) %></li>
+      </ul>
+    <% end %>
   </div>
 </ul>
 

@@ -1,5 +1,9 @@
 <h1><%= @weapon.name %></h1>
 
+<% if logged_in? %>
+  <%= render partial: '/weapons/obtain_form' %>
+<% end %>
+
 <p><%= @weapon.description %></p>
   <h2>Example rolls:</h2>
 <ul class='no-dots'>
@@ -19,6 +23,7 @@
 <ul class='no-dots weapon-stats'>
   <li>Creator: <%= @weapon.user.username %></li>
   <li>Weapon Type: <%= @weapon.weapon_type.name %></li>
+  <li>Weapon Class: <%= @weapon.weapon_classes.map {|w| w.name}.join(', ') %></li>
   <li>Defense die number: <%= @weapon.defense_die_number %></li>
   <li>Defense die size: <%= @weapon.defense_die_size %></li>
   <li>Flat defense bonus: <%= @weapon.flat_defense_bonus %></li>

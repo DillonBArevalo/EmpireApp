@@ -26,17 +26,9 @@
     <% @characters_skills.each do |character_skill| %>
       <tr>
         <td class='table-skill-form'>
-          <% if character_skill[1] %>
-
-            <%= form_for [character_skill[0], character_skill[1]] do |f| %>
-              <%= hidden_field_tag :skill_id, @skill.id %>
-              <%= f.submit character_skill[0].name, disabled: !character_skill[2][:status] %>
-            <% end %>
-          <% else %>
-            <%= form_for [character_skill[0], @obtained_skill] do |f| %>
-              <%= hidden_field_tag :skill_id, @skill.id %>
-              <%= f.submit character_skill[0].name, disabled: !character_skill[2][:status] %>
-            <% end %>
+          <%= form_for [character_skill[0], character_skill[1] || @obtained_skill] do |f| %>
+            <%= hidden_field_tag :skill_id, @skill.id %>
+            <%= f.submit character_skill[0].name, disabled: !character_skill[2][:status] %>
           <% end %>
         </td>
         <td>

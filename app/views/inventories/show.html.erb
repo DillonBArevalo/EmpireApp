@@ -1,0 +1,12 @@
+<h1><%= @character.name %>'s inventory</h1>
+<ul>
+
+<% @inventory.weapons.each do |weapon| %>
+  <li> <%= link_to weapon.name, weapon %>
+    <%= form_for [@character, @equipped_weapon] do |f| %>
+      <%= hidden_field_tag :weapon_id, weapon.id %>
+      <%= f.submit 'equip', disabled: @character.equipped_weapons.include?(weapon) %>
+    <% end %>
+  </li>
+<% end %>
+</ul>

@@ -6,10 +6,11 @@ Rails.application.routes.draw do
   resources :weapons # full
   # resources :armor_types
   resources :characters do #, except: [:edit, :update, :destroy] # full
-    resources :inventories, only: [:show]
     resources :obtained_skills, only: [:create, :update]
+    resources :equipped_weapons, only: [:create]
   end
 
+  resources :inventories, only: [:show, :update]
   resources :damage_resistances, only: [:index] # describe dr?
   resources :damage_types, only: [:index] # describe/display
 

@@ -324,10 +324,12 @@ RSpec.describe Character, type: :model do
     end
 
     describe '#equip_weapon' do
-      it 'returns false if weapon could not be equipped (not enough hands)' do
+      it 'unequips all other weapons if the weapon needs two hands' do
         shield.weapon_classes << shields
         character.equip_shield(shield)
-        expect(character.equip_weapon(b_axe)).to be false
+        character.equip_weapon(b_axe)
+        expect(character.equipped_weapons.length).to eq(1)
+        expect(character.equipped_weapons).to include(b_axe)
       end
       it 'adds an equipped weapon to character.equipped_weapons' do
         character.equip_weapon(b_axe)

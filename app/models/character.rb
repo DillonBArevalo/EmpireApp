@@ -129,7 +129,7 @@ class Character < ApplicationRecord
       equipped_shield = self.equipped_weapons.select {|weapon| weapon.is_shield?}[0]
       self.equipped_weapons.delete(equipped_shield) if equipped_shield
     else
-      other = self.equipped_weapons.select {|weapon| !weapon.is_shield?}[0]
+      other = self.equipped_weapons.reject {|weapon| weapon.is_shield?}[0]
       self.equipped_weapons.delete(other) if other
     end
   end
@@ -137,6 +137,9 @@ class Character < ApplicationRecord
 # DOES NOT PERSIST WITHOUT A SAVE
   def equip_weapon(weapon)
     remove_weapon
+    if weapon.hands_used > free_hands
+      remove_weapon(true)
+    end
     add_weapon(weapon)
   end
 
@@ -176,7 +179,8 @@ class Character < ApplicationRecord
     attack_option.dexterity_damage_bonus ? (dex_bonus = (self.dexterity / attack_option.dexterity_damage_bonus.to_f).ceil) : (dex_bonus = 0)
     base = str_bonus + dex_bonus + attack_option.flat_damage_bonus + skills_bonus(skills_ranks, :damage_boost, weapon_class_ids)
     dice = die_string(attack_option.damage_dice, (attack_option.damage_die_size + skills_bonus(skills_ranks, :damage_die_boost, weapon_class_ids)))
-
+    # TEST MEEEE
+    return 'none' unless base > 0 || !dice.empty?
     "#{base} + #{dice} #{attack_option.damage_type.name}"
   end
 
@@ -193,6 +197,8 @@ class Character < ApplicationRecord
   end
 
   def multi_attack_numbers_and_cost(weapon)
+    # TEST MEEEE
+    return '1' unless weapon.extra_attack_cost
     skills_ranks = skills_ranks_hash
     weapon_class_ids = weapon.weapon_class_ids
 
