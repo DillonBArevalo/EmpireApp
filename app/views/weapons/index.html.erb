@@ -5,7 +5,7 @@
 <h2>Core weapons:</h2>
 <ul class='flex-row no-dots weapon-classes-list core-weapons'>
   <% @weapon_classes.each do |weapon_class_array| %>
-    <li> <strong> <%= link_to(weapon_class_array[0].name, weapon_class_array[0]) %> </strong>
+    <li> <span class='bold'> <%= link_to(weapon_class_array[0].name, weapon_class_array[0]) %></span>
       <ul class='flex-column no-dots weapons-list no-pad'>
         <% weapon_class_array[1].each do |weapon| %>
           <li><%= link_to(weapon.name, weapon) %></li>

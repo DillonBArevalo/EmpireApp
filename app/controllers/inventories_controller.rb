@@ -6,9 +6,15 @@ class InventoriesController < ApplicationController
   end
 
   def update
-    @weapon = Weapon.find(params[:weapon_id])
     @inventory = Inventory.find(params[:id])
-    @inventory.weapons << @weapon
-    redirect_to @weapon
+    if params[:weapon_id]
+      @weapon = Weapon.find(params[:weapon_id])
+      @inventory.weapons << @weapon
+      redirect_to @weapon
+    elsif params[:armor_id]
+      @armor = Armor.find(params[:armor_id])
+      @inventory.armors << @armor
+      redirect_to @armor
+    end
   end
 end

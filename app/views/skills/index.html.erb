@@ -5,7 +5,7 @@
 <h2>Character Class Skills:</h2>
 <ul class='flex-row no-dots character-classes-skills-list'>
   <% @character_classes.each do |character_class| %>
-    <li> <%= link_to(character_class.name, character_class, class: 'pad-bottom bold') %>
+    <li class='half'> <%= link_to(character_class.name, character_class, class: 'pad-bottom bold') %>
       <ul class='flex-column no-dots skills-list no-pad'>
       <li class='bold pad-bottom'>Active Skills: </li>
         <% character_class.active_skills.each do |skill| %>
@@ -29,7 +29,7 @@
 <h2>Weapon Skills:</h2>
 <ul class='flex-row no-dots weapon-classes-skills-list'>
   <% @weapon_classes.each do |weapon_class| %>
-    <li><%= link_to(weapon_class.name, weapon_class, class: 'pad-bottom bold') %>
+    <li class='half'><%= link_to(weapon_class.name, weapon_class, class: 'pad-bottom bold') %>
       <ul class='flex-column no-dots skills-list no-pad'>
       <li class='bold pad-bottom'>Active Skills: </li>
         <% weapon_class.active_skills.each do |skill| %>

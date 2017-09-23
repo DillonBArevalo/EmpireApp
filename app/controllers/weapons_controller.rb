@@ -26,12 +26,12 @@ class WeaponsController < ApplicationController
     @attack_option = @weapon.attack_options.new(aoo_params)
     @condition1 = @attack_option.attack_options_conditions.new(condition1_params)
     @condition2 = @attack_option.attack_options_conditions.new(condition2_params)
+    @weapon.weapon_classes << WeaponClass.find(params[:weapon_class_id])
     if @weapon.valid? && @attack_option.valid? && @condition1.valid? && @condition2.valid?
       @weapon.save
       @attack_option.save
       @condition1.save
       @condition2.save
-      @weapon.weapon_classes << WeaponClass.find(params[:weapon_class_id])
       redirect_to @weapon
     else
       @errors = @weapon.errors.full_messages
@@ -51,7 +51,13 @@ class WeaponsController < ApplicationController
   end
 
   def edit
-
+    @weapon = Weapon.find(params[:id])
+    @damage_types = DamageType.all
+    @attack_option = @weapon.attack_options.first
+    @weapon_types = WeaponType.all
+    @weapon_classes = @character.weapon_classes
+    @conditions = Condition.all
+    render 'new'
   end
 
   def update
@@ -59,7 +65,13 @@ class WeaponsController < ApplicationController
   end
 
   def destroy
-
+    @weapon = Weapon.find(params[:id])
+    if @weapon.inventories.empty?
+      @weapon.destroy
+      redirect_to '/weapons'
+    else
+      redirect_to @weapon
+    end
   end
 
   private

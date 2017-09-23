@@ -10,4 +10,9 @@ class EquippedWeaponsController < ApplicationController
     end
     redirect_to @character.inventory
   end
+
+  def destroy
+
+  end
+
 end

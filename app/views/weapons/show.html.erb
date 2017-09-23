@@ -52,3 +52,25 @@
   <li>Flat Damage Bonus: <%= attack_option.flat_damage_bonus %></li>
 </ul>
 <% end %>
+
+
+<% if @weapon.user == current_user %>
+  <table>
+    <tr>
+      <td>
+        <%= form_for @weapon, method: 'delete' do |f| %>
+            <%= f.submit 'delete', disabled: !@weapon.inventories.empty? %>
+          <% end %>
+      </td>
+      <td><%= @weapon.inventories.empty? ? 'No characters are currently using this weapon' : "#{@weapon.inventories.length} characters have this weapon in their inventories. You cannot delete it" %></td>
+    </tr>
+    <tr>
+      <td>
+      <%= form_for @weapon, url: edit_weapon_path(@weapon), method: 'get' do |f| %>
+          <%= f.submit 'edit', disabled: !@weapon.inventories.empty? %>
+        <% end %>
+    </td>
+    <td><%= @weapon.inventories.empty? ? 'No characters are currently using this weapon' : "#{@weapon.inventories.length} characters have this weapon in their inventories. You cannot edit it" %></td>
+    </tr>
+  </table>
+<% end %>

@@ -1,8 +1,12 @@
 <h1>Character Show</h1>
 
 <h2><%= @character.name %></h2>
+<div class='flex-row'>
+<%= link_to('inventory', @character.inventory) %>
+<p class='no-margin'><%= @character.description %></p>
 
-<p><%= @character.description %></p>
+</div>
+
 <ul class='stats no-dots flex-row'>
   <div class='flex-column padded border'>
     <li><strong>Primary Stats:</strong></li>
@@ -30,23 +34,38 @@
     <li>Dodge: <%= @character.dodge_numbers %></li>
   </div>
   <div class='flex-column padded border'>
-    <li><strong>Equipment:</strong></li>
-    <% @character.equipped_weapons.each do |weapon| %>
-      <li class='bold'><%= weapon.name %></li>
-      <ul class='no-dots'>
-        <li class='bold'>Attacks</li>
-        <li>number: <%= @character.multi_attack_numbers_and_cost(weapon) %></li>
-        <% weapon.attack_options.each do |a_o| %>
-          <li class='bold'><%= a_o.name %></li>
-          <li>Attack: <%= @character.generate_attack_string(a_o) %></li>
-          <li>Damage: <%= @character.generate_damage_string(a_o) %></li>
-
-        <% end %>
-        <li class='bold'>blocks:</li>
-        <li>number: <%= @character.multi_block_numbers_and_cost(weapon) %></li>
-        <li>block: <%= @character.generate_defense_string(weapon) %></li>
-      </ul>
-    <% end %>
+    <li class='bold'>Weapons</li>
+    <div class='flex-row'>
+      <% @character.equipped_weapons.each do |weapon| %>
+        <div class='half'>
+          <li class='bold'><%= link_to(weapon.name, weapon) %></li>
+          <ul class='no-dots'>
+            <li class='bold'>Attacks</li>
+            <li>number: <%= @character.multi_attack_numbers_and_cost(weapon) %></li>
+            <% weapon.attack_options.each do |a_o| %>
+              <li class='bold'><%= a_o.name %></li>
+              <li>Attack: <%= @character.generate_attack_string(a_o) %></li>
+              <li>Damage: <%= @character.generate_damage_string(a_o) %></li>
+            <% end %>
+            <li class='bold'>blocks:</li>
+            <li>number: <%= @character.multi_block_numbers_and_cost(weapon) %></li>
+            <li>block: <%= @character.generate_defense_string(weapon) %></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class='flex-column padded border'>
+    <li class='bold'>Armor</li>
+    <ul class='no-dots'>
+      <% if @character.equipped_armor %>
+        <li class='bold'><%= link_to(@character.equipped_armor.name, @character.equipped_armor) %></li>
+        <li>Damage Resistances: <%= @character.equipped_armor.drs %></li>
+        <li>Passive Defense: <%= @character.equipped_armor.passive_defense_bonus %></li>
+      <% else %>
+      <li>No armor equipped</li>
+      <% end %>
+    </ul>
   </div>
 </ul>
 

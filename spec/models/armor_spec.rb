@@ -35,4 +35,6 @@ RSpec.describe Armor, type: :model do
   xdescribe '#dr_string' do
 
   end
+
+  xdescribe '#generate_drs'
 end

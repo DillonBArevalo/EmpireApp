@@ -19,11 +19,11 @@
     </div>
     <div class='form-field'>
       <%= f.label :weapon_type %>
-      <%= f.select :weapon_type_id, options_from_collection_for_select(@weapon_types, "id", "name") %>
+      <%= f.select :weapon_type_id, options_from_collection_for_select(@weapon_types, "id", "name", @weapon.weapon_type_id) %>
     </div>
     <div class='form-field'>
       <%= label_tag :weapon_class %>
-      <%= select_tag :weapon_class_id, options_from_collection_for_select(@weapon_classes, "id", "name") %>
+      <%= select_tag :weapon_class_id, options_from_collection_for_select(@weapon_classes, "id", "name", @weapon.weapon_classes.first ? @weapon.weapon_classes.first.id : nil) %>
     </div>
     <div class='form-field'>
       <%= f.label :defense_die_number %>
@@ -124,7 +124,6 @@
     <div class='form-field'>
       <%= label_tag :threshold_1 %>
       <%= number_field_tag 'condition1[threshold]', @condition1 ? @condition1.threshold : 10, class: 'number-field' %>
-      <%= @condition1 ? @condition1.threshold : 10 %>
     </div>
     <div class='form-field'>
       <%= label_tag :condition_2_type %>
@@ -137,4 +136,5 @@
   </div>
     <%= f.submit %>
 <% end %>
+
 </div>
