@@ -36,7 +36,11 @@ class CharactersController < ApplicationController
   def update
     @character = Character.find(params[:id])
     if params[:armor_id]
-      @character.equip_armor(Armor.find(params[:armor_id]))
+      if params[:unequip]
+        @character.remove_armor
+      else
+        @character.equip_armor(Armor.find(params[:armor_id]))
+      end
       redirect_to @character.inventory
     end
   end

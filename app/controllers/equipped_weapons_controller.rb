@@ -12,7 +12,11 @@ class EquippedWeaponsController < ApplicationController
   end
 
   def destroy
+    @character = Character.find(params[:character_id])
+    @weapon = Weapon.find(params[:id])
 
+    @character.remove_weapon(params[:shield])
+    redirect_to @character.inventory
   end
 
 end

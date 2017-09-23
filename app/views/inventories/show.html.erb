@@ -19,26 +19,56 @@
 </ul>
 <ul class='no-dots'>
   <li class='bold'>Armor</li>
-<% @inventory.armors_and_joins.each do |armor| %>
-  <li> <%= link_to armor[0].name, armor[0] %>
-    <% if current_user == @character.creator %>
-      <%= form_for @character do |f| %>
-        <%= hidden_field_tag :armor_id, armor[0].id %>
-        <%= f.submit 'equip', disabled: @character.equipped_armor ? @character.equipped_armor.id == armor[0].id : false %>
+  <% @inventory.armors_and_joins.each do |armor| %>
+    <li class='flex-row'> <%= link_to armor[0].name, armor[0] %>
+      <% if current_user == @character.creator %>
+        <%= form_for @character do |f| %>
+          <%= hidden_field_tag :armor_id, armor[0].id %>
+          <%= f.submit 'equip', disabled: @character.equipped_armor ? @character.equipped_armor.id == armor[0].id : false %>
+        <% end %>
+        <%= form_for @character do |f| %>
+          <%= hidden_field_tag :armor_id, armor[0].id %>
+          <%= hidden_field_tag :remove, true %>
+          <%= f.submit 'remove from inventory', disabled: @character.equipped_armor == armor[0] %>
+        <% end %>
       <% end %>
-      <%= form_for @character do |f| %>
-        <%= hidden_field_tag :armor_id, armor[0].id %>
-        <%= hidden_field_tag :remove, true %>
-        <%= f.submit 'remove from inventory', disabled: @character.equipped_armor == armor[0] %>
-      <% end %>
-    <% end %>
-  </li>
-<% end %>
+    </li>
+  <% end %>
 </ul>
 <ul class='no-dots'>
   <li class='bold'>Equipped items:</li>
-  <li>Weapon: <%= @character.equipped_weapons.first ? link_to(@character.equipped_weapons.first.name, @character.equipped_weapons.first) : 'no weapons equipped' %></li>
-  <li>Shield: <%= 'fix meeee' %></li>
-  <li>Armor: <%= @character.equipped_armor ? link_to(@character.equipped_armor.name, @character.equipped_armor) : 'no armor equipped' %></li>
+  <li class='flex-row'>Weapon:
+    <% if @weapon %>
+      <%= link_to(@weapon.name, @weapon) %>
+      <%= form_for([@character, @character.equipped_w.find_by(weapon_id: @weapon.id)], method: 'DELETE') do |f| %>
+        <%= f.submit 'unequip' %>
+      <% end %>
+    <% else %>
+      no weapons equipped
+    <% end %>
+  </li>
+  <li class='flex-row'>Shield:
+    <% if @shield %>
+      <%= link_to(@shield.name, @shield) %>
+      <%= form_for([@character, @character.equipped_w.find_by(weapon_id: @shield.id)], method: 'DELETE') do |f| %>
+        <%= hidden_field_tag :shield, true %>
+        <%= f.submit 'unequip' %>
+      <% end %>
+    <% else %>
+      no shield equipped
+    <% end %>
+    </li>
+  <li class='flex-row'>Armor:
+    <% if @armor %>
+      <%= link_to(@armor.name, @armor) %>
+      <%= form_for(@character) do |f| %>
+        <%= hidden_field_tag :armor_id, @armor.id %>
+        <%= hidden_field_tag :unequip, true %>
+        <%= f.submit 'unequip' %>
+      <% end %>
+    <% else %>
+      no armor equipped
+    <% end %>
+    </li>
 </ul>
 </div>
