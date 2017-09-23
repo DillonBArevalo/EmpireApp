@@ -4,7 +4,7 @@ module SessionsHelper
   end
 
   def current_user
-    @user ||= User.find_by(id: session[:id])
+    @current_user ||= User.find_by(id: session[:id]) if session[:id]
   end
 
   def current_user?(user)
