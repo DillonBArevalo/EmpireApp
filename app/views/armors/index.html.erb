@@ -1,0 +1,29 @@
+<h1>Armor</h1>
+
+<%= link_to('Create new armor!', new_armor_path) %>
+
+<h2>Core armor:</h2>
+<ul class='flex-row no-dots armor_class_list core-armor'>
+  <% @armor_types.each do |armor_type_array| %>
+    <li>  <span class='bold'> <%= link_to(armor_type_array[0].name, armor_type_array[0]) %></span>
+      <ul class='flex-column no-dots armor-list no-pad'>
+        <% armor_type_array[1].each do |armor| %>
+          <li><%= link_to(armor.name, armor) %></li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>
+
+<h2>User Created armor:</h2>
+<ul class='flex-row no-dots armor-class-list user-armor'>
+  <% @armor_types.each do |armor_type_array| %>
+    <li>  <span class='bold'> <%= link_to(armor_type_array[0].name, armor_type_array[0]) %></span>
+      <ul class='flex-column no-dots armor-list no-pad'>
+        <% armor_type_array[2].each do |armor| %>
+          <li><%= link_to(armor.name, armor) %></li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>
