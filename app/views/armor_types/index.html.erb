@@ -1,0 +1,21 @@
+<h1>Armor Types</h1>
+<p>
+In Empire armor is a powerful tool. If you have a well crafted piece of heavy armor it can make you nigh invincible against normal attacks, but unless your armor is enchanted and/or flawlessly produced it will also have significant drawbacks.
+<br>
+A well made piece of armor can be light, strong, and very easy to move around in. However, as most armor you will have access to (at least unless you're rich) isn't specifically made or fitted for you the default armor sets in Empire will perform on a gradient for each given metric.
+<br>
+A light piece of armor will offer fairly little protection but will keep your energy budget high and not significantly hinder your actions, but the heavier your armor gets the less those hold true.
+<br>
+Having heavy armor, however, can carry some insane advantages. If you are attacked by surprise or from outside of your field of vision you cannot block an attack in empire. And if you cannot block, all you have to protect you from a painful death is your armor. A good heavy set of armor can not only make you incredibly hard to connect with, but it also carries damage resistance which will even lessen the damage from strikes that successfully land!
+<br>
+A low level character with low strength and dexterity wearing heavy armor, however may find themselves nearly unable to move!
+<br>
+Choose your armor type wisely:
+</p>
+
+
+<ul>
+  <% @armor_types.each do |armor_type| %>
+      <li><%= link_to armor_type.name, armor_type %></li>
+  <% end %>
+</ul>
