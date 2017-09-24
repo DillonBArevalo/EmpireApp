@@ -1,0 +1,42 @@
+<h1>Conditions: <%= @condition.name %></h1>
+
+<table>
+  <tr>
+    <td class='bold table-label'>
+      Description:
+    </td>
+    <td class='table-content'>
+      <%= @condition.description %>
+    </td>
+  </tr>
+  <tr>
+    <td class='bold table-label'>
+      Effect Description:
+    </td>
+    <td class='table-content'>
+      <%= @condition.effect_description %>
+    </td>
+  </tr>
+  <tr>
+    <td class='bold table-label'>
+      Average damage for trigger:
+    </td>
+    <td class='table-content'>
+      <%= @condition.average_trigger %>
+    </td>
+  </tr>
+  <tr>
+    <td class='bold table-label'>
+      Weapons that trigger this condition:
+    </td>
+    <td class='table-content'>
+      <ul class='no-pad no-dots'>
+  <% @condition.weapons.distinct.each do |weapon| %>
+    <li><%= link_to weapon.name, weapon %></li>
+  <% end %>
+</ul>
+    </td>
+  </tr>
+</table>
+
+

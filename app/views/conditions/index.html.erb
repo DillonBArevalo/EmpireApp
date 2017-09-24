@@ -1,0 +1,19 @@
+<h1>Conditions</h1>
+
+<p>
+  Conditions are debuffs that a character can accrue by taking damage. Each weapon will have 2 conditions that it can cause (though can conditions can be caused in other, roleplay based ways too, of course) and these conditions are triggered upon a certain amount of damage being dealt in a single attack (after damage reduction).
+<br>
+  Some conditions can stack, though sometimes only a specified number of times. Conditions that affect a particular part of the body (like broken bones) are applied to the limb that tried to block the attack (and failed) or, if not blocked, it is by the attacker's choice.
+<br>
+  As the game is still in alpha some things are poorly defined and everything is subject to change.
+</p>
+
+<table>
+  <% @conditions.each do |condition| %>
+    <tr>
+      <td class='bold table-label'><%= link_to(condition.name, condition) %></td>
+      <td class='table-content'><%= condition.description %></td>
+    </tr>
+
+  <% end %>
+</table>

@@ -107,6 +107,15 @@
   border-radius: 10px;
 }
 
+.table-label {
+  width: 20%
+}
+
+.table-content {
+  width: 70%;
+  padding: 1em;
+}
+
 .border {
   border: 1px solid black;
 }
@@ -114,6 +123,12 @@
 .bottom-nav {
   border-top: 1px solid black;
 }
+
+// .test {
+//   border-top: 1px solid black;
+//   border-bottom: 1px solid black;
+//   border-radius: 20px;
+// }
 
 label {
   padding-right: 5px;
@@ -126,7 +141,3 @@ footer {
   width: 100%;
   background-color: white;
 }
-
-// li {
-//   flex-basis: 50%;
-// }
