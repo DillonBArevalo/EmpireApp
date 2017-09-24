@@ -40,8 +40,10 @@
   <li class='flex-row'>Weapon:
     <% if @weapon %>
       <%= link_to(@weapon.name, @weapon) %>
+      <% if current_user == @character.creator %>
       <%= form_for([@character, @character.equipped_w.find_by(weapon_id: @weapon.id)], method: 'DELETE') do |f| %>
         <%= f.submit 'unequip' %>
+      <% end %>
       <% end %>
     <% else %>
       no weapons equipped
@@ -50,9 +52,11 @@
   <li class='flex-row'>Shield:
     <% if @shield %>
       <%= link_to(@shield.name, @shield) %>
+      <% if current_user == @character.creator %>
       <%= form_for([@character, @character.equipped_w.find_by(weapon_id: @shield.id)], method: 'DELETE') do |f| %>
         <%= hidden_field_tag :shield, true %>
         <%= f.submit 'unequip' %>
+      <% end %>
       <% end %>
     <% else %>
       no shield equipped
@@ -61,10 +65,12 @@
   <li class='flex-row'>Armor:
     <% if @armor %>
       <%= link_to(@armor.name, @armor) %>
+      <% if current_user == @character.creator %>
       <%= form_for(@character) do |f| %>
         <%= hidden_field_tag :armor_id, @armor.id %>
         <%= hidden_field_tag :unequip, true %>
         <%= f.submit 'unequip' %>
+      <% end %>
       <% end %>
     <% else %>
       no armor equipped

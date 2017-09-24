@@ -1,0 +1,38 @@
+<h1>Damage Types/Resistances</h1>
+
+<p>
+  In Empire there are 5 different damage types. Their names and details are below. Damage types are primarily used to help categorize damage resistances. Types that are ineffective against armor, however, often have very low triggers for their conditions and will do wonders against low armor or unarmored opponents.
+</p>
+
+<table>
+  <tr>
+    <th>Damage Type:</th>
+    <th>Description</th>
+    <th>Weapons that deal damage of this type</th>
+  </tr>
+  <% @damage_types.each do |type| %>
+    <tr>
+      <td><%= type.name %></td>
+      <td><%= type.description %></td>
+      <td>
+        <ul class='no-pad no-dots'>
+          <% type.weapons.each do |weapon| %>
+            <li><%= link_to weapon.name, weapon %></li>
+          <% end %>
+        </ul>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<h2>Damage Resistances</h2>
+
+<p>
+Damage resistances are stats for armor that only come into play when someone's attack has succeeded against you and you are about to take damage. After the final damage calculation on the side of the attacker the damage number is reduced by the amount of the damage resistance for the given damage type.
+<br>
+Damage resistances are displayed as five numbers separated by slashes:<br> 8/6/4/5/2
+<br>
+these go in the following order:
+<br>
+slashing | piercing | bludgeoning | bludgeoning/slashing | bludgeoning/piercing
+</p>

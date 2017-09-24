@@ -15,7 +15,6 @@ Rails.application.routes.draw do
   resources :armor_types, only: [:index, :show]
 
   resources :inventories, only: [:show, :update]
-  resources :damage_resistances, only: [:index] # describe dr?
   resources :damage_types, only: [:index] # describe/display
 
   resources :character_classes, only: [:index, :show]
