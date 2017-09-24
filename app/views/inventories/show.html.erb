@@ -9,7 +9,7 @@
         <%= hidden_field_tag :weapon_id, weapon[0].id %>
         <%= f.submit 'equip', disabled: @character.equipped_weapons.include?(weapon[0]) %>
       <% end %>
-      <%= form_for [@character, weapon[1]], method: 'delete' do |f| %>
+      <%= form_for weapon[1], method: 'delete' do |f| %>
         <%= f.submit 'remove from inventory', disabled: @character.equipped_weapons.include?(weapon[0]) %>
       <% end %>
     <% end %>
@@ -26,9 +26,7 @@
           <%= hidden_field_tag :armor_id, armor[0].id %>
           <%= f.submit 'equip', disabled: @character.equipped_armor ? @character.equipped_armor.id == armor[0].id : false %>
         <% end %>
-        <%= form_for @character do |f| %>
-          <%= hidden_field_tag :armor_id, armor[0].id %>
-          <%= hidden_field_tag :remove, true %>
+        <%= form_for ObtainedArmor.find_by(inventory_id: @inventory.id, armor_id: armor[0].id), method: :delete do |f| %>
           <%= f.submit 'remove from inventory', disabled: @character.equipped_armor == armor[0] %>
         <% end %>
       <% end %>

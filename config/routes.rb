@@ -8,11 +8,12 @@ Rails.application.routes.draw do
   resources :characters do #, except: [:edit, :update, :destroy] # full
     resources :obtained_skills, only: [:create, :update]
     resources :equipped_weapons, only: [:create, :destroy]
-    resources :obtained_weapons, only: [:destroy]
-    resources :obtained_armors, only: [:destroy]
   end
 
   resources :armor_types, only: [:index, :show]
+
+  resources :obtained_armors, only: [:destroy]
+  resources :obtained_weapons, only: [:destroy]
 
   resources :inventories, only: [:show, :update]
   resources :damage_types, only: [:index] # describe/display
