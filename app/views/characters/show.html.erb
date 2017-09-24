@@ -7,7 +7,7 @@
 </div>
 <% if current_user?(@character.creator) %>
   <h2>Add skill points to your character</h2>
-  <p>current skill points <%= @character.available_skill_points %></p>
+  <p>current unspent skill points <%= @character.available_skill_points %></p>
   <%= form_for @character do |f| %>
     <%= hidden_field_tag :add_skill_points, true %>
     <%= number_field_tag :skill_points %>
