@@ -1,0 +1,40 @@
+<h1>Character Class: <%= @character_class.name %></h1>
+
+<h2>Description: </h2>
+<p>
+  <%= @character_class.description %>
+</p>
+
+<%= render partial: 'obtain_form' %>
+
+<h2>Characters who are <%= @character_class.name %>s:</h2>
+<ul>
+  <% @character_class.characters.each do |character| %>
+    <li><%= link_to character.name, character %></li>
+  <% end %>
+</ul>
+
+<h2>Skills: </h2>
+<ul class='no-pad no-dots'>
+  <li><span class='bold'>Base Class Skills: </span>
+    <ul>
+      <% @character_class.bcs.each do |skill| %>
+        <li><%= link_to skill.name, skill %></li>
+      <% end %>
+    </ul>
+  </li>
+  <li><span class='bold'>Passive Skills: </span>
+    <ul>
+      <% @character_class.passive_skills.each do |skill| %>
+        <li><%= link_to skill.name, skill %></li>
+      <% end %>
+    </ul>
+  </li>
+  <li><span class='bold'>Active Skills: </span>
+    <ul>
+      <% @character_class.active_skills.each do |skill| %>
+        <li><%= link_to skill.name, skill %></li>
+      <% end %>
+    </ul>
+  </li>
+</ul>

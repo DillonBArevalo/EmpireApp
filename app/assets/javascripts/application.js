@@ -15,7 +15,7 @@
 //= require turbolinks
 //= require_tree .
 
-$(document).ready(function(){
+$( document ).on('turbolinks:load', function(){
   hideDetailListener();
 })
 
@@ -23,5 +23,5 @@ var hideDetailListener = function(){
   $('#hide-desc').on('click', function(e){
     e.preventDefault();
     $('.skill-description').toggle();
-  })
+  });
 }

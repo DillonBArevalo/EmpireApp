@@ -1,0 +1,17 @@
+<h1>Character Classes</h1>
+
+<p>
+Eventually, Empire will have 6 character classes. As it is in Alpha, it currently only has 3, and only 2 are on this website. The full list is below. Each character class has its own set of skills and base class skills so investing in a particular type is particularly advantageous, but as character skills will always apply, picking and choosing is also very beneficial.
+<br>
+Before a character can obtain a class skill they must first obtain the class. This can be done by investing 5 skill points to unlock the first levels of the base class skills.
+<br>
+Each class has its own unique flavor and playstyle. Warriors are aggressive and do best when they can stay on the offense and have a team to support their constant attacks. Soldiers love to be front line support characters and tanks. Rangers are masters of ranged combat and Assassins stealth.
+<br>
+Each class can compliment any other and eventually specific multi-class classes will be available with their own skills and specialties. For instance, the juggernaut is half soldier, half warrior and can only be unlocked after spending 50 skill points in each of those classes. The juggernaut is an unstoppable, one person army who can take damage as well as they can dish it out.
+
+<ul>
+  <% @character_classes.each do |character_class| %>
+    <li><%= link_to character_class.name, character_class %></li>
+  <% end %>
+</ul>
+</p>
