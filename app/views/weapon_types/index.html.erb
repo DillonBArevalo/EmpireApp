@@ -1,0 +1,11 @@
+<h1>Weapon Types</h1>
+
+<p>
+  Weapon types have no gameplay distinction in Empire, they are simply flavor. Given that, core weapon wise the weapon type will strongly correlate with and sometimes determine the weapon class, though there are no technical restrictions on types to classes.
+</p>
+
+<ul>
+  <% @weapon_types.each do |type| %>
+    <li><%= link_to type.name, type %></li>
+  <% end %>
+</ul>

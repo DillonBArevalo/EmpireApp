@@ -1,0 +1,9 @@
+<h1>Weapon Type: <%= @weapon_type.name %></h1>
+
+<h2>Weapons of this type: </h2>
+
+<ul>
+  <% @weapon_type.weapons.each do |weapon| %>
+    <li><%= link_to weapon.name, weapon %></li>
+  <% end %>
+</ul>
