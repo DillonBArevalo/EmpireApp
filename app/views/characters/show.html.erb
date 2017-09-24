@@ -5,6 +5,27 @@
 <p class='no-margin'><%= @character.description %></p>
 
 </div>
+<% if current_user?(@character.creator) %>
+  <h2>Add skill points to your character</h2>
+  <p>current skill points <%= @character.available_skill_points %></p>
+  <%= form_for @character do |f| %>
+    <%= hidden_field_tag :add_skill_points, true %>
+    <%= number_field_tag :skill_points %>
+    <%= f.submit 'add_skill_points' %>
+  <% end %>
+  <% if @character.unspent_energy_upgrade_points > 0 %>
+    <h2>Upgrade your character's stats:</h2>
+    <p><%= @character.name %> currently has <span id='unspent_points'><%= @character.unspent_energy_upgrade_points %></span> points to spend:</p>
+    <%= form_for @character, html: {id: 'upgrade_form'} do |f| %>
+      <%= hidden_field_tag :upgrade, true %>
+      <%= label_tag :boost_energy_budget %>
+      <%= number_field_tag 'character[budget_amount]', @character.unspent_energy_upgrade_points, in: 0..@character.unspent_energy_upgrade_points, class: 'number-field', id: 'budget_amount' %>
+      <%= label_tag :boost_energy_pool %>
+      <%= number_field_tag 'character[pool_amount]', 0, in: 0..@character.unspent_energy_upgrade_points, class: 'number-field', id: 'pool_amount' %>
+      <%= f.submit 'upgrade' %>
+    <% end %>
+  <% end %>
+<% end %>
 
 <ul class='stats no-dots flex-row'>
   <div class='flex-column padded border'>

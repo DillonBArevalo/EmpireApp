@@ -61,6 +61,14 @@ class Character < ApplicationRecord
     equipped_armor ? (equipped_armor.passive_defense_bonus + skills_bonus(skills_hash, :armor_defense_boost)) : 0
   end
 
+  def spend_upgrade_points(amounts_hash)
+    if self.unspent_energy_upgrade_points >= (amounts_hash[:budget_amount].to_i + amounts_hash[:pool_amount].to_i)
+      self.increment!(:unspent_energy_upgrade_points, -amounts_hash[:budget_amount].to_i)
+      self.increment!(:energy_budget_level_bonus, amounts_hash[:budget_amount].to_i)
+      self.increment!(:unspent_energy_upgrade_points, -amounts_hash[:pool_amount].to_i)
+      self.increment!(:energy_pool_level_bonus, (amounts_hash[:pool_amount].to_i * 10))
+    end
+  end
 
   def obtain_skill(skill)
     return {status: false, messages: ["#{skill.name} is a base class skill"]} if skill.base_class_skill

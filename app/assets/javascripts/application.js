@@ -17,6 +17,7 @@
 
 $( document ).on('turbolinks:load', function(){
   hideDetailListener();
+  upgradeFormListener();
 })
 
 var hideDetailListener = function(){
@@ -24,4 +25,17 @@ var hideDetailListener = function(){
     e.preventDefault();
     $('.skill-description').toggle();
   });
+}
+
+var upgradeFormListener = function(){
+  upgradeSingle('#pool_amount', '#budget_amount')
+  upgradeSingle('#budget_amount', '#pool_amount')
+}
+
+var upgradeSingle = function(primary, other) {
+  $(primary).on('change', function(e){
+    var max = parseInt($('#unspent_points').html())
+    var secondaryValue = max - parseInt($(this).val())
+    $(other).val(secondaryValue)
+  })
 }

@@ -42,6 +42,12 @@ class CharactersController < ApplicationController
         @character.equip_armor(Armor.find(params[:armor_id]))
       end
       redirect_to @character.inventory
+    elsif params[:add_skill_points]
+      @character.add_skill_points(params[:skill_points].to_i)
+      redirect_to @character
+    elsif params[:upgrade]
+      @character.spend_upgrade_points(upgrade_params)
+      redirect_to @character
     end
   end
 
@@ -50,6 +56,10 @@ class CharactersController < ApplicationController
   end
 
   private
+
+  def upgrade_params
+    params.require(:character).permit(:budget_amount, :pool_amount)
+  end
 
   def new_character_params
     params.require(:character).permit(:name, :description, :strength, :dexterity, :constitution, :intelligence, :wisdom, :charisma)
