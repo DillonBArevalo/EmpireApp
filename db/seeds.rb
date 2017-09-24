@@ -307,7 +307,7 @@ s_b = class1.skills.create!(base_class_skill: false, display_description: false,
   s_b.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-class2.skills.create!(base_class_skill: true, display_description: false, name: "Balanced Fighter", description: "For every 10 points spent in Class 2 weapons, gain +1 to each attack and defense.", is_weapon_boost: true, weapon_class: class2.id, accuracy_boost: 1, defense_boost: 1)
+class2.skills.create!(base_class_skill: true, passive: true, display_description: false, name: "Balanced Fighter", description: "For every 10 points spent in Class 2 weapons, gain +1 to each attack and defense.", is_weapon_boost: true, weapon_class: class2.id, accuracy_boost: 1, defense_boost: 1)
 
 par = class2.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Parry", description: "Gain a bonus to defense with a Class 2 weapon. +1 to base defense per level", ranks_available: 7, defense_boost: 1, is_weapon_boost: true, weapon_class: class2.id)
 [3,5,8,13,21,34,55].each_with_index do |cost, idx|

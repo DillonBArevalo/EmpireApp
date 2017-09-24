@@ -63,6 +63,7 @@ class Character < ApplicationRecord
 
 
   def obtain_skill(skill)
+    return {status: false, messages: ["#{skill.name} is a base class skill"]} if skill.base_class_skill
     join = ObtainedSkill.find_by(character_id: self.id, skill_id: skill.id)
     response = {status: true, messages: []}
 
@@ -86,6 +87,7 @@ class Character < ApplicationRecord
   end
 
   def skill_obtainable(skill, join, response = {status: true, messages: []})
+    return {status: false, messages: ["#{skill.name} is a base class skill"]} if skill.base_class_skill
     check_class(response, skill)
     if check_rank_available(response, skill, join)
       check_enough_points(response, skill, join)

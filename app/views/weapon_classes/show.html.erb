@@ -1,0 +1,45 @@
+<h1>Weapon Class: <%= @weapon_class.name %></h1>
+
+<h2>Description: </h2>
+<p>
+  <%= @weapon_class.description %>
+</p>
+
+<h2>Characters who use <%= @weapon_class.name %>:</h2>
+<ul>
+  <% @weapon_class.characters.each do |character| %>
+    <li><%= link_to character.name, character %></li>
+  <% end %>
+</ul>
+
+<h2>Weapons: </h2>
+<ul>
+  <% @weapon_class.weapons.each do |weapon| %>
+    <li><%= link_to weapon.name, weapon %></li>
+  <% end %>
+</ul>
+
+<h2>Skills: </h2>
+<ul class='no-pad no-dots'>
+  <li><span class='bold'>Base Class Skills: </span>
+    <ul>
+      <% @weapon_class.base_class_skills.each do |skill| %>
+        <li><%= link_to skill.name, skill %></li>
+      <% end %>
+    </ul>
+  </li>
+  <li><span class='bold'>Passive Skills: </span>
+    <ul>
+      <% @weapon_class.passive_skills.each do |skill| %>
+        <li><%= link_to skill.name, skill %></li>
+      <% end %>
+    </ul>
+  </li>
+  <li><span class='bold'>Active Skills: </span>
+    <ul>
+      <% @weapon_class.active_skills.each do |skill| %>
+        <li><%= link_to skill.name, skill %></li>
+      <% end %>
+    </ul>
+  </li>
+</ul>
