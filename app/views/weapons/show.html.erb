@@ -47,8 +47,8 @@
   <li>Attack Bonus: <%= attack_option.attack_bonus %></li>
   <li>Damage die number: <%= attack_option.damage_dice %></li>
   <li>Damage die size: <%= attack_option.damage_die_size %></li>
-  <li>Strength damage bonus: STR/<%= attack_option.strength_damage_bonus %></li>
-  <li>Dexterity damage bonus: DEX/<%= attack_option.dexterity_damage_bonus %></li>
+  <li>Strength damage bonus: <%= attack_option.strength_damage_bonus ? "STR/#{attack_option.strength_damage_bonus}" : 'none' %></li>
+  <li>Dexterity damage bonus: <%= attack_option.dexterity_damage_bonus ? "DEX/#{attack_option.dexterity_damage_bonus}" : 'none' %></li>
   <li>Flat Damage Bonus: <%= attack_option.flat_damage_bonus %></li>
 </ul>
 <% end %>
