@@ -27,6 +27,7 @@ class CharactersController < ApplicationController
 
   def show
     @character = Character.find(params[:id])
+    @skills_ranks = @character.skills_ranks_hash
   end
 
   def edit

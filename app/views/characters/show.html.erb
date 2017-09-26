@@ -87,6 +87,14 @@
       <% end %>
     </ul>
   </div>
+  <div class='flex-column padded border'>
+    <li class='bold'>Obtained Skills: </li>
+    <ul class='no-dots'>
+      <% @skills_ranks.keys.each do |skill| %>
+        <li><%= skill.skillable.name %>: <%= link_to skill.name, skill %> at rank: <%= @skills_ranks[skill].ranks %></li>
+      <% end %>
+    </ul>
+  </div>
 </ul>
 
 

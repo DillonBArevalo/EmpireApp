@@ -267,6 +267,10 @@ class Character < ApplicationRecord
     Skill.all.reject {|skill| skill.skillable_type == 'CharacterClass' && !class_ids.include?(skill.skillable_id)}
   end
 
+  def skills_ranks_hash
+    @skills_hash ||= skills.zip(obtained_skills).to_h
+  end
+
 private
 
   def check_class(response, skill)
@@ -406,10 +410,6 @@ private
     else
       12
     end
-  end
-
-  def skills_ranks_hash
-    @skills_hash ||= skills.zip(obtained_skills).to_h
   end
 
 end

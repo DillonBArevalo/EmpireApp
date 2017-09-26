@@ -1,5 +1,9 @@
 <h1><%= @skill.name %></h1>
 
+<% if @skill.base_class_skill %>
+  <h2>Base Class Skill</h2>
+<% end %>
+
 <label class='bold'>Description:</label><p><%= @skill.description %></p>
 
 <table >
