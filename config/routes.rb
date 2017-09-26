@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :new, :show, :create]
 
   resources :armors # full
-  resources :weapons # full
+  resources :weapons do
+    resources :attack_options, only: [:new, :create]
+  end
   # resources :armor_types
   resources :characters do #, except: [:edit, :update, :destroy] # full
     resources :obtained_skills, only: [:create, :update]

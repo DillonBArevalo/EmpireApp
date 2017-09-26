@@ -4,6 +4,10 @@
   <%= render partial: '/weapons/obtain_form' %>
 <% end %>
 
+<% if logged_in? && @weapon.user == current_user %>
+  <%= link_to 'add another attack option', new_weapon_attack_option_path(@weapon) %>
+<% end %>
+
 <p><%= @weapon.description %></p>
   <h2>Example rolls:</h2>
 <ul class='no-dots'>
@@ -35,22 +39,7 @@
 </ul>
 <h2>Attack Options: </h2>
 <% @attack_options.each do |attack_option| %>
-<ul class='no-dots attack-option-stats'>
-  <h3><%= attack_option.name %>:</h3>
-  <li>Description: <%= attack_option.description %></li>
-  <li>Damage type: <%= attack_option.damage_type.name %></li>
-  <li>Strength dice: <%= attack_option.strength_dice %></li>
-  <li>Dexterity Dice: <%= attack_option.dexterity_dice %></li>
-  <li>Energy Modifier: <%= attack_option.energy_modifier %></li>
-  <li>Attack die number: <%= attack_option.die_number %></li>
-  <li>Attack die size: <%= attack_option.die_size %></li>
-  <li>Attack Bonus: <%= attack_option.attack_bonus %></li>
-  <li>Damage die number: <%= attack_option.damage_dice %></li>
-  <li>Damage die size: <%= attack_option.damage_die_size %></li>
-  <li>Strength damage bonus: <%= attack_option.strength_damage_bonus ? "STR/#{attack_option.strength_damage_bonus}" : 'none' %></li>
-  <li>Dexterity damage bonus: <%= attack_option.dexterity_damage_bonus ? "DEX/#{attack_option.dexterity_damage_bonus}" : 'none' %></li>
-  <li>Flat Damage Bonus: <%= attack_option.flat_damage_bonus %></li>
-</ul>
+<%= render partial: '/attack_options/show', locals: {attack_option: attack_option} %>
 <% end %>
 
 

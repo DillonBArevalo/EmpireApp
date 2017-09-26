@@ -1,0 +1,20 @@
+<h1>Create a new attack option for your weapon: <%= @weapon.name %></h1>
+<div class='flex-row'>
+  <div>
+    <h2>Current attack options:</h2>
+    <% @weapon.attack_options.each do |attack_option| %>
+      <% if attack_option.id %>
+        <%= render partial: 'show', locals: {attack_option: attack_option} %>
+      <% end %>
+    <% end %>
+  </div>
+  <div>
+    <%= render partial: '/errors', locals: {errors: @errors} %>
+    <%= form_for [@weapon, @attack_option] do |f| %>
+      <%= render partial: 'form' %>
+      <%= f.submit "add new attack option to #{@weapon.name}" %>
+    <% end %>
+  </div>
+</div>
+
+
