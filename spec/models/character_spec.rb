@@ -123,8 +123,8 @@ RSpec.describe Character, type: :model do
     let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing', motto: 'I help make sure things work!')}
     let(:class_skill) {character_class.skills.create(base_class_skill: false, name: 'tester character class skill', description: 'a skill for testing!', is_weapon_boost: true, weapon_class: 1, ranks_available: 2, passive: true, defense_boost: 5)}
     let!(:class_skill_cost1) {class_skill.skill_costs.create({rank: 1, cost: 10})}
-    let!(:class_skill_cost2) {class_skill.skill_costs.create({rank: 2, cost: 4})}
-    let!(:class_skill_cost3) {class_skill.skill_costs.create({rank: 2, cost: 4})}
+    let!(:class_skill_cost2) {class_skill.skill_costs.create({rank: 2, cost: 5})}
+    let!(:class_skill_cost3) {class_skill.skill_costs.create({rank: 2, cost: 5})}
     let(:weapon_class) {WeaponClass.create(name: 'weapon class', description: 'a weapon class!')}
     let(:weapon_skill) {weapon_class.skills.create(name: 'tester weapon skill', description: 'a weapon skill for testing!', ranks_available: 2, passive: true, accuracy_boost: 5)}
     let!(:weapon_skill_cost1) {weapon_skill.skill_costs.create(rank: 1, cost: 10)}
@@ -176,13 +176,12 @@ RSpec.describe Character, type: :model do
         expect(response[:messages]).to eq(["#{saved_character.name} successfully obtained #{weapon_skill.name} at rank 1 for 10 skill points."])
       end
 
-      # need bcs instantiated
       it 'levels up BCS if appropriate' do
         bcs = saved_character.class_bcs
         saved_character.obtain_skill(class_skill)
         obtained_bcs = bcs.map {|skill| ObtainedSkill.find_by(character_id: saved_character.id, skill_id: skill.id)}
         obtained_bcs.each do |skill|
-          expect(skill.ranks).to eq 3
+          expect(skill.ranks).to eq 2
         end
       end
 

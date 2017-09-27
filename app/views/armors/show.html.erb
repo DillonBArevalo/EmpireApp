@@ -1,3 +1,4 @@
+<% title @armor.name %>
 <h1><%= @armor.name %></h1>
 
 <% if logged_in? %>
@@ -10,8 +11,8 @@
 <h2>Stats:</h2>
 
 <ul class='no-dots armor-stats'>
-  <li>Creator: <%= @armor.creator.username %></li>
-  <li>Armor Type: <%= @armor.armor_type.name %></li>
+  <li>Creator: <%= link_to @armor.creator.username, @armor.creator %></li>
+  <li>Armor Type: <%= link_to @armor.armor_type.name, @armor.armor_type %></li>
   <li>Passive Defense Bonus: +<%= @armor.passive_defense_bonus %></li>
   <li>Active Action Reduction: -<%= @armor.active_action_reduction %></li>
   <li>Energy Budget Reduction: -<%= @armor.budget_reduction %></li>

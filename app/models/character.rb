@@ -312,8 +312,8 @@ private
   # Add to bcs then add to invested points
   def add_points_to_class(obtained_character_class, cost)
     # grab ranks
-    current_sp_mod_5 = obtained_character_class.invested_points % 5
-    additional_ranks = (current_sp_mod_5 + cost)/5
+    current_sp_mod_10 = obtained_character_class.invested_points % 10
+    additional_ranks = (current_sp_mod_10 + cost)/10
 
     # level up bcs
     bcs = self.class_bcs.select {|skill| skill.skillable_id == obtained_character_class.character_class_id}
