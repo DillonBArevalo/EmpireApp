@@ -379,7 +379,7 @@ private
   end
 
   def convert_hash_to_dice(die_hash)
-    die_hash.to_a.map { |pair| die_string(pair[1], pair[0])}.join(' + ')
+    die_hash.to_a.map { |pair| die_string(pair[1], pair[0])}.reject {|dice| dice.empty? }.join(' + ')
   end
 
   def add_to_energy_upgrade_points(new_points)

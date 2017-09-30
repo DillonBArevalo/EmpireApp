@@ -42,7 +42,21 @@ class ArmorsController < ApplicationController
   end
 
   def update
-
+    @armor = Armor.find(params[:id])
+    updates = []
+    updates << @armor.update(new_armor_params)
+    @drs = drs_from_params
+    old_drs = @armor.damage_resistances
+    old_drs.each_with_index do |dr, idx|
+      updates << dr.update(amount: @drs[idx])
+    end
+    if updates.any? {|update| !update}
+      @errors = ([@armor] + old_drs).reduce([]) {|errors, model| errors + model.errors.full_messages}
+      @armor_types = ArmorType.all
+      render 'edit'
+    else
+      redirect_to @armor
+    end
   end
 
   def destroy
