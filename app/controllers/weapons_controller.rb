@@ -8,8 +8,18 @@ class WeaponsController < ApplicationController
     @weapon = Weapon.new
     @damage_types = DamageType.all
     @attack_option = AttackOption.new
-    @weapon_types = WeaponType.all
-    @weapon_classes = WeaponClass.all
+    @weapon_types = WeaponType.all.reject {|weapon_type| weapon_type.name.downcase.include?('shield')}
+    @weapon_classes = WeaponClass.all.reject {|weapon_class| weapon_class.name.downcase.include?('shield')}
+    @conditions = Condition.all
+  end
+
+  def new_shield
+    @weapon = Weapon.new
+    @damage_types = DamageType.all
+    bludgeoning = @damage_types.find_by(name: 'Bludgeoning')
+    @attack_option = AttackOption.new(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone", damage_type_id: bludgeoning.id, damage_dice: 0, damage_die_size: 0, flat_damage_bonus: 0)
+    @weapon_types = WeaponType.all.select {|weapon_type| weapon_type.name.downcase.include?('shield')}
+    @weapon_classes = WeaponClass.all.select {|weapon_class| weapon_class.name.downcase.include?('shield')}
     @conditions = Condition.all
   end
 
@@ -40,7 +50,7 @@ class WeaponsController < ApplicationController
       @weapon_types = WeaponType.all
       @conditions = Condition.all
       @weapon_classes = WeaponClass.all
-      render 'new'
+      params[:shield] ? (render 'new_shield') : (render 'new')
     end
   end
 

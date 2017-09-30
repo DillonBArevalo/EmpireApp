@@ -9,7 +9,7 @@
     </div>
     <div class='form-field'>
       <%= label_tag :damage_type %>
-      <%= select_tag 'attack_option[damage_type_id]',  options_from_collection_for_select(@damage_types, "id", "name") %>
+      <%= select_tag 'attack_option[damage_type_id]',  options_from_collection_for_select(@damage_types, "id", "name", @attack_option.damage_type_id) %>
     </div>
     <div class='form-field'>
       <%= label_tag :strength_dice %>
@@ -41,7 +41,7 @@
     </div>
     <div class='form-field'>
       <%= label_tag :damage_die_size %>
-      <%= number_field_tag 'attack_option[damage_die_size]', @attack_option.damage_die_size, in: 2..12, step: 2, class: 'number-field' %>
+      <%= number_field_tag 'attack_option[damage_die_size]', @attack_option.damage_die_size, in: 0..12, step: 2, class: 'number-field' %>
     </div>
     <div class='form-field'>
       <%= label_tag :strength_damage_bonus %>
@@ -57,7 +57,7 @@
     </div>
     <div class='form-field'>
       <%= label_tag :condition_1_type %>
-      <%= select_tag 'condition1[condition_id]', options_from_collection_for_select(@conditions, "id", "name") %>
+      <%= select_tag 'condition1[condition_id]', options_from_collection_for_select(@conditions, "id", "name", @condition1 ? @condition1.id : nil) %>
     </div>
     <div class='form-field'>
       <%= label_tag :threshold_1 %>
@@ -65,7 +65,7 @@
     </div>
     <div class='form-field'>
       <%= label_tag :condition_2_type %>
-      <%= select_tag 'condition2[condition_id]', options_from_collection_for_select(@conditions, "id", "name") %>
+      <%= select_tag 'condition2[condition_id]', options_from_collection_for_select(@conditions, "id", "name", @condition2 ? @condition2.id : nil) %>
     </div>
     <div class='form-field'>
       <%= label_tag :threshold_2 %>
