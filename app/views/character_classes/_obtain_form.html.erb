@@ -12,6 +12,7 @@
             <%= hidden_field_tag :character_id, character.id %>
             <%= f.submit character.name, disabled: (character.character_classes.include?(@character_class) || character.available_skill_points < 5) %>
           <% end %>
+          <%= link_to "#{character.name}'s page", character %>
         </td>
         <td class='table-issues'>
           <% if (character.character_classes.include?(@character_class)) %>

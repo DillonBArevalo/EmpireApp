@@ -7,18 +7,20 @@
 
 <label class='bold'>Description:</label><p><%= @skill.description %></p>
 
-<table >
-  <tr>
-    <th class='table-rank'>Rank</th>
-    <th class='table-cost'>Cost</th>
-  </tr>
-  <% @skill.skill_costs.each do |cost| %>
-  <tr>
-    <th class='table-rank'><%= cost.rank %></th>
-    <th class='table-cost'><%= cost.cost %></th>
-  </tr>
-  <% end %>
-</table>
+<% unless @skill.base_class_skill %>
+  <table >
+    <tr>
+      <th class='table-rank'>Rank</th>
+      <th class='table-cost'>Cost</th>
+    </tr>
+    <% @skill.skill_costs.each do |cost| %>
+    <tr>
+      <th class='table-rank'><%= cost.rank %></th>
+      <th class='table-cost'><%= cost.cost %></th>
+    </tr>
+    <% end %>
+  </table>
+<% end %>
 
 <!-- probably add number of ranks to obtain? -->
 <% if logged_in? && !@skill.base_class_skill %>
@@ -27,6 +29,9 @@
     <tr>
       <th class='table-skill-form'>character</th>
       <th class='table-issues'>issues</th>
+      <th class='table-skill-form'>current ranks</th>
+      <th class='table-issues'>next rank cost</th>
+      <th class='table-skill-form'>available skill points</th>
     </tr>
     <% @characters_skills.each do |character_skill| %>
       <tr>
@@ -35,11 +40,21 @@
             <%= hidden_field_tag :skill_id, @skill.id %>
             <%= f.submit character_skill[0].name, disabled: !character_skill[2][:status] %>
           <% end %>
+          <span><%= link_to "#{character_skill[0].name}'s page", character_skill[0] %></span>
         </td>
-        <td>
+        <td class='flex-column'>
           <% character_skill[2][:messages].each do |message| %>
             <span class='table-issues'><%= message %></span>
           <% end %>
+        </td>
+        <td class='table-skill-form'>
+          <%= character_skill[1] ? character_skill[1].ranks : 0 %>
+        </td>
+        <td class='table-issues'>
+          <%= character_skill[3] %>
+        </td>
+        <td class='table-skill-form'>
+          <%= character_skill[0].available_skill_points %>
         </td>
       </tr>
     <% end %>

@@ -11,6 +11,7 @@
             <%= hidden_field_tag :armor_id, @armor.id %>
             <%= f.submit character.name, disabled: character.armors.include?(@armor) %>
           <% end %>
+          <%= link_to "#{character.name}'s page", character %>
         </td>
         <td class='table-issues'>
           <%= (character.armors.include?(@armor)) ? "#{character.name} already has this armor in their inventory" : "Add this armor to #{character.name}'s inventory" %>
