@@ -5,6 +5,6 @@ class CharacterClassesController < ApplicationController
 
   def show
     @character_class = CharacterClass.find(params[:id])
-    @obtained_character_class = ObtainedCharacterClass.new
+    @obtained_class = ObtainedClass.new
   end
 end

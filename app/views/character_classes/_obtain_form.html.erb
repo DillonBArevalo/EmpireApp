@@ -7,7 +7,7 @@
     <% current_user.characters.each do |character| %>
       <tr>
         <td class='table-skill-form'>
-          <%= form_for @obtained_character_class do |f| %>
+          <%= form_for @obtained_class do |f| %>
             <%= hidden_field_tag :character_class_id, @character_class.id %>
             <%= hidden_field_tag :character_id, character.id %>
             <%= f.submit character.name, disabled: (character.character_classes.include?(@character_class) || character.available_skill_points < 5) %>

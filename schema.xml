@@ -32,7 +32,7 @@
     <type label="SET" length="1" sql="SET" quote=""/>
     <type label="Bit" length="0" sql="bit" quote=""/>
   </group>
-</datatypes><table x="540" y="190" name="users">
+</datatypes><table x="450" y="550" name="users">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -52,11 +52,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="540" y="340" name="weapons">
-<row name="creator_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="users" row="id" />
-</row>
+<table x="350" y="230" name="weapons">
 <row name="weapon_type_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="weapon_types" row="id" />
@@ -64,6 +60,10 @@
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="creator_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="users" row="id" />
+</row>
 <row name="name" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
@@ -98,14 +98,14 @@
 <part>id</part>
 </key>
 </table>
-<table x="1160" y="540" name="characters">
+<table x="1040" y="460" name="characters">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <row name="creator_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="users" row="id" />
 </row>
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
@@ -153,7 +153,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="530" y="700" name="armors">
+<table x="380" y="690" name="armors">
 <row name="creator_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="users" row="id" />
@@ -161,13 +161,13 @@
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="name" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
 <row name="type_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="armor_types" row="id" />
 </row>
+<row name="name" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+<default>NULL</default></row>
 <row name="passive_defense_bonus" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -190,7 +190,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1470" y="240" name="character_classes">
+<table x="1070" y="290" name="character_classes">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -207,7 +207,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="760" y="450" name="equipped_weapons">
+<table x="610" y="360" name="equipped_weapons">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -223,17 +223,21 @@
 <part>id</part>
 </key>
 </table>
-<table x="1410" y="510" name="obtained_character_classes">
+<table x="830" y="220" name="obtained_classes">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="classable_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="character_classes" row="id" />
+<relation table="weapon_classes" row="id" />
+</row>
+<row name="classable_type" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <row name="character_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="characters" row="id" />
-</row>
-<row name="character_class_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="character_classes" row="id" />
 </row>
 <row name="invested_points" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -242,7 +246,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1000" y="640" name="inventories">
+<table x="860" y="550" name="inventories">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -254,7 +258,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="780" y="570" name="obtained_weapons">
+<table x="610" y="450" name="obtained_weapons">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -270,7 +274,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="780" y="660" name="obtained_armors">
+<table x="630" y="600" name="obtained_armors">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -286,7 +290,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="150" y="80" name="weapon_classes">
+<table x="630" y="110" name="weapon_classes">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -355,7 +359,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1160" y="10" name="skills">
+<table x="1350" y="170" name="skills">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -365,7 +369,7 @@
 <relation table="weapon_classes" row="id" />
 </row>
 <row name="skillable_type" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
+<datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <row name="base_class_skill" null="1" autoincrement="0">
 <datatype>bit</datatype>
@@ -431,7 +435,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="850" y="140" name="obtained_skills">
+<table x="1080" y="20" name="obtained_skills">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -487,7 +491,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="150" y="220" name="weapon_classes_weapons">
+<table x="370" y="100" name="weapon_classes_weapons">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -503,7 +507,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="750" y="360" name="weapon_types">
+<table x="610" y="290" name="weapon_types">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -514,7 +518,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="760" y="870" name="armor_types">
+<table x="620" y="800" name="armor_types">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -525,7 +529,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1510" y="40" name="skill_costs">
+<table x="1430" y="30" name="skill_costs">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -543,7 +547,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="330" y="580" name="conditions">
+<table x="170" y="40" name="conditions">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -560,7 +564,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="280" y="450" name="attack_options_conditions">
+<table x="70" y="170" name="attack_options_conditions">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>

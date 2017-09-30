@@ -12,5 +12,6 @@ class WeaponClass < ApplicationRecord
 # tests!
   has_many :equipped_weapons, through: :weapons
   has_many :characters, through: :equipped_weapons
+  has_many :obtained_classes, as: :classable
 
 end

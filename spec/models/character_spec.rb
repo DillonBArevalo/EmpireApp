@@ -4,17 +4,18 @@ RSpec.describe Character, type: :model do
   describe 'Associations' do
     it{should belong_to :creator}
     it{should have_many :character_classes}
+    it{should have_many :weapon_classes}
     it{should have_many :possible_class_skills}
-    it{should have_many :improved_weapon_classes}
-    it{should have_many :displaying_skills}
     it{should have_many :skills}
+    it{should have_many :displaying_skills}
+    it{should have_many :class_bcs}
+    it{should have_many :weapon_bcs}
     it{should have_one :inventory}
     it{should have_many :weapons}
     it{should have_many :armors}
     it{should belong_to :equipped_armor}
     it{should have_many :equipped_weapons}
     it{should have_many :attack_options}
-    it{should have_many :class_bcs}
   end
 
   let(:user) {User.create(username: 'ex', name: 'Tom', email: 'tom@tom.com', password: 'password',password_confirmation: 'password')}
@@ -111,7 +112,7 @@ RSpec.describe Character, type: :model do
       it 'benefits from skills that boost passive def' do
         saved_character.equip_armor(armor)
         saved_character.add_skill_points(100)
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         saved_character.obtain_skill(class_skill)
         expect(saved_character.passive_defense).to eq(15)
       end
@@ -147,7 +148,7 @@ RSpec.describe Character, type: :model do
         response = saved_character.obtain_skill(class_skill)
         expect(response[:messages][0]).to eq('You do not have the class required to obtain this skill')
         saved_character.add_skill_points(5)
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         response = saved_character.obtain_skill(class_skill)
         expect(response[:messages][0]).to eq('You don\'t have enough skill points to obtain the next rank of this skill')
         saved_character.add_skill_points(30)
@@ -161,7 +162,7 @@ RSpec.describe Character, type: :model do
       before(:each) do
         character_class.skills.create(base_class_skill: true, name: 'tester bcs', description: 'a bcs for testing', passive: true)
         saved_character.add_skill_points(100)
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
       end
 
       it 'responds with a successful message' do
@@ -213,24 +214,24 @@ RSpec.describe Character, type: :model do
     end
   end
 
-  describe '#obtain_character_class' do
+  describe '#obtain_class' do
     let(:character_class) {CharacterClass.create(name: 'Ex class', description: 'For testing', motto: 'I help make sure things work!')}
 
     it 'returns a hash with keys status and messages' do
-      expect(character.obtain_character_class(character_class).keys).to eq([:status, :messages])
+      expect(character.obtain_class(character_class).keys).to eq([:status, :messages])
     end
 
     context 'when you cannot obtain the class' do
       it 'returns status false with an appropriate message when not enough sp' do
         saved_character.available_skill_points = 4
-        response = saved_character.obtain_character_class(character_class)
+        response = saved_character.obtain_class(character_class)
         expect(response[:status]).to be false
         expect(response[:messages]).to eq(['test does not have enough available skill points (you have 4) to obtain this class (requires 5)'])
       end
       it 'returns status false with an appropriate message you already have the class' do
         saved_character.available_skill_points = 10
-        saved_character.obtain_character_class(character_class)
-        response = saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
+        response = saved_character.obtain_class(character_class)
         expect(response[:status]).to be false
         expect(response[:messages]).to eq(['test already has the class Ex class'])
       end
@@ -239,24 +240,24 @@ RSpec.describe Character, type: :model do
     context 'when you successfully obtain the class' do
       it 'responds with a positive status and a success message' do
         saved_character.available_skill_points = 10
-        response = saved_character.obtain_character_class(character_class)
+        response = saved_character.obtain_class(character_class)
         expect(response[:status]).to be true
         expect(response[:messages]).to eq(['test has obtained the class Ex class and the associated base class skills!'])
       end
       it 'subtracts 5 from the available_skill_points of the character' do
         saved_character.available_skill_points = 10
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         expect(saved_character.available_skill_points).to eq(5)
       end
-      it 'creates an ObtainedCharacterClass with invested_points = 5' do
+      it 'creates an ObtainedClass with invested_points = 5' do
         saved_character.available_skill_points = 10
-        saved_character.obtain_character_class(character_class)
-        expect(saved_character.obtained_character_classes.first.invested_points).to eq(5)
+        saved_character.obtain_class(character_class)
+        expect(saved_character.obtained_classes.first.invested_points).to eq(5)
       end
       it 'gives the character all the relevant base class skills' do
         bcs = character_class.skills.create(base_class_skill: true, name: 'tester bcs', description: 'a bcs for testing', passive: true)
         saved_character.available_skill_points = 10
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         expect(saved_character.skills).to include (bcs)
       end
     end
@@ -292,7 +293,7 @@ RSpec.describe Character, type: :model do
 
     it 'adds a dex die with the relevant skill' do
       saved_character.add_skill_points(50)
-      saved_character.obtain_character_class(character_class)
+      saved_character.obtain_class(character_class)
       saved_character.obtain_skill(skill)
       expect(saved_character.jump).to eq(character.tactical_maneuver + ' + 1d4')
     end
@@ -455,7 +456,7 @@ RSpec.describe Character, type: :model do
 
       before(:each) do
         saved_character.add_skill_points(100)
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         saved_character.obtain_skill(class_skill)
       end
 
@@ -530,7 +531,7 @@ RSpec.describe Character, type: :model do
 
       before(:each) do
         saved_character.add_skill_points(100)
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         saved_character.obtain_skill(class_skill)
       end
 
@@ -610,7 +611,7 @@ RSpec.describe Character, type: :model do
 
       before(:each) do
         saved_character.add_skill_points(100)
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         saved_character.obtain_skill(class_skill)
       end
 
@@ -665,7 +666,7 @@ RSpec.describe Character, type: :model do
 
       before(:each) do
         saved_character.add_skill_points(100)
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         saved_character.obtain_skill(class_skill)
       end
 
@@ -715,7 +716,7 @@ RSpec.describe Character, type: :model do
       saved_character.equip_weapon(hand_axe)
       saved_character.equip_shield(shield)
       saved_character.add_skill_points(100)
-      saved_character.obtain_character_class(character_class)
+      saved_character.obtain_class(character_class)
       saved_character.obtain_skill(class_skill)
       saved_character.obtain_skill(class_skill2)
       expect(saved_character.total_blocks).to eq('4 + 2 panic block(s) for half your next offense budget')
@@ -739,7 +740,7 @@ RSpec.describe Character, type: :model do
 
       before(:each) do
         saved_character.add_skill_points(100)
-        saved_character.obtain_character_class(character_class)
+        saved_character.obtain_class(character_class)
         saved_character.obtain_skill(class_skill)
       end
 
@@ -788,7 +789,7 @@ RSpec.describe Character, type: :model do
 
     it 'lists all weapon skills and all class skills of a class the character has' do
       saved_character.add_skill_points(100)
-      saved_character.obtain_character_class(character_class)
+      saved_character.obtain_class(character_class)
       expect(saved_character.possible_skills).to eq([weapon_skill, class_skill])
     end
 

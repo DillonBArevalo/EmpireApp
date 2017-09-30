@@ -1,15 +1,16 @@
 class Character < ApplicationRecord
   belongs_to :creator, foreign_key: :user_id, class_name: 'User'
 
-  has_many :obtained_character_classes
-  has_many :character_classes, through: :obtained_character_classes
+  has_many :obtained_classes
+  has_many :character_classes, through: :obtained_classes, source: :classable, source_type: 'CharacterClass'
+  has_many :weapon_classes, through: :obtained_classes, source: :classable, source_type: 'WeaponClass'
   has_many :possible_class_skills, through: :character_classes, source: :skills
 
-  has_many :improved_weapon_classes, through: :obtained_skills, source: :applicable_weapon_class
   has_many :obtained_skills, -> { order 'skill_id ASC' }
   has_many :skills, -> { order 'id ASC' }, through: :obtained_skills
   has_many :displaying_skills, -> {where display_description: true}, through: :obtained_skills, source: :skill
   has_many :class_bcs, through: :character_classes, source: :bcs
+  has_many :weapon_bcs, through: :weapon_classes, source: :base_class_skills
 
   has_one :inventory
 
@@ -28,6 +29,10 @@ class Character < ApplicationRecord
   # validations
   validates :name, :description, :strength, :dexterity, :constitution, presence: true
 
+
+  def bcs
+    class_bcs + weapon_bcs
+  end
 # EXTRA STATS
   def active_defense_bonus
     debuff = equipped_armor ? equipped_armor.active_action_reduction : 0
@@ -89,7 +94,7 @@ class Character < ApplicationRecord
     # remove used sp from available_skill_points
     cost = skill.cost_at_rank(join.ranks)
     self.increment!(:available_skill_points, -cost)
-    increase_class_stat_points(skill, cost) if skill.skillable_type == 'CharacterClass'
+    increase_class_stat_points(skill, cost)
     response[:messages] = ["#{self.name} successfully obtained #{skill.name} at rank #{join.ranks} for #{cost} skill points."]
     response
   end
@@ -103,13 +108,13 @@ class Character < ApplicationRecord
     response
   end
 
-  def obtain_character_class(character_class)
-    if ObtainedCharacterClass.find_by(character_class_id: character_class.id, character_id: self.id)
+  def obtain_class(character_class)
+    if ObtainedClass.find_by(classable_id: character_class.id, classable_type: 'CharacterClass', character_id: self.id)
       {status: false, messages: ["#{self.name} already has the class #{character_class.name}"]}
     elsif self.available_skill_points < 5
       {status: false, messages: ["#{self.name} does not have enough available skill points (you have #{self.available_skill_points}) to obtain this class (requires 5)"]}
     else
-      self.obtained_character_classes.create(character_class_id: character_class.id, invested_points: 5)
+      self.obtained_classes.create(classable_id: character_class.id, classable_type: 'CharacterClass', invested_points: 5)
       self.increment!(:available_skill_points, -5)
       obtain_all_bcs(character_class)
       {status: true, messages: ["#{self.name} has obtained the class #{character_class.name} and the associated base class skills!"]}
@@ -302,26 +307,23 @@ private
   end
 
   def increase_class_stat_points(skill, cost)
-    if skill.skillable_type = 'CharacterClass'
-      class_id = skill.skillable_id
-      obtained_class = ObtainedCharacterClass.find_by(character_id: self.id, character_class_id: class_id)
-      add_points_to_class(obtained_class, cost)
-    end
+    obtained_class = ObtainedClass.find_or_create_by(character_id: self.id, classable_id: skill.skillable_id, classable_type: skill.skillable_type)
+    add_points_to_class(obtained_class, cost)
   end
 
   # Add to bcs then add to invested points
-  def add_points_to_class(obtained_character_class, cost)
+  def add_points_to_class(obtained_class, cost)
     # grab ranks
-    current_sp_mod_10 = obtained_character_class.invested_points % 10
+    current_sp_mod_10 = ((obtained_class.classable_type == 'CharacterClass') ? (obtained_class.invested_points - 5 % 10) : (obtained_class.invested_points % 10))
     additional_ranks = (current_sp_mod_10 + cost)/10
 
     # level up bcs
-    bcs = self.class_bcs.select {|skill| skill.skillable_id == obtained_character_class.character_class_id}
-    obtained_bcs = bcs.map {|skill| ObtainedSkill.find_by(skill_id: skill.id, character_id: self.id)}
+    base_class_skills = self.bcs.select {|skill| skill.skillable_id == obtained_class.classable_id && obtained_class.classable_type == skill.skillable_type}
+    obtained_bcs = base_class_skills.map {|skill| ObtainedSkill.find_by(skill_id: skill.id, character_id: self.id) || ObtainedSkill.create(skill_id: skill.id, character_id: self.id, ranks: 0) }
     obtained_bcs.each {|obtained_skill| obtained_skill.increment!(:ranks, additional_ranks)}
 
     # add to invested points
-    obtained_character_class.increment!(:invested_points, cost)
+    obtained_class.increment!(:invested_points, cost)
   end
 
   def obtain_all_bcs(character_class)

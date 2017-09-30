@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   resources :damage_types, only: [:index] # describe/display
 
   resources :character_classes, only: [:index, :show]
-  resources :obtained_character_classes, only: [:create]
+  resources :obtained_classes, only: [:create]
   resources :conditions, only: [:index, :show]
   resources :skills, only: [:index, :show]
   resources :weapon_classes, only: [:index, :show]
