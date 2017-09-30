@@ -110,8 +110,8 @@ damage_types.each_with_index do |type, idx|
 end
 
 # Class Skills
-warrior.skills.create!(base_class_skill: true, display_description: true, name: "Always Swinging", description: "If the Warrior uses more energy in their offensive round than in their defensive round, they gain extra energy from their pool to spend on their offensive round. +1 energy at every 10th Skill Points Invested.")
-warrior.skills.create!(base_class_skill: true, display_description: true, name: "Thrill of the Fight", description: "When outnumbered (engaged in melee combat with more than one combatant), the Warrior multiplies their bonus from Always Swinging by the number of targets they face. Doesn’t increase pool size. +100 percent per enemy when outnumbered.")
+warrior.skills.create!(base_class_skill: true, display_description: true, passive: true, name: "Always Swinging", description: "If the Warrior uses more energy in their offensive round than in their defensive round, they gain extra energy from their pool to spend on their offensive round. +1 energy at every 10th Skill Points Invested.")
+warrior.skills.create!(base_class_skill: true, display_description: true, passive: true, name: "Thrill of the Fight", description: "When outnumbered (engaged in melee combat with more than one combatant), the Warrior multiplies their bonus from Always Swinging by the number of targets they face. Doesn’t increase pool size. +100 percent per enemy when outnumbered.")
 
 aggression1 = warrior.skills.create!(base_class_skill: false, passive: true, display_description: false, is_weapon_boost: true, weapon_class: class1.id, name: "Aggression (Class 1)", description: "Base Damage increase for a specified weapon class (Class 1). +1 per level.", ranks_available: 8, damage_boost: 1)
 [1, 3, 5, 7, 9, 11, 13, 15].each_with_index do |cost, idx|
@@ -186,8 +186,8 @@ m_f = warrior.skills.create!(base_class_skill: false, display_description: true,
   m_f.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
 
-soldier.skills.create!(base_class_skill: true, display_description: true, name: "Master of Defense", description: "If the Soldier uses more energy in their defensive round than in their offensive round, they gain extra energy from their pool to spend on their defensive round. + 1 energy at every 10th point in the Soldier class.")
-soldier.skills.create!(base_class_skill: true, display_description: true, name: "Firm Footing", description: "The Soldier is harder to knock off balance or knock prone. This does not affect their mobility in combat. +1 to defense against the Off Balance and Prone conditions (Margin of Overwhelming Victory and damage conditions) per 10 skill points.")
+soldier.skills.create!(base_class_skill: true, display_description: true, passive: true, name: "Master of Defense", description: "If the Soldier uses more energy in their defensive round than in their offensive round, they gain extra energy from their pool to spend on their defensive round. + 1 energy at every 10th point in the Soldier class.")
+soldier.skills.create!(base_class_skill: true, display_description: true, passive: true, name: "Firm Footing", description: "The Soldier is harder to knock off balance or knock prone. This does not affect their mobility in combat. +1 to defense against the Off Balance and Prone conditions (Margin of Overwhelming Victory and damage conditions) per 10 skill points.")
 
 s_f = soldier.skills.create!(base_class_skill: false, display_description: false, passive: true, name: "Shield Fighter", description: "Soldiers are more effective with shields than anyone else. They gain a flat bonus when defending with a shield. +1 Base Defense per level", ranks_available: 8, is_weapon_boost: true, weapon_class: shields.id, defense_boost: 1)
 [1,3,5,7,9,11,13,15].each_with_index do |cost, idx|

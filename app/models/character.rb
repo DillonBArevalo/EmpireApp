@@ -314,7 +314,7 @@ private
   # Add to bcs then add to invested points
   def add_points_to_class(obtained_class, cost)
     # grab ranks
-    current_sp_mod_10 = ((obtained_class.classable_type == 'CharacterClass') ? (obtained_class.invested_points - 5 % 10) : (obtained_class.invested_points % 10))
+    current_sp_mod_10 = ((obtained_class.classable_type == 'CharacterClass') ? ((obtained_class.invested_points - 5) % 10) : (obtained_class.invested_points % 10))
     additional_ranks = (current_sp_mod_10 + cost)/10
 
     # level up bcs

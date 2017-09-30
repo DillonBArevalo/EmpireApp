@@ -96,6 +96,25 @@
       <% end %>
     </ul>
   </div>
+  <div class='flex-column padded border'>
+    <li class='bold'>Obtained Classes: </li>
+    <ul class='no-dots'>
+      <% @character.obtained_classes.each do |obtained_class| %>
+        <li><%= obtained_class.classable.name %>: <%= obtained_class.invested_points %> points invested</li>
+      <% end %>
+    </ul>
+  </div>
+  <div class='flex-column padded border'>
+    <li class='bold'>Skill bonuses not applied through raw numbers: </li>
+    <ul class='no-dots'>
+      <% @skills_ranks.keys.each do |skill| %>
+        <% if skill.display_description %>
+          <li><label> <%= skill.name %> (<%= skill.passive ? 'passive' : 'active' %>):</label>
+            <p>   <%= skill.description %></p></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
 </ul>
 
 

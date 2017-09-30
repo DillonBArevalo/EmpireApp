@@ -4,6 +4,10 @@
 <% if @skill.base_class_skill %>
   <h2>Base Class Skill</h2>
 <% end %>
+<ul>
+  <li><%= @skill.passive ? 'Passive' : 'Active' %></li>
+  <li><%= link_to @skill.skillable.name, @skill.skillable %> skill</li>
+</ul>
 
 <label class='bold'>Description:</label><p><%= @skill.description %></p>
 
