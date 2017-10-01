@@ -1,22 +1,3 @@
 <% title "New Weapon" %>
 <h1>Create a new weapon!</h1>
-<div class='flex-row center'>
-<%= render partial: '/errors', locals: {errors: @errors} %>
-<%= render partial: '/errors', locals: {errors: @errors2} %>
-</div>
-
-<div class='flex-column center'>
-
-<%= form_for @weapon, html: {class: 'flex-row left', id: nil} do |f| %>
-  <div class='flex-column left half'>
-    <label><span class='bold'>Weapon Details:</span></label>
-    <%= render partial: 'form', locals: {f: f} %>
-  </div>
-
-  <div class='flex-column left half'>
-    <%= render partial: '/attack_options/form' %>
-  </div>
-    <%= f.submit %>
-<% end %>
-
-</div>
+<%= render partial: 'weapon_form' %>

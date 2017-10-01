@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   resources :weapons do
     resources :attack_options, only: [:new, :create]
   end
+
   get '/weapons/new/shield', to: 'weapons#new_shield'
+  get '/weapons/:id/edit/shield', to: 'weapons#edit_shield'
 
   # resources :armor_types
   resources :characters do #, except: [:edit, :update, :destroy] # full

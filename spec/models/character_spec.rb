@@ -192,7 +192,7 @@ RSpec.describe Character, type: :model do
         saved_character.obtain_skill(class_skill)
         obtained_bcs = bcs.map {|skill| ObtainedSkill.find_by(character_id: saved_character.id, skill_id: skill.id)}
         obtained_bcs.each do |skill|
-          expect(skill.ranks).to eq 3
+          expect(skill.ranks).to eq 2
         end
       end
 

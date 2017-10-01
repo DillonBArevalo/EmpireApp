@@ -64,14 +64,50 @@ class WeaponsController < ApplicationController
     @weapon = Weapon.find(params[:id])
     @damage_types = DamageType.all
     @attack_option = @weapon.attack_options.first
-    @weapon_types = WeaponType.all
-    @weapon_classes = @character.weapon_classes
+    @weapon_types = WeaponType.all.reject {|weapon_type| weapon_type.name.downcase.include?('shield')}
+    @weapon_classes = WeaponClass.all.reject {|weapon_class| weapon_class.name.downcase.include?('shield')}
     @conditions = Condition.all
-    render 'new'
+  end
+
+  def edit_shield
+    @weapon = Weapon.find(params[:id])
+    @damage_types = DamageType.all
+    @attack_option = @weapon.attack_options.first
+    @weapon_types = WeaponType.all.select {|weapon_type| weapon_type.name.downcase.include?('shield')}
+    @weapon_classes = WeaponClass.all.select {|weapon_class| weapon_class.name.downcase.include?('shield')}
+    @conditions = Condition.all
   end
 
   def update
+    @weapon = Weapon.find(params[:id])
+    if logged_in? && current_user == @weapon.user
+      @user = current_user
+    else
+      redirect_to @weapon
+    end
 
+  # refactor to use a weapon method to create everything else in one line?
+  # also maybe add validations to AttackOptionsCondition
+    @attack_option = @weapon.attack_options.first
+    @condition1 = @attack_option.attack_options_conditions.first
+    @condition2 = @attack_option.attack_options_conditions.second
+    @weapon.weapon_classes = [WeaponClass.find(params[:weapon_class_id])]
+    if @weapon.update(new_weapon_params) && @attack_option.update(aoo_params) && @condition1.update(condition1_params) && @condition2.update(condition2_params)
+      redirect_to @weapon
+    else
+      @errors = @weapon.errors.full_messages
+      @errors2 =  @attack_option.errors.full_messages + @condition1.errors.full_messages + @condition2.errors.full_messages
+      @damage_types = DamageType.all
+      if @weapon.weapon_classes.any? {|weapon_class| weapon_class.name.downcase.include?('shield')}
+        @weapon_types = WeaponType.all.select {|weapon_type| weapon_type.name.downcase.include?('shield')}
+        @weapon_classes = WeaponClass.all.select {|weapon_class| weapon_class.name.downcase.include?('shield')}
+      else
+        @weapon_types = WeaponType.all.reject {|weapon_type| weapon_type.name.downcase.include?('shield')}
+        @weapon_classes = WeaponClass.all.reject {|weapon_class| weapon_class.name.downcase.include?('shield')}
+      end
+      @conditions = Condition.all
+      params[:shield] ? (render 'edit_shield') : (render 'edit')
+    end
   end
 
   def destroy
