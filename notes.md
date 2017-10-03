@@ -1,12 +1,5 @@
 # Notes
 
-
-## Virtual stats for characters:
-
-- maybe use after_initialize (which runs after finding a thing as well) to create virtual stats
-- stat die sizes
-
-
 ## Schema is missing:
 
 - Ranged Weapons/ranger
@@ -51,8 +44,6 @@ A LOT OF THESE DON'T MATTER FOR JUST THE CHARACTER CREATOR. ONLY PASSIVE STAT BO
 ## Random notes:
 
 - decided on adding energy boosts upon getting more skill points, not upon getting more skills!
-
-- maybe add a sidebar (openable) that holds all characters with their available skill points
 
 - maybe make skill costs a json on skills to cut down on db lookups?
 
