@@ -20,27 +20,4 @@
   <% end %>
 </ul>
 
-<h2>Skills: </h2>
-<ul class='no-pad no-dots'>
-  <li><span class='bold'>Base Class Skills: </span>
-    <ul>
-      <% @weapon_class.base_class_skills.each do |skill| %>
-        <li><%= link_to skill.name, skill %></li>
-      <% end %>
-    </ul>
-  </li>
-  <li><span class='bold'>Passive Skills: </span>
-    <ul>
-      <% @weapon_class.passive_skills.each do |skill| %>
-        <li><%= link_to skill.name, skill %></li>
-      <% end %>
-    </ul>
-  </li>
-  <li><span class='bold'>Active Skills: </span>
-    <ul>
-      <% @weapon_class.active_skills.each do |skill| %>
-        <li><%= link_to skill.name, skill %></li>
-      <% end %>
-    </ul>
-  </li>
-</ul>
+<%= render partial: '/skills/show', locals: {resource: @weapon_class} %>

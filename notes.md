@@ -51,7 +51,6 @@ A LOT OF THESE DON'T MATTER FOR JUST THE CHARACTER CREATOR. ONLY PASSIVE STAT BO
 ## Random notes:
 
 - decided on adding energy boosts upon getting more skill points, not upon getting more skills!
-- DON'T HAVE A WAY TO TRACK BCS FOR WEAPONS! NEED OBTAINED WEAPON SKILLS TABLE
 
 - maybe add a sidebar (openable) that holds all characters with their available skill points
 

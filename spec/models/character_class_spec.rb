@@ -9,6 +9,6 @@ RSpec.describe CharacterClass, type: :model do
     it{should have_many :active_skills}
     it{should have_many :passive_skills}
 
-    it{should have_many :bcs}
+    it{should have_many :base_class_skills}
   end
 end

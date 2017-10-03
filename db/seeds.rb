@@ -263,6 +263,11 @@ c_t = soldier.skills.create!(base_class_skill: false, display_description: true,
 [5, 10, 30].each_with_index do |cost, idx|
   c_t.skill_costs.create!(rank: (idx + 1), cost: cost)
 end
+# Timed Advance: (Multi-Tiered)  [1, 2, 4, 8, 16]
+t_a = soldier.skills.create!(base_class_skill: false, display_description: true, name: "Timed Advance", description: "Soldier must spend more than half their energy budget defending: On a successful defense on every attack in a round, the Soldier gains a bonus to tactical maneuver to move into the opponent's square before their next offensive round (immediately following). (+2, +4, +6, +8, +10)", ranks_available: 5)
+[1, 2, 4, 8, 16].each_with_index do |cost, idx|
+  t_a.skill_costs.create!(rank: (idx + 1), cost: cost)
+end
 
 # Weapon Skills
 class1.skills.create!(base_class_skill: true, display_description: false, passive: true, is_weapon_boost: true, weapon_class: class1.id, name: "Bring the Hurt", description: "For every ten skill points spent on Class 1 weapon skills, all Class 1 weapons gain +2 to damage.", damage_boost: 2)

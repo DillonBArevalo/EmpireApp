@@ -9,7 +9,7 @@ class Character < ApplicationRecord
   has_many :obtained_skills, -> { order 'skill_id ASC' }
   has_many :skills, -> { order 'id ASC' }, through: :obtained_skills
   has_many :displaying_skills, -> {where display_description: true}, through: :obtained_skills, source: :skill
-  has_many :class_bcs, through: :character_classes, source: :bcs
+  has_many :class_bcs, through: :character_classes, source: :base_class_skills
   has_many :weapon_bcs, through: :weapon_classes, source: :base_class_skills
 
   has_one :inventory
@@ -327,7 +327,7 @@ private
   end
 
   def obtain_all_bcs(character_class)
-    character_class.bcs.each do |skill|
+    character_class.base_class_skills.each do |skill|
       self.obtained_skills.create(skill_id: skill.id, ranks: 1)
     end
   end
