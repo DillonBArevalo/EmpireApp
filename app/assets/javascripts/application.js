@@ -18,6 +18,7 @@
 $( document ).on('turbolinks:load', function(){
   hideDetailListener();
   upgradeFormListener();
+  characterNavListener();
 })
 
 var hideDetailListener = function(){
@@ -37,5 +38,11 @@ var upgradeSingle = function(primary, other) {
     var max = parseInt($('#unspent_points').html())
     var secondaryValue = max - parseInt($(this).val())
     $(other).val(secondaryValue)
+  })
+}
+
+var characterNavListener = function(){
+  $('.navigate_to_character').on('click', function(e){
+    window.location.href = '/characters/' + $(this).closest('ul').find('.select_character').val()
   })
 }

@@ -15,6 +15,10 @@
 <li><%= link_to 'Characters', characters_path %>
   <ul>
     <li><%= link_to 'New Character', new_character_path %></li>
+    <% if logged_in? %>
+      <li> <%= select_tag 'select_character', options_from_collection_for_select(current_user.characters, :id, :name), class: 'select_character' %> </li>
+      <li><button class='navigate_to_character'>view character</button></li>
+    <% end %>
   </ul>
 </li>
 <li><%= link_to 'Users', users_path %></li>
