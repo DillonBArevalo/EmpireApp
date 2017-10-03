@@ -107,9 +107,9 @@
   <div class='flex-column padded border'>
     <li class='bold'>Skill bonuses not applied through raw numbers: </li>
     <ul class='no-dots'>
-      <% @skills_ranks.keys.each do |skill| %>
+      <% @skills_ranks.each do |skill, ranks| %>
         <% if skill.display_description %>
-          <li><label> <%= skill.name %> (<%= skill.passive ? 'passive' : 'active' %>):</label>
+          <li><label> <%= skill.name %>, <%= skill.skillable.name %>, ranks: <%= ranks.ranks %> (<%= skill.passive ? 'passive' : 'active' %>):</label>
             <p>   <%= skill.description %></p></li>
         <% end %>
       <% end %>
