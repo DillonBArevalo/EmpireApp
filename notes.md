@@ -55,3 +55,5 @@ A LOT OF THESE DON'T MATTER FOR JUST THE CHARACTER CREATOR. ONLY PASSIVE STAT BO
 - maybe add a sidebar (openable) that holds all characters with their available skill points
 
 - maybe make skill costs a json on skills to cut down on db lookups?
+
+- look into what's cascading for deletion. does deleting a character kill all the equipped stuff? that would be bad. conversely, does it not destroy the equipped things tables? either way it's bad... look into it for non mvp unless serious bug

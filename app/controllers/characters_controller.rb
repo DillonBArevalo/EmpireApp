@@ -31,12 +31,14 @@ class CharactersController < ApplicationController
   end
 
   def edit
-
+    @character = Character.find(params[:id])
   end
 
   def update
     @character = Character.find(params[:id])
-    if params[:armor_id]
+    if @character.creator != current_user
+      redirect_to @character
+    elsif params[:armor_id]
       if params[:unequip]
         @character.remove_armor
       else
@@ -49,11 +51,20 @@ class CharactersController < ApplicationController
     elsif params[:upgrade]
       @character.spend_upgrade_points(upgrade_params)
       redirect_to @character
+    else
+      if @character.update(new_character_params)
+        redirect_to @character
+      else
+        @errors = @character.errors.full_messages
+        render 'edit'
+      end
     end
   end
 
   def destroy
-
+    @character = Character.find(params[:id])
+    @character.destroy
+    redirect_to current_user
   end
 
   private

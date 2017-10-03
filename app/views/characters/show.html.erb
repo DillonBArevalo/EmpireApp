@@ -2,9 +2,11 @@
 <h1><%= @character.name %></h1>
 <h2>Created by <%= link_to @character.creator.username, @character.creator %></h2>
 <div class='flex-row'>
-<%= link_to('inventory', @character.inventory) %>
-<p class='no-margin'><%= @character.description %></p>
-
+  <%= link_to('inventory', @character.inventory) %>
+  <p class='no-margin'><%= @character.description %></p>
+  <% if @character.creator == current_user %>
+    <%= link_to("Edit #{@character.name}", edit_character_path(@character)) %>
+  <% end %>
 </div>
 <% if current_user?(@character.creator) %>
   <h2>Add skill points to your character</h2>

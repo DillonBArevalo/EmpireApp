@@ -1,5 +1,5 @@
-<% title "New Character" %>
-<h1>New Character</h1>
+<% title "Edit #{@character.name}" %>
+<h1>Edit <%= @character.name %></h1>
 
 <%= render partial: '/errors', locals: {errors: @errors} %>
 

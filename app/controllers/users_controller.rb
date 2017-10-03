@@ -25,12 +25,6 @@ class UsersController < ApplicationController
     @characters = @user.characters
   end
 
-  def destroy
-    @user.find(params[:id])
-    @user.destroy
-    redirect_to
-  end
-
   private
 
   def user_params
