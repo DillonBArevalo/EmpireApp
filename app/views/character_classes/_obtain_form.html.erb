@@ -1,0 +1,28 @@
+<label>Obtain this class for one of your characters:</label>
+  <table>
+    <tr>
+      <th class='table-skill-form'>character</th>
+      <th class='table-issues'>status</th>
+    </tr>
+    <% current_user.characters.each do |character| %>
+      <tr>
+        <td class='table-skill-form'>
+          <%= form_for @obtained_class do |f| %>
+            <%= hidden_field_tag :character_class_id, @character_class.id %>
+            <%= hidden_field_tag :character_id, character.id %>
+            <%= f.submit character.name, disabled: (character.character_classes.include?(@character_class) || character.available_skill_points < 5) %>
+          <% end %>
+          <%= link_to "#{character.name}'s page", character %>
+        </td>
+        <td class='table-issues'>
+          <% if (character.character_classes.include?(@character_class)) %>
+            <%= "#{character.name} has already obtained this class" %>
+          <% elsif character.available_skill_points < 5 %>
+            <%= "#{character.name} does not have enough skill points to obtain the class (has #{character.available_skill_points}, needs 5)" %>
+          <% else %>
+            <%= "Have #{character.name} obtain this class" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>

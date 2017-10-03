@@ -1,0 +1,151 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+#nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#nav * {
+  padding: 5px;
+}
+
+#content {
+  margin-bottom: 120px
+}
+
+.no-wrap {
+  flex-wrap: nowrap;
+}
+
+.no-margin {
+  margin: 0px;
+}
+
+.number-field {
+  width: 3em;
+}
+
+.half {
+  flex-basis: 50%;
+}
+
+.stats {
+  width: 80%;
+  min-width: 350px;
+  // max-width: 700px;
+ }
+
+.no-pad {
+  padding: 0px;
+}
+
+ .no-dots {
+  list-style: none
+ }
+
+.padded {
+  padding: 0.5em;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  // flex-basis: 50%; goes on child!
+}
+
+.form-field {
+  padding: 5px;
+  display:flex;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.left {
+  align-items: flex-start;
+}
+
+.center {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.errors {
+  color: red;
+}
+
+.pad-bottom {
+  padding-bottom: 10px;
+}
+
+.small-border {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.table-label {
+  width: 20%
+}
+
+.table-content {
+  width: 70%;
+  padding: 1em;
+}
+
+.width100 {
+  width: 100%
+}
+
+.width20 {
+  width: 20%;
+}
+
+.border {
+  border: 1px solid black;
+}
+
+.bottom-nav {
+  border-top: 1px solid black;
+}
+
+// .test {
+//   border-top: 1px solid black;
+//   border-bottom: 1px solid black;
+//   border-radius: 20px;
+// }
+
+label {
+  padding-right: 5px;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  height: 100px;
+  width: 100%;
+  background-color: white;
+}

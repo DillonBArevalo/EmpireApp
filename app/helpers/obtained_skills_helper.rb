@@ -1,0 +1,2 @@
+module ObtainedSkillsHelper
+end

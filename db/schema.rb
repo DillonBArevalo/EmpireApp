@@ -10,15 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716043007) do
+ActiveRecord::Schema.define(version: 20170927213911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "armor_types", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "armors", force: :cascade do |t|
@@ -150,14 +151,15 @@ ActiveRecord::Schema.define(version: 20170716043007) do
     t.index ["inventory_id"], name: "index_obtained_armors_on_inventory_id", using: :btree
   end
 
-  create_table "obtained_character_classes", force: :cascade do |t|
+  create_table "obtained_classes", force: :cascade do |t|
     t.integer  "character_id"
-    t.integer  "character_class_id"
-    t.integer  "invested_points"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.index ["character_class_id"], name: "index_obtained_character_classes_on_character_class_id", using: :btree
-    t.index ["character_id"], name: "index_obtained_character_classes_on_character_id", using: :btree
+    t.string   "classable_type"
+    t.integer  "classable_id"
+    t.integer  "invested_points", default: 0
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.index ["character_id"], name: "index_obtained_classes_on_character_id", using: :btree
+    t.index ["classable_type", "classable_id"], name: "index_obtained_classes_on_classable_type_and_classable_id", using: :btree
   end
 
   create_table "obtained_skills", force: :cascade do |t|

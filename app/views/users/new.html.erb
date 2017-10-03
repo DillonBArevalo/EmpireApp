@@ -1,5 +1,6 @@
+<% title "Register" %>
 <h1>Register</h1>
 
-<%= render '/errors' %>
+<%= render partial: '/errors', locals: {errors: @errors} %>
 
 <%= render 'form' %>

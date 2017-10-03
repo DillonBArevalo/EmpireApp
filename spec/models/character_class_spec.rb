@@ -3,16 +3,12 @@ require 'rails_helper'
 RSpec.describe CharacterClass, type: :model do
   describe 'Associations' do
 
-    describe '#characters' do
-      it{should have_many :characters}
-    end
+    it{should have_many :characters}
 
-    describe '#skills' do
-      it{should have_many :skills}
-    end
+    it{should have_many :skills}
+    it{should have_many :active_skills}
+    it{should have_many :passive_skills}
 
-    describe '#bcs' do
-      it{should have_many :bcs}
-    end
+    it{should have_many :base_class_skills}
   end
 end

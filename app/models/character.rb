@@ -1,15 +1,16 @@
 class Character < ApplicationRecord
   belongs_to :creator, foreign_key: :user_id, class_name: 'User'
 
-  has_many :obtained_character_classes
-  has_many :character_classes, through: :obtained_character_classes
+  has_many :obtained_classes
+  has_many :character_classes, through: :obtained_classes, source: :classable, source_type: 'CharacterClass'
+  has_many :weapon_classes, through: :obtained_classes, source: :classable, source_type: 'WeaponClass'
   has_many :possible_class_skills, through: :character_classes, source: :skills
 
   has_many :obtained_skills, -> { order 'skill_id ASC' }
-  has_many :improved_weapon_classes, through: :obtained_skills, source: :applicable_weapon_class
   has_many :skills, -> { order 'id ASC' }, through: :obtained_skills
   has_many :displaying_skills, -> {where display_description: true}, through: :obtained_skills, source: :skill
-  has_many :class_bcs, through: :character_classes, source: :bcs
+  has_many :class_bcs, through: :character_classes, source: :base_class_skills
+  has_many :weapon_bcs, through: :weapon_classes, source: :base_class_skills
 
   has_one :inventory
 
@@ -26,11 +27,15 @@ class Character < ApplicationRecord
   has_many :attack_options, through: :equipped_weapons
 
   # validations
-  validates :strength, :dexterity, :constitution, :name, presence: true
+  validates :name, :description, :strength, :dexterity, :constitution, presence: true
 
+
+  def bcs
+    class_bcs + weapon_bcs
+  end
 # EXTRA STATS
   def active_defense_bonus
-    equipped_armor ? debuff = equipped_armor.active_action_reduction : debuff = 0
+    debuff = equipped_armor ? equipped_armor.active_action_reduction : 0
     ((self.constitution + self.dexterity)/2.0).ceil - 3 - debuff
   end
 
@@ -40,12 +45,12 @@ class Character < ApplicationRecord
   end
 
   def energy_budget
-    equipped_armor ? debuff = equipped_armor.budget_reduction : debuff = 0
+    debuff = equipped_armor ? equipped_armor.budget_reduction : 0
     self.strength + self.dexterity - 6 + self.energy_budget_level_bonus.to_i - debuff
   end
 
   def energy_pool
-    equipped_armor ? debuff = equipped_armor.energy_pool_reduction : debuff = 0
+    debuff = equipped_armor ? equipped_armor.energy_pool_reduction : 0
     10 * (self.strength + self.dexterity + ((self.constitution)/2.0).ceil) + self.energy_pool_level_bonus.to_i - debuff
   end
 
@@ -61,16 +66,22 @@ class Character < ApplicationRecord
     equipped_armor ? (equipped_armor.passive_defense_bonus + skills_bonus(skills_hash, :armor_defense_boost)) : 0
   end
 
+  def spend_upgrade_points(amounts_hash)
+    if self.unspent_energy_upgrade_points >= (amounts_hash[:budget_amount].to_i + amounts_hash[:pool_amount].to_i)
+      self.increment!(:unspent_energy_upgrade_points, -amounts_hash[:budget_amount].to_i)
+      self.increment!(:energy_budget_level_bonus, amounts_hash[:budget_amount].to_i)
+      self.increment!(:unspent_energy_upgrade_points, -amounts_hash[:pool_amount].to_i)
+      self.increment!(:energy_pool_level_bonus, (amounts_hash[:pool_amount].to_i * 10))
+    end
+  end
 
   def obtain_skill(skill)
+    return {status: false, messages: ["#{skill.name} is a base class skill"]} if skill.base_class_skill
     join = ObtainedSkill.find_by(character_id: self.id, skill_id: skill.id)
     response = {status: true, messages: []}
 
     # check permissions
-    check_class(response, skill)
-    if check_rank_available(response, skill, join)
-      check_enough_points(response, skill, join)
-    end
+    skill_obtainable(skill, join, response)
     return response unless response[:status]
 
     #add to ranks
@@ -83,18 +94,27 @@ class Character < ApplicationRecord
     # remove used sp from available_skill_points
     cost = skill.cost_at_rank(join.ranks)
     self.increment!(:available_skill_points, -cost)
-    increase_class_stat_points(skill, cost) if skill.skillable_type == 'CharacterClass'
-    response[:messages] << "#{self.name} successfully obtained #{skill.name} at rank #{join.ranks} for #{cost} skill points."
+    increase_class_stat_points(skill, cost)
+    response[:messages] = ["#{self.name} successfully obtained #{skill.name} at rank #{join.ranks} for #{cost} skill points."]
     response
   end
 
-  def obtain_character_class(character_class)
-    if ObtainedCharacterClass.find_by(character_class_id: character_class.id, character_id: self.id)
+  def skill_obtainable(skill, join, response = {status: true, messages: []})
+    return {status: false, messages: ["#{skill.name} is a base class skill"]} if skill.base_class_skill
+    check_class(response, skill)
+    if check_rank_available(response, skill, join)
+      check_enough_points(response, skill, join)
+    end
+    response
+  end
+
+  def obtain_class(character_class)
+    if ObtainedClass.find_by(classable_id: character_class.id, classable_type: 'CharacterClass', character_id: self.id)
       {status: false, messages: ["#{self.name} already has the class #{character_class.name}"]}
     elsif self.available_skill_points < 5
       {status: false, messages: ["#{self.name} does not have enough available skill points (you have #{self.available_skill_points}) to obtain this class (requires 5)"]}
     else
-      self.obtained_character_classes.create(character_class_id: character_class.id, invested_points: 5)
+      self.obtained_classes.create(classable_id: character_class.id, classable_type: 'CharacterClass', invested_points: 5)
       self.increment!(:available_skill_points, -5)
       obtain_all_bcs(character_class)
       {status: true, messages: ["#{self.name} has obtained the class #{character_class.name} and the associated base class skills!"]}
@@ -124,7 +144,7 @@ class Character < ApplicationRecord
       equipped_shield = self.equipped_weapons.select {|weapon| weapon.is_shield?}[0]
       self.equipped_weapons.delete(equipped_shield) if equipped_shield
     else
-      other = self.equipped_weapons.select {|weapon| !weapon.is_shield?}[0]
+      other = self.equipped_weapons.reject {|weapon| weapon.is_shield?}[0]
       self.equipped_weapons.delete(other) if other
     end
   end
@@ -132,6 +152,9 @@ class Character < ApplicationRecord
 # DOES NOT PERSIST WITHOUT A SAVE
   def equip_weapon(weapon)
     remove_weapon
+    if weapon.hands_used > free_hands
+      remove_weapon(true)
+    end
     add_weapon(weapon)
   end
 
@@ -171,7 +194,8 @@ class Character < ApplicationRecord
     attack_option.dexterity_damage_bonus ? (dex_bonus = (self.dexterity / attack_option.dexterity_damage_bonus.to_f).ceil) : (dex_bonus = 0)
     base = str_bonus + dex_bonus + attack_option.flat_damage_bonus + skills_bonus(skills_ranks, :damage_boost, weapon_class_ids)
     dice = die_string(attack_option.damage_dice, (attack_option.damage_die_size + skills_bonus(skills_ranks, :damage_die_boost, weapon_class_ids)))
-
+    # TEST MEEEE
+    return 'none' unless base > 0 || !dice.empty?
     "#{base} + #{dice} #{attack_option.damage_type.name}"
   end
 
@@ -188,6 +212,8 @@ class Character < ApplicationRecord
   end
 
   def multi_attack_numbers_and_cost(weapon)
+    # TEST MEEEE
+    return '1' unless weapon.extra_attack_cost
     skills_ranks = skills_ranks_hash
     weapon_class_ids = weapon.weapon_class_ids
 
@@ -246,6 +272,10 @@ class Character < ApplicationRecord
     Skill.all.reject {|skill| skill.skillable_type == 'CharacterClass' && !class_ids.include?(skill.skillable_id)}
   end
 
+  def skills_ranks_hash
+    @skills_hash ||= skills.zip(obtained_skills).to_h
+  end
+
 private
 
   def check_class(response, skill)
@@ -257,7 +287,7 @@ private
     end
   end
 
-# return false if fails
+  # return false if fails
   def check_rank_available(response, skill, join)
     if join && (join.ranks == skill.ranks_available)
       response[:status] = false
@@ -277,30 +307,27 @@ private
   end
 
   def increase_class_stat_points(skill, cost)
-    if skill.skillable_type = 'CharacterClass'
-      class_id = skill.skillable_id
-      obtained_class = ObtainedCharacterClass.find_by(character_id: self.id, character_class_id: class_id)
-      add_points_to_class(obtained_class, cost)
-    end
+    obtained_class = ObtainedClass.find_or_create_by(character_id: self.id, classable_id: skill.skillable_id, classable_type: skill.skillable_type)
+    add_points_to_class(obtained_class, cost)
   end
 
   # Add to bcs then add to invested points
-  def add_points_to_class(obtained_character_class, cost)
+  def add_points_to_class(obtained_class, cost)
     # grab ranks
-    current_sp_mod_5 = obtained_character_class.invested_points % 5
-    additional_ranks = (current_sp_mod_5 + cost)/5
+    current_sp_mod_10 = ((obtained_class.classable_type == 'CharacterClass') ? ((obtained_class.invested_points - 5) % 10) : (obtained_class.invested_points % 10))
+    additional_ranks = (current_sp_mod_10 + cost)/10
 
     # level up bcs
-    bcs = self.class_bcs.select {|skill| skill.skillable_id == obtained_character_class.character_class_id}
-    obtained_bcs = bcs.map {|skill| ObtainedSkill.find_by(skill_id: skill.id, character_id: self.id)}
+    base_class_skills = self.bcs.select {|skill| skill.skillable_id == obtained_class.classable_id && obtained_class.classable_type == skill.skillable_type}
+    obtained_bcs = base_class_skills.map {|skill| ObtainedSkill.find_by(skill_id: skill.id, character_id: self.id) || ObtainedSkill.create(skill_id: skill.id, character_id: self.id, ranks: 0) }
     obtained_bcs.each {|obtained_skill| obtained_skill.increment!(:ranks, additional_ranks)}
 
     # add to invested points
-    obtained_character_class.increment!(:invested_points, cost)
+    obtained_class.increment!(:invested_points, cost)
   end
 
   def obtain_all_bcs(character_class)
-    character_class.bcs.each do |skill|
+    character_class.base_class_skills.each do |skill|
       self.obtained_skills.create(skill_id: skill.id, ranks: 1)
     end
   end
@@ -352,7 +379,7 @@ private
   end
 
   def convert_hash_to_dice(die_hash)
-    die_hash.to_a.map { |pair| die_string(pair[1], pair[0])}.join(' + ')
+    die_hash.to_a.map { |pair| die_string(pair[1], pair[0])}.reject {|dice| dice.empty? }.join(' + ')
   end
 
   def add_to_energy_upgrade_points(new_points)
@@ -385,10 +412,6 @@ private
     else
       12
     end
-  end
-
-  def skills_ranks_hash
-    @skills_hash ||= skills.zip(obtained_skills).to_h
   end
 
 end

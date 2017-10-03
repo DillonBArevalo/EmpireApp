@@ -1,4 +1,5 @@
 <div id='nav'>
+  <%= link_to('home', '/') %><span>|</span>
   <% if logged_in? %>
     <%= link_to(current_user.username, user_path(current_user)) %> <span>|</span>
     <%= link_to('Logout', logout_path, method: :delete) %>

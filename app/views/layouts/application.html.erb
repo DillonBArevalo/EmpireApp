@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EmpireApp</title>
+    <title>EmpireApp<%= yield(:title) %></title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -10,6 +10,14 @@
 
   <body>
   <%= render 'layouts/nav_bar' %>
+  <div id='content'>
+
     <%= yield %>
+  </div>
+  <footer>
+    <ul class='flex-row no-dots no-pad wrap bottom-nav'>
+      <%= render partial: 'navigation/nav' %>
+    </ul>
+  </footer>
   </body>
 </html>

@@ -1,0 +1,46 @@
+<% title @armor.name %>
+<h1><%= @armor.name %></h1>
+
+<% if logged_in? %>
+  <%= render partial: '/armors/obtain_form' %>
+<% end %>
+
+<p><%= @armor.description %></p>
+
+
+<h2>Stats:</h2>
+
+<ul class='no-dots armor-stats'>
+  <li>Creator: <%= link_to @armor.creator.username, @armor.creator %></li>
+  <li>Armor Type: <%= link_to @armor.armor_type.name, @armor.armor_type %></li>
+  <li>Passive Defense Bonus: +<%= @armor.passive_defense_bonus %></li>
+  <li>Active Action Reduction: -<%= @armor.active_action_reduction %></li>
+  <li>Energy Budget Reduction: -<%= @armor.budget_reduction %></li>
+  <li>Energy Pool Reduction: -<%= @armor.energy_pool_reduction %></li>
+  <li>Dodge Energy Mod Penalty: -<%= @armor.dodge_energy_mod_penalty %></li>
+  <li>Dodge Die Size Reduction: -<%= @armor.dodge_die_size_reduction %></li>
+  <li>Damage Resistances: <%= @armor.drs %></li>
+  <li><%= @armor.users.length %> characters have this armor in their inventory</li>
+  <li><%= @armor.characters.length %> of those characters currently have this armor equipped</li>
+</ul>
+
+<% if @armor.creator == current_user %>
+  <table>
+    <tr>
+      <td>
+        <%= form_for @armor, method: 'delete' do |f| %>
+            <%= f.submit 'delete', disabled: !@armor.inventories.empty? %>
+          <% end %>
+      </td>
+      <td><%= @armor.inventories.empty? ? 'No characters are currently using this armor' : "#{@armor.inventories.length} characters have this armor in their inventories. You cannot delete it" %></td>
+    </tr>
+    <tr>
+      <td>
+      <%= form_for @armor, url: edit_armor_path(@armor), method: 'get' do |f| %>
+          <%= f.submit 'edit', disabled: !@armor.inventories.empty? %>
+        <% end %>
+    </td>
+    <td><%= @armor.inventories.empty? ? 'No characters are currently using this armor' : "#{@armor.inventories.length} characters have this armor in their inventories. You cannot edit it" %></td>
+    </tr>
+  </table>
+<% end %>
