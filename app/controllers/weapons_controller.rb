@@ -56,6 +56,7 @@ class WeaponsController < ApplicationController
 
   def show
     @weapon = Weapon.find(params[:id])
+    @empty = @weapon.inventories.empty?
     @attack_options = @weapon.attack_options
     @character = Character.first
   end

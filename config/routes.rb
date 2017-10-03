@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :armors # full
   resources :weapons do
-    resources :attack_options, only: [:new, :create]
+    resources :attack_options, only: [:new, :create, :edit, :update]
   end
 
   get '/weapons/new/shield', to: 'weapons#new_shield'

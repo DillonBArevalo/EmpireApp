@@ -47,20 +47,30 @@
 <% if @weapon.user == current_user %>
   <table>
     <tr>
+      <td><%= @empty ? 'No characters are currently using this weapon' : "#{@weapon.inventories.length} characters have this weapon in their inventories. You cannot modify it" %></td>
+    </tr>
+    <tr>
       <td>
         <%= form_for @weapon, method: 'delete' do |f| %>
-            <%= f.submit 'delete', disabled: !@weapon.inventories.empty? %>
+            <%= f.submit 'delete', disabled: !@empty %>
           <% end %>
       </td>
-      <td><%= @weapon.inventories.empty? ? 'No characters are currently using this weapon' : "#{@weapon.inventories.length} characters have this weapon in their inventories. You cannot delete it" %></td>
     </tr>
     <tr>
       <td>
       <%= form_for @weapon, url: (@weapon.weapon_classes.any? {|weapon_class| weapon_class.name.downcase.include?('shield')} ? "/weapons/#{@weapon.id}/edit/shield" : edit_weapon_path(@weapon)), method: 'get' do |f| %>
-          <%= f.submit 'edit', disabled: !@weapon.inventories.empty? %>
+          <%= f.submit 'edit', disabled: !@empty %>
         <% end %>
     </td>
-    <td><%= @weapon.inventories.empty? ? 'No characters are currently using this weapon' : "#{@weapon.inventories.length} characters have this weapon in their inventories. You cannot edit it" %></td>
     </tr>
+    <% @weapon.attack_options[1..-1].each do |a_o| %>
+      <tr>
+        <td>
+          <%= form_for [@weapon, a_o], url: edit_weapon_attack_option_path(@weapon, a_o), method: 'get' do |f| %>
+              <%= f.submit "edit #{a_o.name}", disabled: !@empty %>
+            <% end %>
+        </td>
+      </tr>
+    <% end %>
   </table>
 <% end %>
