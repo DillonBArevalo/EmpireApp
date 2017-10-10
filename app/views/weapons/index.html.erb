@@ -1,0 +1,30 @@
+<% title "Weapons" %>
+<h1>Weapons</h1>
+
+<%= link_to('Create a new weapon!', new_weapon_path) %>
+
+<h2>Core weapons:</h2>
+<ul class='flex-row no-dots weapon-classes-list core-weapons'>
+  <% @weapon_classes.each do |weapon_class_array| %>
+    <li> <span class='bold'> <%= link_to(weapon_class_array[0].name, weapon_class_array[0]) %></span>
+      <ul class='flex-column no-dots weapons-list no-pad'>
+        <% weapon_class_array[1].each do |weapon| %>
+          <li><%= link_to(weapon.name, weapon) %></li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>
+
+<h2>User created weapons:</h2>
+<ul class='flex-row no-dots weapon-classes-list user-weapons'>
+  <% @weapon_classes.each do |weapon_class_array| %>
+    <li> <strong> <%= link_to(weapon_class_array[0].name, weapon_class_array[0]) %> </strong>
+      <ul class='flex-column no-dots weapons-list no-pad'>
+        <% weapon_class_array[2].each do |weapon| %>
+          <li><%= link_to(weapon.name, weapon) %></li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>

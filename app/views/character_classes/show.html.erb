@@ -1,0 +1,18 @@
+<% title @character_class.name %>
+<h1>Character Class: <%= @character_class.name %></h1>
+
+<h2>Description: </h2>
+<p>
+  <%= @character_class.description %>
+</p>
+
+<%= render partial: 'obtain_form' %>
+
+<h2>Characters who are <%= @character_class.name %>s:</h2>
+<ul>
+  <% @character_class.characters.each do |character| %>
+    <li><%= link_to character.name, character %></li>
+  <% end %>
+</ul>
+
+<%= render partial: '/skills/show', locals: {resource: @character_class} %>

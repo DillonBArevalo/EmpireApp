@@ -1,0 +1,37 @@
+<% title "Users" %>
+<h1>All Users</h1>
+
+<table>
+  <tr>
+    <th>username</th>
+    <th>characters</th>
+    <th>weapons</th>
+    <th>armors</th>
+  </tr>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= link_to user.username, user %></td>
+      <td>
+        <ul class='no-pad no-dots'>
+          <% user.characters.each do |character| %>
+            <li><%= link_to character.name, character %></li>
+          <% end %>
+        </ul>
+      </td>
+      <td>
+        <ul class='no-pad no-dots'>
+          <% user.weapons.each do |weapon| %>
+            <li><%= link_to weapon.name, weapon %></li>
+          <% end %>
+        </ul>
+      </td>
+      <td>
+        <ul class='no-pad no-dots'>
+          <% user.armors.each do |armor| %>
+            <li><%= link_to armor.name, armor %></li>
+          <% end %>
+        </ul>
+      </td>
+    </tr>
+  <% end %>
+</table>

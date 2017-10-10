@@ -1,0 +1,48 @@
+<div class='form-field'>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+</div>
+<div class='form-field'>
+  <%= f.label :description %>
+  <%= f.text_area :description %>
+</div>
+<div class='form-field'>
+  <%= f.label :weapon_type %>
+  <%= f.select :weapon_type_id, options_from_collection_for_select(@weapon_types, "id", "name", @weapon.weapon_type_id) %>
+</div>
+<div class='form-field'>
+  <%= label_tag :weapon_class %>
+  <%= select_tag :weapon_class_id, options_from_collection_for_select(@weapon_classes, "id", "name", @weapon.weapon_classes.first ? @weapon.weapon_classes.first.id : nil) %>
+</div>
+<div class='form-field'>
+  <%= f.label :defense_die_number %>
+  <%= f.number_field :defense_die_number, class: 'number-field' %>
+</div>
+<div class='form-field'>
+  <%= f.label :defense_die_size %>
+  <%= f.number_field :defense_die_size, in: 2..12, step: 2, class: 'number-field' %>
+</div>
+<div class='form-field'>
+  <%= f.label :flat_defense_bonus %>
+  <%= f.number_field :flat_defense_bonus, class: 'number-field' %>
+</div>
+<div class='form-field'>
+  <%= f.label :defense_energy_modifier %>
+  <%= f.number_field :defense_energy_modifier, in: 1..2, step: 0.5, class: 'number-field' %>
+</div>
+<div class='form-field'>
+  <%= f.label 'Extra attack cost (% of budget)' %>
+  <%= f.number_field :extra_attack_cost, class: 'number-field' %>
+</div>
+<div class='form-field'>
+  <%= f.label 'Extra block cost (% of budget)' %>
+  <%= f.number_field :extra_block_cost, class: 'number-field' %>
+</div>
+<div class='form-field'>
+  <%= f.label :hands_used %>
+  <%= f.number_field :hands_used, in: 1..2, class: 'number-field' %>
+</div>
+<div class='form-field'>
+  <%= f.label :dodge_energy_mod_penalty %>
+  <%= f.number_field :dodge_energy_mod_penalty, step: :any, class: 'number-field' %>
+</div>
