@@ -42,7 +42,7 @@ var upgradeSingle = function(primary, other) {
 }
 
 var characterNavListener = function(){
-  $('.navigate_to_character').on('click', function(e){
-    window.location.href = '/characters/' + $(this).closest('ul').find('.select_character').val()
+  $('.select_character').on('change', function(e){
+    window.location.href = '/characters/' + $(this).val()
   })
 }
