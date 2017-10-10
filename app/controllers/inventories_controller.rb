@@ -10,6 +10,7 @@ class InventoriesController < ApplicationController
 
   def update
     @inventory = Inventory.find(params[:id])
+    auth(@inventory.character)
     if params[:weapon_id]
       @weapon = Weapon.find(params[:weapon_id])
       @inventory.weapons << @weapon

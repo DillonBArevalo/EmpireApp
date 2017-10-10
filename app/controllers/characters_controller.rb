@@ -5,6 +5,7 @@ class CharactersController < ApplicationController
   end
 
   def new
+    auth
     @character = Character.new
   end
 
@@ -32,6 +33,7 @@ class CharactersController < ApplicationController
 
   def edit
     @character = Character.find(params[:id])
+    auth(@character)
   end
 
   def update
@@ -63,6 +65,7 @@ class CharactersController < ApplicationController
 
   def destroy
     @character = Character.find(params[:id])
+    auth(@character)
     @character.destroy
     redirect_to current_user
   end

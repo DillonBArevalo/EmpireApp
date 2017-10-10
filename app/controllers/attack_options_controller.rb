@@ -1,6 +1,7 @@
 class AttackOptionsController < ApplicationController
   def new
     @weapon = Weapon.find(params[:weapon_id])
+    auth(@weapon)
     @attack_option = AttackOption.new
     @damage_types = DamageType.all
     @conditions = Condition.all
@@ -32,6 +33,7 @@ class AttackOptionsController < ApplicationController
 
   def edit
     @weapon = Weapon.find(params[:weapon_id])
+    auth(@weapon)
     @attack_option = AttackOption.find(params[:id])
     @damage_types = DamageType.all
     @conditions = Condition.all
