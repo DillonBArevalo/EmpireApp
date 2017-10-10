@@ -11,6 +11,7 @@ class Inventory < ApplicationRecord
   def weapons_and_joins
     self.weapons.zip(self.obtained_weapons)
   end
+
   def armors_and_joins
     self.armors.zip(self.obtained_armors)
   end
