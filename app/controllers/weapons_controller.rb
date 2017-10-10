@@ -5,6 +5,7 @@ class WeaponsController < ApplicationController
   end
 
   def new
+    auth
     @weapon = Weapon.new
     @damage_types = DamageType.all
     @attack_option = AttackOption.new
@@ -14,6 +15,7 @@ class WeaponsController < ApplicationController
   end
 
   def new_shield
+    auth
     @weapon = Weapon.new
     @damage_types = DamageType.all
     bludgeoning = @damage_types.find_by(name: 'Bludgeoning')
@@ -63,6 +65,7 @@ class WeaponsController < ApplicationController
 
   def edit
     @weapon = Weapon.find(params[:id])
+    auth(@weapon)
     @damage_types = DamageType.all
     @attack_option = @weapon.attack_options.first
     @weapon_types = WeaponType.all.reject {|weapon_type| weapon_type.name.downcase.include?('shield')}
@@ -72,6 +75,7 @@ class WeaponsController < ApplicationController
 
   def edit_shield
     @weapon = Weapon.find(params[:id])
+    auth(@weapon)
     @damage_types = DamageType.all
     @attack_option = @weapon.attack_options.first
     @weapon_types = WeaponType.all.select {|weapon_type| weapon_type.name.downcase.include?('shield')}
@@ -81,11 +85,8 @@ class WeaponsController < ApplicationController
 
   def update
     @weapon = Weapon.find(params[:id])
-    if logged_in? && current_user == @weapon.user
-      @user = current_user
-    else
-      redirect_to @weapon
-    end
+    auth(@weapon)
+    @user = current_user
 
   # refactor to use a weapon method to create everything else in one line?
   # also maybe add validations to AttackOptionsCondition
@@ -113,6 +114,7 @@ class WeaponsController < ApplicationController
 
   def destroy
     @weapon = Weapon.find(params[:id])
+    auth(@weapon)
     if @weapon.inventories.empty?
       @weapon.destroy
       redirect_to '/weapons'

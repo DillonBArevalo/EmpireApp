@@ -5,6 +5,7 @@ class ArmorsController < ApplicationController
   end
 
   def new
+    auth
     @armor_types = ArmorType.all
     @armor = Armor.new
     @drs = []
@@ -35,14 +36,16 @@ class ArmorsController < ApplicationController
   end
 
   def edit
-    @armor_types = ArmorType.all # not going to default correctly
     @armor = Armor.find(params[:id])
+    auth(@armor)
+    @armor_types = ArmorType.all # not going to default correctly
     @drs = @armor.drs.split('/')
     render 'new' # should be form partial and render edit here
   end
 
   def update
     @armor = Armor.find(params[:id])
+    auth(@armor)
     updates = []
     updates << @armor.update(new_armor_params)
     @drs = drs_from_params
@@ -61,6 +64,7 @@ class ArmorsController < ApplicationController
 
   def destroy
     @armor = Armor.find(params[:id])
+    auth(@armor)
     if @armor.inventories.empty?
       @armor.destroy
       redirect_to '/armors'

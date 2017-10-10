@@ -1,7 +1,10 @@
 class EquippedWeaponsController < ApplicationController
+  before_action do
+    @character = Character.find(params[:character_id])
+    auth(@character)
+  end
 
   def create
-    @character = Character.find(params[:character_id])
     @weapon = Weapon.find(params[:weapon_id])
     if @weapon.weapon_classes.map {|w_class| w_class.name}.include? 'Shields'
       @character.equip_shield(@weapon)
@@ -12,7 +15,6 @@ class EquippedWeaponsController < ApplicationController
   end
 
   def destroy
-    @character = Character.find(params[:character_id])
     @weapon = Weapon.find(params[:id])
 
     @character.remove_weapon(params[:shield])
