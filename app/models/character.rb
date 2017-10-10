@@ -1,18 +1,18 @@
 class Character < ApplicationRecord
   belongs_to :creator, foreign_key: :user_id, class_name: 'User'
 
-  has_many :obtained_classes
+  has_many :obtained_classes, dependent: :delete_all
   has_many :character_classes, through: :obtained_classes, source: :classable, source_type: 'CharacterClass'
   has_many :weapon_classes, through: :obtained_classes, source: :classable, source_type: 'WeaponClass'
   has_many :possible_class_skills, through: :character_classes, source: :skills
 
-  has_many :obtained_skills, -> { order 'skill_id ASC' }
+  has_many :obtained_skills, -> { order 'skill_id ASC' }, dependent: :delete_all
   has_many :skills, -> { order 'id ASC' }, through: :obtained_skills
   has_many :displaying_skills, -> {where display_description: true}, through: :obtained_skills, source: :skill
   has_many :class_bcs, through: :character_classes, source: :base_class_skills
   has_many :weapon_bcs, through: :weapon_classes, source: :base_class_skills
 
-  has_one :inventory
+  has_one :inventory, dependent: :destroy
 
   has_many :obtained_weapons, through: :inventory
   has_many :weapons, through: :obtained_weapons
@@ -22,7 +22,7 @@ class Character < ApplicationRecord
 
   belongs_to :equipped_armor, class_name: 'Armor', optional: true
 
-  has_many :equipped_w, class_name: 'EquippedWeapon'
+  has_many :equipped_w, class_name: 'EquippedWeapon', dependent: :delete_all
   has_many :equipped_weapons, through: :equipped_w, source: :weapon
   has_many :attack_options, through: :equipped_weapons
 
