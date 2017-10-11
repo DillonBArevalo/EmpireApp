@@ -1,0 +1,17 @@
+<div id='dropdown-panel'>
+  <ul class='no-pad no-dots'>
+    <% if !logged_in? %>
+      <li><%= link_to 'login to access more options', login_path %></li>
+    <% end %>
+    <li><%= link_to '▸', '/sub-nav?type=armors', remote: true, class: 'dropdown-arrow armors' %> <%= link_to 'Armor', armors_path %>
+    </li>
+    <li><%= link_to '▸', '/sub-nav?type=weapons', remote: true, class: 'dropdown-arrow weapons' %> <%= link_to 'Weapons', weapons_path %>
+    </li>
+    <li><%= link_to('▸', '/sub-nav?type=characters', remote: true, class: 'dropdown-arrow characters') if logged_in? %> <%= link_to 'Characters', characters_path %>
+    </li>
+    <li><%= link_to 'Users', users_path %></li>
+    <li><%= link_to 'Skills', skills_path %></li>
+    <li><%= link_to 'Classes', character_classes_path %></li>
+    <li><%= link_to 'Conditions', conditions_path %></li>
+  </ul>
+</div>

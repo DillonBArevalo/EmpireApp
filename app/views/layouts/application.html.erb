@@ -14,13 +14,7 @@
     <div class="alert"><%= flash[:alert] %></div>
   <% end %>
   <div id='content'>
-
     <%= yield %>
   </div>
-  <footer>
-    <ul class='flex-row no-dots no-pad wrap bottom-nav'>
-      <%= render partial: 'navigation/nav' %>
-    </ul>
-  </footer>
   </body>
 </html>

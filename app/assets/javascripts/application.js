@@ -19,6 +19,7 @@ $( document ).on('turbolinks:load', function(){
   hideDetailListener();
   upgradeFormListener();
   characterNavListener();
+  navButtonListener();
 })
 
 var hideDetailListener = function(){
@@ -42,7 +43,24 @@ var upgradeSingle = function(primary, other) {
 }
 
 var characterNavListener = function(){
-  $('.select_character').on('change', function(e){
+  $('body').on('change', '.select_character', function(e){
     window.location.href = '/characters/' + $(this).val()
+  })
+}
+
+var navButtonListener = function(){
+  $('#nav-button').on('click', function(){
+    if($(this).attr('style')){
+      $(this).removeAttr('style')
+    }else{
+      $(this).css('flex-direction', 'column')
+    }
+    if($('#dropdown-panel').length > 0){
+      $('#dropdown-panel').remove()
+    }else{
+      $.ajax({
+        url: '/navigation'
+      })
+    }
   })
 }
