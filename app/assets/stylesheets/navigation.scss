@@ -6,6 +6,13 @@
 #nav {
   display: flex;
   justify-content: space-between;
+  hr {
+    width: 1px;
+    height: 1em;
+    display: inline;
+    margin: 5px;
+    border-color: grey;
+  }
 }
 
 #nav-dropdown-button {
@@ -55,10 +62,4 @@
   color: gray;
 }
 
-hr {
-  width: 1px;
-  height: 1em;
-  display: inline;
-  margin: 5px;
-  border-color: grey;
-}
+

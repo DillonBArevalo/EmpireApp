@@ -1,5 +1,6 @@
 <% title @character.name %>
 <h1><%= @character.name %></h1>
+<hr>
 <h2>Created by <%= link_to @character.creator.username, @character.creator %></h2>
 <div class='flex-row'>
   <%= link_to('inventory', @character.inventory) %>

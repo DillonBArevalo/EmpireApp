@@ -1,5 +1,6 @@
 <% title "Edit Attack Option" %>
 <h1>Edit this attack option for your weapon: <%= @weapon.name %></h1>
+<hr>
 <div>
   <%= render partial: '/errors', locals: {errors: @errors} %>
   <%= form_for [@weapon, @attack_option] do |f| %>

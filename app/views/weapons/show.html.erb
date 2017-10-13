@@ -1,6 +1,6 @@
 <% title @weapon.name %>
 <h1><%= @weapon.name %></h1>
-
+<hr>
 <% if logged_in? %>
   <%= render partial: '/weapons/obtain_form' %>
 <% end %>
