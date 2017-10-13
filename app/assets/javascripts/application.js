@@ -64,12 +64,15 @@ var navButtonListener = function(){
 }
 
 var closeNavListener = function(){
-  $('#content').on('click', function(){
-    if($('#dropdown-panel').length > 0){
+  $('#content').on('click', removeDropdown)
+}
+
+var removeDropdown = function(){
+  if($('#dropdown-panel').length > 0){
       navButtonFlipper($('#nav-button'))
       $('#dropdown-panel').remove()
+      $('#content').unbind('click', removeDropdown)
     }
-  })
 }
 
 var navButtonFlipper = function(nav){
