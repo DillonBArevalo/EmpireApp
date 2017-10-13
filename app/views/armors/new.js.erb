@@ -1,0 +1,8 @@
+var armorLink = $("#new-armor-link")
+if($('#armor-form-container').length > 0){
+  armorLink.text('Create new armor!')
+  $('#armor-form-container').remove()
+}else{
+  armorLink.text('Cancel')
+  armorLink.after('<%= j render partial: "form" %>')
+}

@@ -1,0 +1,6 @@
+if('<%= j @success %>' === 'false'){
+  $('.errors').remove()
+  $('#armor-form-container').prepend('<%= j render partial: "/errors", locals: {errors: @errors} %>')
+}else{
+  window.location.href = '/armors/<%= j @armor.id.to_s %>'
+}
