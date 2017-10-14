@@ -29,6 +29,11 @@ class CharactersController < ApplicationController
   def show
     @character = Character.find(params[:id])
     @skills_ranks = @character.skills_ranks_hash
+    @inventory = @character.inventory
+    @weapon = @character.equipped_weapons.reject {|weapon| weapon.is_shield? }.first
+    @shield = @character.equipped_weapons.select {|weapon| weapon.is_shield? }.first
+    @armor = @character.equipped_armor
+    @equipped_weapon = EquippedWeapon.new
   end
 
   def edit
@@ -46,7 +51,16 @@ class CharactersController < ApplicationController
       else
         @character.equip_armor(Armor.find(params[:armor_id]))
       end
-      redirect_to @character.inventory
+      respond_to do |f|
+        f.html {redirect_to @character.inventory}
+        f.js do
+          @inventory = @character.inventory
+          @weapon = @character.equipped_weapons.reject {|weapon| weapon.is_shield? }.first
+          @shield = @character.equipped_weapons.select {|weapon| weapon.is_shield? }.first
+          @armor = @character.equipped_armor
+          @equipped_weapon = EquippedWeapon.new
+        end
+      end
     elsif params[:add_skill_points]
       @character.add_skill_points(params[:skill_points].to_i)
       redirect_to @character

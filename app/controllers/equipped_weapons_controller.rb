@@ -11,14 +11,30 @@ class EquippedWeaponsController < ApplicationController
     else
       @character.equip_weapon(@weapon)
     end
-    redirect_to @character.inventory
+    respond_to do |f|
+      f.html {redirect_to @character.inventory}
+      f.js do
+        @inventory = @character.inventory
+        @weapon = @character.equipped_weapons.reject {|weapon| weapon.is_shield? }.first
+        @shield = @character.equipped_weapons.select {|weapon| weapon.is_shield? }.first
+        @armor = @character.equipped_armor
+        @equipped_weapon = EquippedWeapon.new
+      end
+    end
   end
 
   def destroy
-    @weapon = Weapon.find(params[:id])
-
     @character.remove_weapon(params[:shield])
-    redirect_to @character.inventory
+    respond_to do |f|
+      f.html {redirect_to @character.inventory}
+      f.js do
+        @inventory = @character.inventory
+        @weapon = @character.equipped_weapons.reject {|weapon| weapon.is_shield? }.first
+        @shield = @character.equipped_weapons.select {|weapon| weapon.is_shield? }.first
+        @armor = @character.equipped_armor
+        @equipped_weapon = EquippedWeapon.new
+      end
+    end
   end
 
 end

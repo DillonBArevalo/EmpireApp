@@ -1,0 +1,23 @@
+<h3>Weapons:</h3>
+<% @character.equipped_weapons.each do |weapon| %>
+  <div class='side-border'>
+    <h4><%= link_to(weapon.name, weapon) %>:</h4>
+    <div class='flex-row no-wrap'>
+      <div class='half'>
+        <h4>Attacks</h4>
+        <div>number: <span class='stat'><%= @character.multi_attack_numbers_and_cost(weapon) %></span></div>
+        <% weapon.attack_options.each do |a_o| %>
+          <h5><%= a_o.name %></h5>
+          <div>Attack: <span class='stat'><%= @character.generate_attack_string(a_o) %></span></div>
+          <div>Damage: <span class='stat'><%= @character.generate_damage_string(a_o) %></span></div>
+        <% end %>
+      </div>
+
+      <div class='half'>
+        <h4>blocks:</h4>
+        <div>number: <span class='stat'><%= @character.multi_block_numbers_and_cost(weapon) %></span></div>
+        <div>block: <span class='stat'><%= @character.generate_defense_string(weapon) %></span></div>
+      </div>
+    </div>
+  </div>
+<% end %>

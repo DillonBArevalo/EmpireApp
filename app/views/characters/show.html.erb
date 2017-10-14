@@ -4,7 +4,7 @@
 <h2>Created by <%= link_to @character.creator.username, @character.creator %></h2>
 <div class='flex-row'>
   <%= link_to('inventory', @character.inventory) %>
-  <p class='no-margin'><%= @character.description %></p>
+  <p class='no-margin'>Description: <%= @character.description %></p>
   <% if @character.creator == current_user %>
     <%= link_to("Edit #{@character.name}", edit_character_path(@character)) %>
   <% end %>
@@ -31,93 +31,6 @@
   <% end %>
 <% end %>
 
-<ul class='stats no-dots flex-row'>
-  <div class='flex-column padded border'>
-    <li><strong>Primary Stats:</strong></li>
-    <li>Strength: <%= @character.strength %></li>
-    <li>Dexterity: <%= @character.dexterity %></li>
-    <li>Constitution: <%= @character.constitution %></li>
-    <li>Intelligence: <%= @character.intelligence %></li>
-    <li>Wisdom: <%= @character.wisdom %></li>
-    <li>Charisma: <%= @character.charisma %></li>
-  </div>
-  <div class='flex-column padded border'>
-    <li><strong>Secondary Stats</strong></li>
-    <li>Active Defense Bonus: <%= @character.active_defense_bonus %></li>
-    <li>Active Offense Bonus <%= @character.active_offense_bonus %></li>
-    <li>Energy Budget <%= @character.energy_budget %></li>
-    <li>Energy Pool <%= @character.energy_pool %></li>
-    <li>Hit Points <%= @character.hit_points %></li>
-    <li>Move Speed <%= @character.move_speed %></li>
-  </div>
-  <div class='flex-column padded border'>
-    <li class='bold'>Combat Stats</li>
-    <li>Tactical Maneuver: <%= @character.tactical_maneuver %></li>
-    <li>Jump: <%= @character.jump %></li>
-    <li>Total Blocks: <%= @character.total_blocks %></li>
-    <li>Dodge: <%= @character.dodge_numbers %></li>
-  </div>
-  <div class='flex-column padded border'>
-    <li class='bold'>Weapons</li>
-    <div class='flex-row'>
-      <% @character.equipped_weapons.each do |weapon| %>
-        <div class='half'>
-          <li class='bold'><%= link_to(weapon.name, weapon) %></li>
-          <ul class='no-dots'>
-            <li class='bold'>Attacks</li>
-            <li>number: <%= @character.multi_attack_numbers_and_cost(weapon) %></li>
-            <% weapon.attack_options.each do |a_o| %>
-              <li class='bold'><%= a_o.name %></li>
-              <li>Attack: <%= @character.generate_attack_string(a_o) %></li>
-              <li>Damage: <%= @character.generate_damage_string(a_o) %></li>
-            <% end %>
-            <li class='bold'>blocks:</li>
-            <li>number: <%= @character.multi_block_numbers_and_cost(weapon) %></li>
-            <li>block: <%= @character.generate_defense_string(weapon) %></li>
-          </ul>
-        </div>
-      <% end %>
-    </div>
-  </div>
-  <div class='flex-column padded border'>
-    <li class='bold'>Armor</li>
-    <ul class='no-dots'>
-      <% if @character.equipped_armor %>
-        <li class='bold'><%= link_to(@character.equipped_armor.name, @character.equipped_armor) %></li>
-        <li>Damage Resistances: <%= @character.equipped_armor.drs %></li>
-        <li>Passive Defense: <%= @character.equipped_armor.passive_defense_bonus %></li>
-      <% else %>
-      <li>No armor equipped</li>
-      <% end %>
-    </ul>
-  </div>
-  <div class='flex-column padded border'>
-    <li class='bold'>Obtained Skills: </li>
-    <ul class='no-dots'>
-      <% @skills_ranks.keys.each do |skill| %>
-        <li><%= skill.skillable.name %>: <%= link_to skill.name, skill %> at rank: <%= @skills_ranks[skill].ranks %></li>
-      <% end %>
-    </ul>
-  </div>
-  <div class='flex-column padded border'>
-    <li class='bold'>Obtained Classes: </li>
-    <ul class='no-dots'>
-      <% @character.obtained_classes.each do |obtained_class| %>
-        <li><%= obtained_class.classable.name %>: <%= obtained_class.invested_points %> points invested</li>
-      <% end %>
-    </ul>
-  </div>
-  <div class='flex-column padded border'>
-    <li class='bold'>Skill bonuses not applied through raw numbers: </li>
-    <ul class='no-dots'>
-      <% @skills_ranks.each do |skill, ranks| %>
-        <% if skill.display_description %>
-          <li><label> <%= skill.name %>, <%= skill.skillable.name %>, ranks: <%= ranks.ranks %> (<%= skill.passive ? 'passive' : 'active' %>):</label>
-            <p>   <%= skill.description %></p></li>
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
-</ul>
+<%= render partial: 'show' %>
 
 <%= link_to "Delete #{@character.name}", character_path(@character), method: 'DELETE' %>

@@ -1,0 +1,16 @@
+<div class='flex-col'>
+  <div class='bold'>Armor</div>
+  <% @inventory.armors_and_joins.each do |armor| %>
+    <div class='flex-row'> <%= link_to armor[0].name, armor[0] %>
+      <% if current_user == @character.creator %>
+        <%= form_for @character, remote: true do |f| %>
+          <%= hidden_field_tag :armor_id, armor[0].id %>
+          <%= f.submit 'equip', disabled: @character.equipped_armor ? @character.equipped_armor.id == armor[0].id : false %>
+        <% end %>
+        <%= form_for ObtainedArmor.find_by(inventory_id: @inventory.id, armor_id: armor[0].id), method: :delete, remote: true do |f| %>
+          <%= f.submit 'remove from inventory', disabled: @character.equipped_armor == armor[0] %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

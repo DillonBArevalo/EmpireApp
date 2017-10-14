@@ -28,20 +28,14 @@ class ArmorsController < ApplicationController
       @armor.generate_drs(@drs)
       respond_to do |f|
         f.html {redirect_to @armor}
-        f.js {
-          p 'success'
-          @success = 'true'
-        }
+        f.js {@success = 'true'}
       end
     else
       @armor_types = ArmorType.all
       @errors = @armor.errors.full_messages
       respond_to do |f|
         f.html {render 'new'}
-        f.js {
-          p 'fail'
-          @success = 'false'
-        }
+        f.js {@success = 'false'}
       end
     end
   end

@@ -1,0 +1,10 @@
+<h3>Armor</h3>
+<div>
+  <% if @character.equipped_armor %>
+    <h3><%= link_to(@character.equipped_armor.name, @character.equipped_armor) %></h3>
+    <div>Damage Resistances: <span class='stat'><%= @character.equipped_armor.drs %></span></div>
+    <div>Passive Defense: <span class='stat'><%= @character.equipped_armor.passive_defense_bonus %></span></div>
+  <% else %>
+  <div>No armor equipped</div>
+  <% end %>
+</div>

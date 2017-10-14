@@ -5,6 +5,15 @@ class ObtainedArmorsController < ApplicationController
     auth(@inventory.character)
     @obtained_armor.destroy
 
-    redirect_to @inventory
+    respond_to do |f|
+      f.html {redirect_to @inventory}
+      f.js do
+        @character = @inventory.character
+        @weapon = @character.equipped_weapons.reject {|weapon| weapon.is_shield? }.first
+        @shield = @character.equipped_weapons.select {|weapon| weapon.is_shield? }.first
+        @armor = @character.equipped_armor
+        @equipped_weapon = EquippedWeapon.new
+      end
+    end
   end
 end
