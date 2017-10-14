@@ -1,0 +1,7 @@
+<ul class=' no-dots'>
+  <% if logged_in? %>
+    <li><%= link_to 'New Armor', new_armor_path %></li>
+  <% end %>
+  <li><%= link_to 'Armor Types', armor_types_path %></li>
+  <li><%= link_to 'Damage Resistances', damage_types_path %></li>
+</ul>

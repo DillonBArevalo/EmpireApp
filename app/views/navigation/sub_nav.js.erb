@@ -1,0 +1,8 @@
+var expandedLinks = $('.<%= j @type %>').closest('li').find('ul')
+if(expandedLinks.length > 0){
+  $('.<%= j @type %>').text('▸')
+  expandedLinks.remove()
+}else{
+  $('.<%= j @type %>').text('▾')
+  $('.<%= j @type %>').closest('li').append('<%= j render partial: @erb %>')
+}

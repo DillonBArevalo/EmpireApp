@@ -1,7 +1,9 @@
 <% title "Armor" %>
 <h1>Armor</h1>
-
-<%= link_to('Create new armor!', new_armor_path) %>
+<hr>
+<div id='new-armor-container'>
+  <%= link_to('Create new armor!', new_armor_path, remote: true, id: 'new-armor-link') %>
+</div>
 
 <h2>Core armor:</h2>
 <ul class='flex-row no-dots armor_class_list core-armor'>

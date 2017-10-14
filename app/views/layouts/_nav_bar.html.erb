@@ -1,10 +1,20 @@
 <div id='nav'>
-  <%= link_to('home', '/') %><span>|</span>
-  <% if logged_in? %>
-    <%= link_to(current_user.username, user_path(current_user)) %> <span>|</span>
-    <%= link_to('Logout', logout_path, method: :delete) %>
-  <% else %>
-    <%= link_to('Login', login_path) %> <span>|</span>
-    <%= link_to('Register', new_user_path) %>
-  <% end %>
+  <div>
+    <div id='nav-button'>
+      <div class='nav-oval'></div>
+      <div class='nav-oval'></div>
+      <div class='nav-oval'></div>
+    </div>
+  </div>
+
+  <div>
+    <%= link_to('home', '/') %> <hr>
+    <% if logged_in? %>
+      <%= link_to(current_user.username, user_path(current_user)) %> <hr>
+      <%= link_to('Logout', logout_path, method: :delete) %>
+    <% else %>
+      <%= link_to('Login', login_path) %> <hr>
+      <%= link_to('Register', new_user_path) %>
+    <% end %>
+  </div>
 </div>
