@@ -2,8 +2,13 @@ class AttackOptionsController < ApplicationController
   def new
     @weapon = Weapon.find(params[:weapon_id])
     auth(@weapon)
-    @attack_option = AttackOption.new
-    @damage_types = DamageType.all
+      @damage_types = DamageType.all
+    if @weapon.is_shield?
+      bludgeoning = @damage_types.find_by(name: 'Bludgeoning')
+      @attack_option = AttackOption.new(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone", damage_type_id: bludgeoning.id, damage_dice: 0, damage_die_size: 0, flat_damage_bonus: 0)
+    else
+      @attack_option = AttackOption.new
+    end
     @conditions = Condition.all
   end
 
@@ -19,7 +24,11 @@ class AttackOptionsController < ApplicationController
         @attack_option.save
         @condition1.save
         @condition2.save
-        redirect_to @weapon
+        if params[:another]
+          redirect_to new_weapon_attack_option_url(@weapon)
+        else
+          redirect_to @weapon
+        end
       else
         @errors =  @attack_option.errors.full_messages + @condition1.errors.full_messages + @condition2.errors.full_messages
         @damage_types = DamageType.all

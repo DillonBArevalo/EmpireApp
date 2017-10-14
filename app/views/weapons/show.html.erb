@@ -5,10 +5,6 @@
   <%= render partial: '/weapons/obtain_form' %>
 <% end %>
 
-<% if logged_in? && @weapon.user == current_user %>
-  <%= link_to 'add another attack option', new_weapon_attack_option_path(@weapon) %>
-<% end %>
-
 <p><%= @weapon.description %></p>
   <h2>Example rolls:</h2>
 <ul class='no-dots'>
@@ -42,6 +38,12 @@
 <% @attack_options.each do |attack_option| %>
 <%= render partial: '/attack_options/show', locals: {attack_option: attack_option} %>
 <% end %>
+<% if @attack_options.empty? %>
+  <p>There are currently no attack options for this weapon.</p>
+<% end %>
+<% if logged_in? && @weapon.user == current_user %>
+  <%= link_to "add #{@weapon.attack_options.empty? ? 'an' : 'another'} attack option", new_weapon_attack_option_path(@weapon) %>
+<% end %>
 
 
 <% if @weapon.user == current_user %>
@@ -52,25 +54,27 @@
     <tr>
       <td>
         <%= form_for @weapon, method: 'delete' do |f| %>
-            <%= f.submit 'delete', disabled: !@empty %>
+            <%= f.submit "Delete #{@weapon.name}", disabled: !@empty %>
           <% end %>
       </td>
     </tr>
     <tr>
       <td>
       <%= form_for @weapon, url: (@weapon.weapon_classes.any? {|weapon_class| weapon_class.name.downcase.include?('shield')} ? "/weapons/#{@weapon.id}/edit/shield" : edit_weapon_path(@weapon)), method: 'get' do |f| %>
-          <%= f.submit 'edit', disabled: !@empty %>
+          <%= f.submit "Edit #{@weapon.name}", disabled: !@empty %>
         <% end %>
     </td>
     </tr>
-    <% @weapon.attack_options[1..-1].each do |a_o| %>
+    <% @attack_options.each do |a_o| %>
       <tr>
         <td>
           <%= form_for [@weapon, a_o], url: edit_weapon_attack_option_path(@weapon, a_o), method: 'get' do |f| %>
-              <%= f.submit "edit #{a_o.name}", disabled: !@empty %>
-            <% end %>
+            <%= f.submit "Edit #{a_o.name}", disabled: !@empty %>
+          <% end %>
         </td>
       </tr>
     <% end %>
+
+
   </table>
 <% end %>
