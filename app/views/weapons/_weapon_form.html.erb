@@ -6,15 +6,15 @@
 <div class='flex-column center'>
 
 <%= form_for @weapon, html: {class: 'flex-row left', id: nil} do |f| %>
-  <div class='flex-column left half'>
+  <div class='flex-column left'>
     <label><span class='bold'>Weapon Details:</span></label>
     <%= render partial: 'form', locals: {f: f} %>
+    <div class='flex-row'>
+      <%= f.submit (@weapon.id ? 'Edit weapon' :  'Create weapon with no attack options') %>
+      <%= @weapon.id ? nil : (f.submit 'Create weapon and add attack option', name: 'attack_option') %>
+    </div>
   </div>
 
-  <div class='flex-column left half'>
-    <%= render partial: '/attack_options/form' %>
-  </div>
-    <%= f.submit %>
 <% end %>
 
 </div>

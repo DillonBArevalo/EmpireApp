@@ -5,18 +5,14 @@
 
 <div class='flex-column center'>
 
-<p>Most shields don't have any attack options beyond a bash (and at some point a punch). However, we don't want to remove the possibility from home-brewed shields (check out the <%= link_to 'lantern shield', 'https://www.google.com/search?q=lantern+shield', target: :_blank%>!). As a compromise, we have pre-filled many of the required fields in this form to the appropriate parameters for a shield bash. Strength and Dexterity bonuses should be left blank (unless you are including a damaging bash or attack).</p>
-
 <%= form_for @weapon, html: {class: 'flex-row left', id: nil} do |f| %>
-  <div class='flex-column left half'>
+  <div class='flex-column left'>
     <label><span class='bold'>Shield Details:</span></label>
     <%= render partial: 'form', locals: {f: f} %>
+    <%= hidden_field_tag :shield, true %>
+    <%= f.submit (@weapon.id ? 'Edit shield' :  'Create shield with no attack options') %>
+    <%= @weapon.id ? nil : (f.submit 'Create shield and add attack option', name: 'attack_option') %>
   </div>
-  <%= hidden_field_tag :shield, true %>
-  <div class='flex-column left half'>
-    <%= render partial: '/attack_options/form' %>
-  </div>
-    <%= f.submit 'Create Shield' %>
 <% end %>
 
 </div>

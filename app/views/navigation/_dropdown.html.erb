@@ -1,5 +1,6 @@
 <div id='dropdown-panel'>
   <ul class='no-pad no-dots'>
+    <li><%= link_to 'home', '/' %></li>
     <% if !logged_in? %>
       <li><%= link_to 'login to access more options', login_path %></li>
     <% end %>

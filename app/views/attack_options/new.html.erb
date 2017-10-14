@@ -1,6 +1,10 @@
 <% title "New Attack Option" %>
 <h1>Create a new attack option for your weapon: <%= @weapon.name %></h1>
 <hr>
+<%= link_to 'cancel', weapon_path(@weapon) %>
+<% if @weapon.is_shield? %>
+  <p>Most shields don't have any attack options beyond a bash (and at some point a punch). However, we don't want to remove the possibility from home-brewed shields (check out the <%= link_to 'lantern shield', 'https://www.google.com/search?q=lantern+shield', target: :_blank%>!). As a compromise, we have pre-filled many of the required fields in this form to the appropriate parameters for a shield bash. Strength and Dexterity bonuses should be left blank (unless you are including a damaging bash or attack).</p>
+<% end %>
 <div class='flex-row'>
   <div>
     <h2>Current attack options:</h2>
@@ -10,11 +14,12 @@
       <% end %>
     <% end %>
   </div>
-  <div>
+  <div class='half'>
     <%= render partial: '/errors', locals: {errors: @errors} %>
     <%= form_for [@weapon, @attack_option] do |f| %>
       <%= render partial: 'form' %>
       <%= f.submit "add new attack option to #{@weapon.name}" %>
+      <%= f.submit "add another?", name: 'another' %>
     <% end %>
   </div>
 </div>
