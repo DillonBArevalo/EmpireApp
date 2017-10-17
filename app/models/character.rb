@@ -308,18 +308,18 @@ private
 
   def increase_class_stat_points(skill, cost)
     obtained_class = ObtainedClass.find_or_create_by(character_id: self.id, classable_id: skill.skillable_id, classable_type: skill.skillable_type)
-    add_points_to_class(obtained_class, cost)
+    add_points_to_class(obtained_class, cost, skill)
   end
 
   # Add to bcs then add to invested points
-  def add_points_to_class(obtained_class, cost)
+  def add_points_to_class(obtained_class, cost, skill)
     # grab ranks
     current_sp_mod_10 = ((obtained_class.classable_type == 'CharacterClass') ? ((obtained_class.invested_points - 5) % 10) : (obtained_class.invested_points % 10))
     additional_ranks = (current_sp_mod_10 + cost)/10
 
     # level up bcs
     base_class_skills = self.bcs.select {|skill| skill.skillable_id == obtained_class.classable_id && obtained_class.classable_type == skill.skillable_type}
-    obtained_bcs = base_class_skills.map {|skill| ObtainedSkill.find_by(skill_id: skill.id, character_id: self.id) || ObtainedSkill.create(skill_id: skill.id, character_id: self.id, ranks: 0) }
+    obtained_bcs = base_class_skills.map {|skill| ObtainedSkill.find_by(skill_id: skill.id, character_id: self.id) || ObtainedSkill.create(skill_id: skill.id, applicable_weapon_class_id: skill.weapon_class, character_id: self.id, ranks: 0) }
     obtained_bcs.each {|obtained_skill| obtained_skill.increment!(:ranks, additional_ranks)}
 
     # add to invested points
@@ -342,7 +342,14 @@ private
   end
 
   def skills_bonus(skills, stat, w_class_ids = [])
+    # p w_class_ids
     skills.reduce(0) do |base, (skill, obtained_skill)|
+      # p skill.name
+      # if skill.name == 'Bring the Hurt'
+      #   p obtained_skill
+      # end
+      # p !obtained_skill.applicable_weapon_class_id
+      # p w_class_ids.include?(obtained_skill.applicable_weapon_class_id)
       if !obtained_skill.applicable_weapon_class_id || w_class_ids.include?(obtained_skill.applicable_weapon_class_id)
         base + (skill[stat] * obtained_skill.ranks)
       else
