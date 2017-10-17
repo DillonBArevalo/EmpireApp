@@ -1,22 +1,26 @@
 <% title @character.name %>
 <h1><%= @character.name %></h1>
 <hr>
+
 <h2>Created by <%= link_to @character.creator.username, @character.creator %></h2>
+
 <div class='flex-row'>
-  <%= link_to('inventory', @character.inventory) %>
+  <%= link_to('inventory', @character.inventory, id: 'inventory-link') %>
   <p class='no-margin'>Description: <%= @character.description %></p>
   <% if @character.creator == current_user %>
     <%= link_to("Edit #{@character.name}", edit_character_path(@character)) %>
   <% end %>
 </div>
+
 <% if current_user?(@character.creator) %>
   <h2>Add skill points to your character</h2>
   <p>current unspent skill points <%= @character.available_skill_points %></p>
   <%= form_for @character do |f| %>
     <%= hidden_field_tag :add_skill_points, true %>
-    <%= number_field_tag :skill_points %>
+    <%= number_field_tag :skill_points, nil, class: 'number-field' %>
     <%= f.submit 'add_skill_points' %>
   <% end %>
+
   <% if @character.unspent_energy_upgrade_points > 0 %>
     <h2>Upgrade your character's stats:</h2>
     <p><%= @character.name %> currently has <span id='unspent_points'><%= @character.unspent_energy_upgrade_points %></span> points to spend:</p>
@@ -33,4 +37,4 @@
 
 <%= render partial: 'show' %>
 
-<%= link_to "Delete #{@character.name}", character_path(@character), method: 'DELETE' %>
+<%= link_to "Delete #{@character.name}", character_path(@character), method: 'DELETE', data: {confirm: "Really delete #{@character.name}?"} %>
