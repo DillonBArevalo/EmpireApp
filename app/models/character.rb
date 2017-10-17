@@ -342,14 +342,7 @@ private
   end
 
   def skills_bonus(skills, stat, w_class_ids = [])
-    # p w_class_ids
     skills.reduce(0) do |base, (skill, obtained_skill)|
-      # p skill.name
-      # if skill.name == 'Bring the Hurt'
-      #   p obtained_skill
-      # end
-      # p !obtained_skill.applicable_weapon_class_id
-      # p w_class_ids.include?(obtained_skill.applicable_weapon_class_id)
       if !obtained_skill.applicable_weapon_class_id || w_class_ids.include?(obtained_skill.applicable_weapon_class_id)
         base + (skill[stat] * obtained_skill.ranks)
       else
