@@ -20,7 +20,12 @@ $( document ).on('turbolinks:load', function(){
   upgradeFormListener();
   characterNavListener();
   navButtonListener();
+  removeInventoryIfJS()
 })
+
+var removeInventoryIfJS = function(){
+  $('#inventory-link').remove()
+}
 
 var hideDetailListener = function(){
   $('#hide-desc').on('click', function(e){

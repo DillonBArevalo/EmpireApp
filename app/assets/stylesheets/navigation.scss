@@ -20,6 +20,7 @@
     }
     padding-right: 10px;
   }
+  box-shadow: 0px 5px 4px grey;
 }
 
 #nav-dropdown-button {
@@ -40,6 +41,8 @@
   border-right: 2px solid #721e2d;
   padding: 1em;
   color: white;
+  z-index: 1;
+  box-shadow: 5px 5px 4px grey;
   // width: 25%;
   a {
     color: white;

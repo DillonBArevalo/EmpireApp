@@ -18,10 +18,11 @@
 #content {
   margin-top: 40px;
   background-color: #fcfbf9;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   padding: 10px;
-  height: 100%;
   box-sizing: border-box;
+  overflow: auto;
 }
 
 .no-wrap {
