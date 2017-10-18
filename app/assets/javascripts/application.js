@@ -19,7 +19,14 @@ $( document ).on('turbolinks:load', function(){
   hideDetailListener();
   upgradeFormListener();
   characterNavListener();
+  navButtonListener();
+  removeInventoryIfJS()
+  obtainWeaponListener()
 })
+
+var removeInventoryIfJS = function(){
+  $('#inventory-link').remove()
+}
 
 var hideDetailListener = function(){
   $('#hide-desc').on('click', function(e){
@@ -42,7 +49,48 @@ var upgradeSingle = function(primary, other) {
 }
 
 var characterNavListener = function(){
-  $('.navigate_to_character').on('click', function(e){
-    window.location.href = '/characters/' + $(this).closest('ul').find('.select_character').val()
+  $('body').on('change', '.select_character', function(e){
+    window.location.href = '/characters/' + $(this).val()
+  })
+}
+
+var navButtonListener = function(){
+  $('#nav-button').on('click', function(){
+    navButtonFlipper($(this))
+    closeNavListener()
+
+    if($('#dropdown-panel').length > 0){
+      $('#dropdown-panel').remove()
+    }else{
+      $.ajax({
+        url: '/navigation'
+      })
+    }
+  })
+}
+
+var closeNavListener = function(){
+  $('#content').on('click', removeDropdown)
+}
+
+var removeDropdown = function(){
+  if($('#dropdown-panel').length > 0){
+      navButtonFlipper($('#nav-button'))
+      $('#dropdown-panel').remove()
+      $('#content').unbind('click', removeDropdown)
+    }
+}
+
+var navButtonFlipper = function(nav){
+  if(nav.attr('style')){
+      nav.removeAttr('style')
+    }else{
+      nav.css('flex-direction', 'column')
+    }
+}
+
+var obtainWeaponListener = function(){
+  $('.obtain_equipment_forms').on('change', '.select_equipment', function(e){
+    $(this).closest('form').submit()
   })
 }

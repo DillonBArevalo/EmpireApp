@@ -1,0 +1,6 @@
+<ul class=' no-dots'>
+  <% if logged_in? %>
+    <li><%= link_to 'New Character', new_character_path %></li>
+    <li> <%= select_tag 'select_character', options_from_collection_for_select(([Character.new(name: 'View character')] + current_user.characters), :id, :name), class: 'select_character' %> </li>
+  <% end %>
+</ul>

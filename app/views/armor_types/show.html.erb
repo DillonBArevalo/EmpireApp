@@ -1,5 +1,6 @@
 <% title @armor_type.name %>
 <h1>Armor Type: <%= @armor_type.name %></h1>
+<hr>
 <ul>
 <% @armor_type.armors.each do |armor| %>
   <li><%= link_to armor.name, armor %></li>

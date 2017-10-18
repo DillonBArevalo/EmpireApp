@@ -1,0 +1,7 @@
+<ul class=' no-dots'>
+  <% if logged_in? %>
+    <li><%= link_to 'New Weapon', new_weapon_path %> or <%= link_to 'New Shield', '/weapons/new/shield' %></li>
+  <% end %>
+  <li><%= link_to 'Weapon Classes', weapon_classes_path %></li>
+  <li><%= link_to 'Weapon Types', weapon_types_path %></li>
+</ul>

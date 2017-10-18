@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+
+  # navigation
+  get '/navigation', to: 'navigation#dropdown'
+  get '/sub-nav', to: 'navigation#sub_nav'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :users, only: [:index, :new, :show, :create]
 
@@ -14,6 +19,8 @@ Rails.application.routes.draw do
   resources :characters do #, except: [:edit, :update, :destroy] # full
     resources :obtained_skills, only: [:create, :update]
     resources :equipped_weapons, only: [:create, :destroy]
+    resources :obtained_weapons, only: [:create]
+    resources :obtained_armors, only: [:create]
   end
 
   resources :armor_types, only: [:index, :show]

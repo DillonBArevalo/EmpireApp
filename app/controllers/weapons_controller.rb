@@ -7,22 +7,15 @@ class WeaponsController < ApplicationController
   def new
     auth
     @weapon = Weapon.new
-    @damage_types = DamageType.all
-    @attack_option = AttackOption.new
     @weapon_types = WeaponType.all.reject {|weapon_type| weapon_type.name.downcase.include?('shield')}
     @weapon_classes = WeaponClass.all.reject {|weapon_class| weapon_class.name.downcase.include?('shield')}
-    @conditions = Condition.all
   end
 
   def new_shield
     auth
     @weapon = Weapon.new
-    @damage_types = DamageType.all
-    bludgeoning = @damage_types.find_by(name: 'Bludgeoning')
-    @attack_option = AttackOption.new(name: 'Shield Bash', description: "If in closed in (in same square as target), add 2dSTR and any victory pushes them one square away in the direction you face. Successful attacks also give the following conditions: Narrow: 25 percent reduction of opponent’s next attack energy, Clear: 50 percent reduction, Strong: Attacker is Off Balance, Overwhelming: Attacker is Prone", damage_type_id: bludgeoning.id, damage_dice: 0, damage_die_size: 0, flat_damage_bonus: 0)
     @weapon_types = WeaponType.all.select {|weapon_type| weapon_type.name.downcase.include?('shield')}
     @weapon_classes = WeaponClass.all.select {|weapon_class| weapon_class.name.downcase.include?('shield')}
-    @conditions = Condition.all
   end
 
   def create
@@ -35,24 +28,24 @@ class WeaponsController < ApplicationController
   # refactor to use a weapon method to create everything else in one line?
   # also maybe add validations to AttackOptionsCondition
     @weapon = @user.weapons.new(new_weapon_params)
-    @attack_option = @weapon.attack_options.new(aoo_params)
-    @condition1 = @attack_option.attack_options_conditions.new(condition1_params)
-    @condition2 = @attack_option.attack_options_conditions.new(condition2_params)
     @weapon.weapon_classes << WeaponClass.find(params[:weapon_class_id])
-    if @weapon.valid? && @attack_option.valid? && @condition1.valid? && @condition2.valid?
-      @weapon.save
-      @attack_option.save
-      @condition1.save
-      @condition2.save
-      redirect_to @weapon
+    if @weapon.save
+      if params[:attack_option]
+        redirect_to new_weapon_attack_option_url(@weapon)
+      else
+        redirect_to @weapon
+      end
     else
       @errors = @weapon.errors.full_messages
-      @errors2 =  @attack_option.errors.full_messages + @condition1.errors.full_messages + @condition2.errors.full_messages
-      @damage_types = DamageType.all
-      @weapon_types = WeaponType.all
-      @conditions = Condition.all
-      @weapon_classes = WeaponClass.all
-      params[:shield] ? (render 'new_shield') : (render 'new')
+      if params[:shield]
+        @weapon_types = WeaponType.all.select {|weapon_type| weapon_type.name.downcase.include?('shield')}
+        @weapon_classes = WeaponClass.all.select {|weapon_class| weapon_class.name.downcase.include?('shield')}
+        render 'new_shield'
+      else
+        @weapon_types = WeaponType.all.reject {|weapon_type| weapon_type.name.downcase.include?('shield')}
+        @weapon_classes = WeaponClass.all.reject {|weapon_class| weapon_class.name.downcase.include?('shield')}
+        render 'new'
+      end
     end
   end
 

@@ -1,3 +1,62 @@
 // Place all the styles related to the characters controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.stat-container {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-radius: 5px;
+  div {
+    border-radius: 5px;
+    border-bottom: 1px solid grey;
+    border-top: 1px solid grey;
+    padding: 2px;
+    margin: 1px;
+  }
+  h4 {
+    margin-bottom: 0px;
+  }
+  h5 {
+    margin-bottom: 0px;
+  }
+  .header {
+    font-weight: bold;
+    font-size: bigger;
+  }
+  .stat {
+    border-radius: 8px;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
+
+
+#stats {
+  margin: auto;
+  margin-top: 5%;
+  padding: 2%;
+  border-radius: 2px;
+  background-image: url(paper.jpg);
+  width: 8.5in;
+  align-self: center;
+  .left-col {
+    flex-basis: 250px;
+    display: flex;
+    flex-direction: column;
+  }
+  .right-col {
+    flex-basis: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+  .side-border {
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    border-radius: 5px;
+  }
+  .half {
+    flex-basis: 45%;
+  }
+}

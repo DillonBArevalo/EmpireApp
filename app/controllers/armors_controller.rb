@@ -9,6 +9,10 @@ class ArmorsController < ApplicationController
     @armor_types = ArmorType.all
     @armor = Armor.new
     @drs = []
+    respond_to do |f|
+      f.html {}
+      f.js {}
+    end
   end
 
   def create
@@ -20,14 +24,19 @@ class ArmorsController < ApplicationController
 
     @armor = @user.armors.new(new_armor_params)
     @drs = drs_from_params
-    p @drs
     if @armor.save
       @armor.generate_drs(@drs)
-      redirect_to @armor
+      respond_to do |f|
+        f.html {redirect_to @armor}
+        f.js {@success = 'true'}
+      end
     else
       @armor_types = ArmorType.all
       @errors = @armor.errors.full_messages
-      render 'new'
+      respond_to do |f|
+        f.html {render 'new'}
+        f.js {@success = 'false'}
+      end
     end
   end
 

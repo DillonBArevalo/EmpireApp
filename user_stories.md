@@ -16,28 +16,11 @@
 * Update or delete anything they've made (unless it is in use)
 * Can create weapons and armor that act as default equipment
 
-### Incomplete:
 
+#### to-do:
 
-### Not Yet Begun:
-
-
-#### MVP:
-
-* Create an admin account if they have a code for it (ajax it onto the form with a button?)
-* View rules and information about the game pertaining to their character/equipment creation
-* Create adventuring parties (groups of characters)
-* Submit a request to admins for equipment to be added to default
-
-Admins
-* Can create classes and races
-* Can add equipment to the list of default equipment
-* Can view requests for adding equipment to default lists
-
-#### Stretch: ()
-
-##### Make api functionality for this app that lets me export all the social networking stuff below to another site:
 * A user can upload a picture of their character
+* Make api functionality for this app that lets me create a companion react native app and export all the social networking stuff below to another site:
 
 ##### Functionalities moved to social app (not this one)
 * A user can be a DM for a party and allot skill points/equipment to characters within that party

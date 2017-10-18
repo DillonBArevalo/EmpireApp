@@ -4,7 +4,7 @@
 
 This is a project for creating, updating, and hopefully, even running games with characters in the game EMPIRE, created by myself (Dillon Arevalo) and Jack Wostrel (currently in alpha). It is a tabletop game in the style of Dungeons and Dragons but with a much more deadly, tactical, and choice oriented flavor.
 
-The app not yet live.
+The app is live [here](https://empire-character-creator-app.herokuapp.com/).
 
 ## User Stories:
 
@@ -12,16 +12,13 @@ The app not yet live.
 
 ## Basic Use
 
-With this webapp, a user can
-
-to-do:
-give walkthrough with screenshots
+Empire is, as a system, somewhat complex. In designing it Jack and I decided that adding some up front math and a complex character creation was worth the trouble if it helped create a more engaging gameplay experience. Having a difficult character creation process is still a trouble, however, so I created this website to streamline the process. With this website you can very quickly and easily create a character, level them up, fully equip them with anything currently in the game (or homebrewed things too!), and see all the relevant stat blocks created for you. This makes generating attack, defense, and damage numbers and applying skill bonuses as easy as clicking a button and makes the system much more approachable.
 
 ## Tech Stack
 
 * Ruby on Rails
 * PostgreSQL
-* Heroku (soon)
+* Heroku
 * Travis CI
 
 ## Contributing
