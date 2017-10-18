@@ -4,36 +4,53 @@
 
 
 #nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 40px;
+  width: 100%;
+  background-color: #721e1c;
   display: flex;
   justify-content: space-between;
-  hr {
-    width: 1px;
-    height: 1em;
-    display: inline;
-    margin: 5px;
-    border-color: grey;
+  align-items: center;
+  a {
+    color: white;
+    &:hover {
+      color: #EB807D;
+    }
+    padding-right: 10px;
   }
+  box-shadow: 0px 5px 4px grey;
 }
 
 #nav-dropdown-button {
   position: absolute;
   top: 1em;
-  left: 1em
+  left: 1em;
 }
 
 #dropdown-panel {
   position: fixed;
-  top: 3em;
+  top: 40px;
   left: 0;
   display: hidden; // unhide meeee or delete me
   flex-direction: column;
-  background-color: #f2f7ff;
-  border-radius: 10px;
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
-  border-right: 2px solid black;
+  background-color: #721e1c;
+  border-top: 2px solid #721e2d;
+  border-bottom: 2px solid #721e2d;
+  border-right: 2px solid #721e2d;
   padding: 1em;
-  width: 25%
+  color: white;
+  z-index: 1;
+  box-shadow: 5px 5px 4px grey;
+  // width: 25%;
+  a {
+    color: white;
+    &:hover {
+      color: #EB807D;
+    }
+    text-decoration: none;
+  }
 }
 
 #nav-button {
@@ -41,12 +58,16 @@
   justify-content: space-around;
   border: 2px solid black;
   align-items: stretch;
-  height: 25px;
+  height: 24px;
   width: 24px;
   border-radius: 6px;
   padding-left: 1px;
   padding-right: 1px;
   padding: 2px;
+  background-color: white;
+  &:hover {
+    background-color: #EB807D;
+  }
 }
 
 .nav-oval {

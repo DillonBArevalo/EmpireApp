@@ -20,7 +20,13 @@ $( document ).on('turbolinks:load', function(){
   upgradeFormListener();
   characterNavListener();
   navButtonListener();
+  removeInventoryIfJS()
+  obtainWeaponListener()
 })
+
+var removeInventoryIfJS = function(){
+  $('#inventory-link').remove()
+}
 
 var hideDetailListener = function(){
   $('#hide-desc').on('click', function(e){
@@ -81,4 +87,10 @@ var navButtonFlipper = function(nav){
     }else{
       nav.css('flex-direction', 'column')
     }
+}
+
+var obtainWeaponListener = function(){
+  $('.obtain_equipment_forms').on('change', '.select_equipment', function(e){
+    $(this).closest('form').submit()
+  })
 }

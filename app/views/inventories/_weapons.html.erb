@@ -1,0 +1,17 @@
+<div class='weapon-inventory'>
+  <div class='bold'>Weapons</div>
+  <% @inventory.weapons_and_joins.each do |weapon| %>
+    <div class='flex-row'> <%= link_to weapon[0].name, weapon[0] %>
+      <% if current_user == @character.creator %>
+        <%= form_for [@character, @equipped_weapon], remote: true do |f| %>
+          <%= hidden_field_tag :weapon_id, weapon[0].id %>
+          <%= f.submit 'equip', disabled: @character.equipped_weapons.include?(weapon[0]) %>
+        <% end %>
+        <%= form_for weapon[1], method: 'delete', remote: true do |f| %>
+          <%= f.submit 'remove from inventory', disabled: @character.equipped_weapons.include?(weapon[0]) %>
+        <% end %>
+      <% end %>
+
+    </div>
+  <% end %>
+</div>

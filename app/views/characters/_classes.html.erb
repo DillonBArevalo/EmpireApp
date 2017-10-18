@@ -1,0 +1,8 @@
+<div class='flex-column stat-container side-border classes'>
+  <h3>Obtained Classes:</h3>
+  <div>
+    <% @character.obtained_classes.each do |obtained_class| %>
+      <div><%= obtained_class.classable.name %>: <%= obtained_class.invested_points %> points invested</div>
+    <% end %>
+  </div>
+</div>

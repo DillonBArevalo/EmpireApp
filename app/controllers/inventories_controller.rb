@@ -14,11 +14,17 @@ class InventoriesController < ApplicationController
     if params[:weapon_id]
       @weapon = Weapon.find(params[:weapon_id])
       @inventory.weapons << @weapon
-      redirect_to @weapon
+      respond_to do |f|
+        f.html{redirect_to @weapon}
+        f.js{@type = 'weapons'}
+      end
     elsif params[:armor_id]
       @armor = Armor.find(params[:armor_id])
       @inventory.armors << @armor
-      redirect_to @armor
+      respond_to do |f|
+        f.html{redirect_to @armor}
+        f.js{@type = 'armors'}
+      end
     end
   end
 end

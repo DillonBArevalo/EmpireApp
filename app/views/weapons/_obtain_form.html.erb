@@ -1,3 +1,4 @@
+<div class='obtain_form'>
 <label>Add this weapon to one of your characters' inventories</label>
   <table>
     <tr>
@@ -7,7 +8,7 @@
     <% current_user.characters.each do |character| %>
       <tr>
         <td class='table-skill-form'>
-          <%= form_for character.inventory do |f| %>
+          <%= form_for character.inventory, remote: true do |f| %>
             <%= hidden_field_tag :weapon_id, @weapon.id %>
             <%= f.submit character.name, disabled: character.weapons.include?(@weapon) %>
           <% end %>
@@ -19,3 +20,4 @@
       </tr>
     <% end %>
   </table>
+</div>
