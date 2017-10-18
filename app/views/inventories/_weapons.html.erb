@@ -1,4 +1,4 @@
-<div>
+<div class='weapon-inventory'>
   <div class='bold'>Weapons</div>
   <% @inventory.weapons_and_joins.each do |weapon| %>
     <div class='flex-row'> <%= link_to weapon[0].name, weapon[0] %>

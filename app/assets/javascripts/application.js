@@ -21,6 +21,7 @@ $( document ).on('turbolinks:load', function(){
   characterNavListener();
   navButtonListener();
   removeInventoryIfJS()
+  obtainWeaponListener()
 })
 
 var removeInventoryIfJS = function(){
@@ -86,4 +87,10 @@ var navButtonFlipper = function(nav){
     }else{
       nav.css('flex-direction', 'column')
     }
+}
+
+var obtainWeaponListener = function(){
+  $('.obtain_weapon_form').on('change', '.select_weapon', function(e){
+    $('.new_obtained_weapon').submit()
+  })
 }
