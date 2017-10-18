@@ -90,7 +90,7 @@ var navButtonFlipper = function(nav){
 }
 
 var obtainWeaponListener = function(){
-  $('.obtain_weapon_form').on('change', '.select_weapon', function(e){
-    $('.new_obtained_weapon').submit()
+  $('.obtain_equipment_forms').on('change', '.select_equipment', function(e){
+    $(this).closest('form').submit()
   })
 }

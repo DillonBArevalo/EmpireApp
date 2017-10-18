@@ -1,3 +1,3 @@
-$('.obtain_weapon_form').html('<%= j render partial: "/characters/obtain_weapon_form" %>')
+$('.obtain_weapon_form').html('<%= j render partial: "/obtained_weapons/form" %>')
 $('.weapon-inventory').replaceWith('<%= j render partial: "/inventories/weapons" %>')
 alert('<%= j @character.name %> obtained <%= j @weapon.name %>')

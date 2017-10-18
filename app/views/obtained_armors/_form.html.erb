@@ -1,0 +1,5 @@
+<h2>Obtain new armor:
+  <%= form_for [@character, ObtainedArmor.new], remote: true do |f|%>
+    <%= select_tag :armor_id, options_from_collection_for_select(([Armor.new(name: 'Obtain armor')] + Armor.all - @character.armors), :id, :name), class: 'select_equipment' %>
+  <% end %>
+</h2>
