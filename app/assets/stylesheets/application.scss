@@ -130,11 +130,6 @@
   border-top: 1px solid black;
 }
 
-// .test {
-//   border-top: 1px solid black;
-//   border-bottom: 1px solid black;
-//   border-radius: 20px;
-// }
 
 label {
   padding-right: 5px;
@@ -148,4 +143,11 @@ body {
   background-color: #1e1c50;
   margin: 0px;
   min-height: 80%;
+}
+
+a {
+  color: #721e1c;
+  &:hover {
+    color: #3F1110;
+  }
 }

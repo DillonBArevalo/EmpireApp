@@ -1,5 +1,13 @@
 <div id='stats' class='flex-col'>
   <div class='flex-row'>
+    <div class='side-border stat-container left-col name'>
+      <span class='header'>Name: </span> <span class='stat'> <%= @character.name %></span>
+    </div>
+    <div class='side-border stat-container right-col description'>
+      <span class='header'>Description: </span> <span class='stat'> <%= @character.description %></span>
+    </div>
+  </div>
+  <div class='flex-row'>
     <div class='left-col side-border'>
       <%= render partial: 'primary_stats' %>
       <%= render partial: 'secondary_stats' %>
