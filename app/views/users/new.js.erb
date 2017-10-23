@@ -1,0 +1,7 @@
+// $('#content').addClass('faded-out') // might not work, might need to add a new element
+$('#modal').remove();
+$('#content').before('<%= j render partial: "modals/register", layout: "modals/modal" %>');
+
+$('.modal-background').on('click', function(){
+  $('#modal').remove();
+});

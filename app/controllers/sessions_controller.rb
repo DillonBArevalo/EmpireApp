@@ -2,6 +2,10 @@ class SessionsController < ApplicationController
   # get /login
   def new
     @user = User.new
+    respond_to do |f|
+      f.html {}
+      f.js {}
+    end
   end
 
   # post /login

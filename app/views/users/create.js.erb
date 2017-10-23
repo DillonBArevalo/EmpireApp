@@ -1,0 +1,2 @@
+$('#modal .errors').remove();
+$('#register').before('<%= j render partial: "/errors", locals: {errors: @errors} %>');
