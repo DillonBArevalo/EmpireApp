@@ -4,7 +4,7 @@
     <h4><%= link_to(weapon.name, weapon) %>:</h4>
     <div class='flex-row no-wrap'>
       <div class='half'>
-        <h4>Attacks</h4>
+        <h4>Attacks:</h4>
         <div>number: <span class='stat'><%= @character.multi_attack_numbers_and_cost(weapon) %></span></div>
         <% weapon.attack_options.each do |a_o| %>
           <h5><%= a_o.name %></h5>
