@@ -22,7 +22,7 @@ class UsersController < ApplicationController
       @errors = @user.errors.full_messages
       respond_to do |f|
         f.html {render 'new'}
-        f.js {}
+        f.js {render 'modals/errors'}
       end
     end
   end
