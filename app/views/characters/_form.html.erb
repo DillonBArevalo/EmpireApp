@@ -1,36 +1,64 @@
 <%= form_for @character, html: {class: 'flex-column center', id: nil} do |f| %>
   <div class='form-field'>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+    <div class='field'>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div class='description'>Your character's name</div>
   </div>
   <div class='form-field'>
-    <%= f.label :description %>
-    <%= f.text_area :description %>
+    <div class='field'>
+      <%= f.label :description %>
+      <%= f.text_area :description %>
+    </div>
+    <div class='description'>A description for your character. This can be purely flavor based or it can describe statistics not yet worked into Empire. Can your character see in the dark? Do they have natural weapons or armor? This is currently the best place for that!</div>
   </div>
   <div class='form-field'>
-    <%= f.label :strength %>
-    <%= f.number_field :strength, in: 8..18, class: 'number-field' %>
+    <div class='field'>
+      <%= f.label :strength %>
+      <%= f.number_field :strength, in: 8..18, class: 'number-field' %>
+    </div>
+    <div class='description'>This is your character's strength score. It affects your attack bonus (chance to hit), your energy budget (how much energy you can put into a single cycle of offense and defense), your energy pool (how much energy you can spend before you are too tired to fight), your hit points (how much damage you can take before dropping), and your move speed. It also directly factors into your damage on the heavier weapons.</div>
   </div>
   <div class='form-field'>
-    <%= f.label :dexterity %>
-    <%= f.number_field :dexterity, in: 8..18, class: 'number-field' %>
+    <div class='field'>
+      <%= f.label :dexterity %>
+      <%= f.number_field :dexterity, in: 8..18, class: 'number-field' %>
+    </div>
+    <div class='description'>This is your character's dexterity score. It affects your active defense bonus (ability to block attacks and potentially throw your opponent off balance in the process), your attack bonus (chance to hit), your energy budget (how much energy you can put into a single cycle of offense and defense), your energy pool (how much energy you can spend before you are too tired to fight), your hit points (how much damage you can take before dropping), and your move speed. It also directly factors into your damage on lighter weapons. Currently, dexterity affects just about everything you want in EMPIRE. It's gonna be nerfed next edition; I promise.</div>
   </div>
   <div class='form-field'>
-    <%= f.label :constitution %>
-    <%= f.number_field :constitution, in: 8..18, class: 'number-field' %>
+    <div class='field'>
+      <%= f.label :constitution %>
+      <%= f.number_field :constitution, in: 8..18, class: 'number-field' %>
+    </div>
+    <div class='description'>This is your character's constitution score. It affects your energy pool (how much energy you can spend before you are too tired to fight), and massively affects your hit points (how much damage you can take before dropping). It also is the stat used for most saves against negative conditions.</div>
   </div>
   <div class='form-field'>
-    <%= f.label :intelligence %>
-    <%= f.number_field :intelligence, in: 8..18, class: 'number-field' %>
+    <div class='field'>
+      <%= f.label :intelligence %>
+      <%= f.number_field :intelligence, in: 8..18, class: 'number-field' %>
+    </div>
+    <div class='description'>This is your character's intelligence score. It currently affects nothing. It will obviously affect role-playing and will eventually be incorporated into skills to increase your attack and damage numbers as well as being a secondary stat for the assassin class.</div>
   </div>
   <div class='form-field'>
-    <%= f.label :wisdom %>
-    <%= f.number_field :wisdom, in: 8..18, class: 'number-field' %>
+    <div class='field'>
+      <%= f.label :wisdom %>
+      <%= f.number_field :wisdom, in: 8..18, class: 'number-field' %>
+    </div>
+    <div class='description'>This is your character's wisdom score. It currently affects nothing. It will obviously affect role-playing and will eventually be incorporated into skills to increase your attack and damage numbers as well as being a secondary stat for the champion class.</div>
   </div>
   <div class='form-field'>
-    <%= f.label :charisma %>
-    <%= f.number_field :charisma, in: 8..18, class: 'number-field' %>
+    <div class='field'>
+      <%= f.label :charisma %>
+      <%= f.number_field :charisma, in: 8..18, class: 'number-field' %>
+    </div>
+    <div class='description'>This is your character's charisma score. It currently affects nothing. It will obviously affect role-playing and will be a primary stat for the champion class.</div>
   </div>
-
-  <%= f.submit %>
+  <div class='form-field'>
+    <div class='field'>
+      <%= f.submit %>
+    </div>
+    <div class='description'>Create your character and go to their character page where you can give them equipment and skill points. To get skills you must first give your character skill points, then go to the individual skill pages to obtain them. For class skills you must first obtain the class in the same way.</div>
+  </div>
 <% end %>

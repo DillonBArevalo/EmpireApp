@@ -6,27 +6,33 @@
 
 <div class='flex-row'>
   <%= link_to('inventory', @character.inventory, id: 'inventory-link') %>
-  <p class='no-margin'>Description: <%= @character.description %></p>
   <% if @character.creator == current_user %>
     <%= link_to("Edit #{@character.name}", edit_character_path(@character)) %>
+    <%= link_to "Delete #{@character.name}", character_path(@character), method: 'DELETE', data: {confirm: "Really delete #{@character.name}?"} %>
   <% end %>
+
 </div>
 
 <% if current_user?(@character.creator) %>
   <div class='flex-row obtain_equipment_forms'>
     <div>
-
       <h2>Add skill points to your character:</h2>
-      <p>current unspent skill points <%= @character.available_skill_points %></p>
-      <%= form_for @character do |f| %>
-        <%= hidden_field_tag :add_skill_points, true %>
-        <%= number_field_tag :skill_points, nil, class: 'number-field' %>
-        <%= f.submit 'add_skill_points' %>
-      <% end %>
+      <div class='flex-row'>
+
+      <span>current unspent skill points: <%= @character.available_skill_points %></span>
+        <%= form_for @character do |f| %>
+          <%= hidden_field_tag :add_skill_points, true %>
+          <%= number_field_tag :skill_points, nil, class: 'number-field' %>
+          <%= f.submit 'add_skill_points' %>
+        <% end %>
+      </div>
+
     </div>
+
     <div class='obtain_weapon_form'>
       <%= render partial: '/obtained_weapons/form' %>
     </div>
+
     <div class='obtain_armor_form'>
       <%= render partial: '/obtained_armors/form' %>
     </div>
@@ -47,5 +53,3 @@
 <% end %>
 
 <%= render partial: 'show' %>
-
-<%= link_to "Delete #{@character.name}", character_path(@character), method: 'DELETE', data: {confirm: "Really delete #{@character.name}?"} %>

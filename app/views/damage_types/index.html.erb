@@ -17,7 +17,7 @@
       <td><%= type.description %></td>
       <td>
         <ul class='no-pad no-dots'>
-          <% type.weapons.each do |weapon| %>
+          <% type.weapons.distinct.each do |weapon| %>
             <li><%= link_to weapon.name, weapon %></li>
           <% end %>
         </ul>

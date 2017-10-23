@@ -44,7 +44,6 @@
 .stats {
   width: 80%;
   min-width: 350px;
-  // max-width: 700px;
  }
 
 .no-pad {
@@ -71,9 +70,22 @@
 }
 
 .form-field {
-  padding: 5px;
+  padding: 25px;
   display:flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  border-bottom: 1px dashed #1e1c50;
+  border-radius: 10px;
+
+  .field {
+    flex-basis: 30%;
+    border-right: 1px dashed #1e1c50;
+  }
+  .description {
+    flex-basis: 60%;
+  }
 }
 
 .flex-column {
@@ -130,11 +142,6 @@
   border-top: 1px solid black;
 }
 
-// .test {
-//   border-top: 1px solid black;
-//   border-bottom: 1px solid black;
-//   border-radius: 20px;
-// }
 
 label {
   padding-right: 5px;
@@ -148,4 +155,12 @@ body {
   background-color: #1e1c50;
   margin: 0px;
   min-height: 80%;
+  font-family: "Open Sans", sans-serif;
+}
+
+a {
+  color: #721e1c;
+  &:hover {
+    color: #3F1110;
+  }
 }
