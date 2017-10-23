@@ -2,7 +2,7 @@
   <ul class='no-pad no-dots'>
     <li><%= link_to 'home', '/' %></li>
     <% if !logged_in? %>
-      <li><%= link_to 'login to access more options', login_path %></li>
+      <li><%= link_to 'login to access more options', login_path, remote: true %></li>
     <% end %>
     <li><%= link_to '▸', '/sub-nav?type=armors', remote: true, class: 'dropdown-arrow armors' %> <%= link_to 'Armor', armors_path %>
     </li>
