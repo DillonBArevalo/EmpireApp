@@ -70,9 +70,22 @@
 }
 
 .form-field {
-  padding: 5px;
+  padding: 25px;
   display:flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  border-bottom: 1px dashed #1e1c50;
+  border-radius: 10px;
+
+  .field {
+    flex-basis: 30%;
+    border-right: 1px dashed #1e1c50;
+  }
+  .description {
+    flex-basis: 60%;
+  }
 }
 
 .flex-column {
