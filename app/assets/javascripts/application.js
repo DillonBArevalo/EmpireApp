@@ -20,12 +20,12 @@ $( document ).on('turbolinks:load', function(){
   upgradeFormListener();
   characterNavListener();
   navButtonListener();
-  removeInventoryIfJS()
-  obtainWeaponListener()
-})
+  removeInventoryIfJS();
+  equipmentDetailsListener();
+});
 
 var removeInventoryIfJS = function(){
-  $('#inventory-link').remove()
+  $('#inventory-link').remove();
 }
 
 var hideDetailListener = function(){
@@ -36,61 +36,75 @@ var hideDetailListener = function(){
 }
 
 var upgradeFormListener = function(){
-  upgradeSingle('#pool_amount', '#budget_amount')
-  upgradeSingle('#budget_amount', '#pool_amount')
+  upgradeSingle('#pool_amount', '#budget_amount');
+  upgradeSingle('#budget_amount', '#pool_amount');
 }
 
 var upgradeSingle = function(primary, other) {
   $(primary).on('change', function(e){
-    var max = parseInt($('#unspent_points').html())
-    var secondaryValue = max - parseInt($(this).val())
-    $(other).val(secondaryValue)
-  })
+    var max = parseInt($('#unspent_points').html());
+    var secondaryValue = max - parseInt($(this).val());
+    $(other).val(secondaryValue);
+  });
 }
 
 var characterNavListener = function(){
   $('body').on('change', '.select_character', function(e){
-    window.location.href = '/characters/' + $(this).val()
-  })
+    window.location.href = '/characters/' + $(this).val();
+  });
 }
 
 var navButtonListener = function(){
   $('#nav-button').on('click', function(){
-    navButtonFlipper($(this))
-    closeNavListener()
+    navButtonFlipper($(this));
+    closeNavListener();
 
     if($('#dropdown-panel').length > 0){
-      $('#dropdown-panel').remove()
+      $('#dropdown-panel').remove();
     }else{
       $.ajax({
         url: '/navigation'
-      })
+      });
     }
-  })
+  });
 }
 
 var closeNavListener = function(){
-  $('#content').on('click', removeDropdown)
+  $('#content').on('click', removeDropdown);
 }
 
 var removeDropdown = function(){
   if($('#dropdown-panel').length > 0){
-      navButtonFlipper($('#nav-button'))
-      $('#dropdown-panel').remove()
-      $('#content').unbind('click', removeDropdown)
+      navButtonFlipper($('#nav-button'));
+      $('#dropdown-panel').remove();
+      $('#content').unbind('click', removeDropdown);
     }
 }
 
 var navButtonFlipper = function(nav){
   if(nav.attr('style')){
-      nav.removeAttr('style')
+      nav.removeAttr('style');
     }else{
-      nav.css('flex-direction', 'column')
+      nav.css('flex-direction', 'column');
     }
 }
 
-var obtainWeaponListener = function(){
+var equipmentDetailsListener = function(){
+  $.each($('.details-form'), function(i, form){
+    changeDescriptionAction($(form))
+  });
   $('.obtain_equipment_forms').on('change', '.select_equipment', function(e){
-    $(this).closest('form').submit()
+    var selector = $(this);
+    var form = selector.closest('.obtain_form').find('.details-form');
+    changeDescriptionAction(form);
   })
+}
+
+var changeDescriptionAction = function(form){
+  var id = form.closest('.obtain_form').find('.select_equipment').val();
+  var action = form.attr('action');
+  var actionArray = action.split('/')
+  actionArray[actionArray.length - 1] = id
+  action = actionArray.join('/')
+  form.attr('action', action)
 }
