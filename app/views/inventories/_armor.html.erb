@@ -1,5 +1,5 @@
 <div class='flex-col armor-inventory'>
-  <div class='bold'>Armor</div>
+  <div class='bold'>Armor:</div>
   <% @inventory.armors_and_joins.each do |armor| %>
     <div class='flex-row'> <%= link_to armor[0].name, armor[0] %>
       <% if current_user == @character.creator %>

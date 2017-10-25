@@ -6,6 +6,10 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    respond_to do |f|
+      f.html {}
+      f.js {@header = 'Register'}
+    end
   end
 
   def create
@@ -16,7 +20,10 @@ class UsersController < ApplicationController
       # maybe flash a notice?
     else
       @errors = @user.errors.full_messages
-      render 'new'
+      respond_to do |f|
+        f.html {render 'new'}
+        f.js {render 'modals/errors'}
+      end
     end
   end
 

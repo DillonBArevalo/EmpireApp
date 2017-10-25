@@ -1,0 +1,6 @@
+$('#modal').remove();
+$('#content').before('<%= j render partial: "modals/armor", layout: "modals/modal" %>');
+
+$('.modal-background').on('click', function(){
+  $('#modal').remove();
+});

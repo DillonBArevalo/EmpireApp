@@ -42,6 +42,10 @@ class ArmorsController < ApplicationController
 
   def show
     @armor = Armor.find(params[:id])
+    respond_to do |f|
+      f.html {}
+      f.js {@header = @armor.name}
+    end
   end
 
   def edit

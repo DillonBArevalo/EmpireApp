@@ -1,0 +1,18 @@
+<p><%= @armor.description %></p>
+
+
+<h2>Stats:</h2>
+
+<ul class='no-dots armor-stats'>
+  <li>Creator: <%= link_to @armor.creator.username, @armor.creator %></li>
+  <li>Armor Type: <%= link_to @armor.armor_type.name, @armor.armor_type %></li>
+  <li>Passive Defense Bonus: +<%= @armor.passive_defense_bonus %></li>
+  <li>Active Action Reduction: -<%= @armor.active_action_reduction %></li>
+  <li>Energy Budget Reduction: -<%= @armor.budget_reduction %></li>
+  <li>Energy Pool Reduction: -<%= @armor.energy_pool_reduction %></li>
+  <li>Dodge Energy Mod Penalty: -<%= @armor.dodge_energy_mod_penalty %></li>
+  <li>Dodge Die Size Reduction: -<%= @armor.dodge_die_size_reduction %></li>
+  <li>Damage Resistances: <%= @armor.drs %></li>
+  <li><%= @armor.users.length %> characters have this armor in their inventory</li>
+  <li><%= @armor.characters.length %> of those characters currently have this armor equipped</li>
+</ul>
