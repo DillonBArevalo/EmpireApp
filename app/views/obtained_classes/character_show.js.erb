@@ -1,0 +1,6 @@
+// need things for, obtained_skills, display_skills, obtain a skill
+$('.unspent-skill-points').text('<%= j @character.available_skill_points.to_s %>')
+$('.classes').replaceWith('<%= j render partial: "/characters/classes" %>')
+$('.skill-descriptions').replaceWith('<%= j render partial: "/characters/skill_bonuses" %>')
+$('.all-skills').replaceWith('<%= j render partial: "/characters/obtained_skills" %>')
+$('.obtain-classes-form').replaceWith('<%= j render partial: "/characters/obtain_classes_form" %>')

@@ -1,0 +1,8 @@
+<div class='flex-column stat-container side-border left-col all-skills'>
+  <h3>Obtained Skills: </h3>
+  <div>
+    <% @skills_ranks.keys.each do |skill| %>
+      <div><%= skill.skillable.name %>: <%= link_to skill.name, skill %> at rank: <span class='stat'><%= @skills_ranks[skill].ranks %></span></div>
+    <% end %>
+  </div>
+</div>

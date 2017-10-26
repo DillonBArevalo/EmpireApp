@@ -1,0 +1,18 @@
+<% if !@unobtained_classes.empty? %>
+<div class='obtain-classes-form flex-column card'>
+  <h2>Obtain a class (costs 5 skill points):</h2>
+  <% @unobtained_classes.each do |character_class| %>
+    <div class='flex-row'>
+      <%= form_for @obtained_class, remote: true do |f| %>
+        <%= hidden_field_tag :character_class_id, character_class.id %>
+        <%= hidden_field_tag :character_id, @character.id %>
+        <%= hidden_field_tag :character_show, true %>
+        <%= f.submit "Obtain #{character_class.name} class", disabled: (@character.available_skill_points < 5) %>
+      <% end %>
+      <!-- ajax details modal -->
+
+      <%= "Not enough skill points. You only have #{@character.available_skill_points}." unless @character.available_skill_points >= 5%>
+    </div>
+  <% end %>
+  </div>
+<% end %>

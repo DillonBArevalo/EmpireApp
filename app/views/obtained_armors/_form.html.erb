@@ -4,6 +4,6 @@
     <%= f.submit 'Obtain armor' %>
   <% end %>
 
-<%= form_for Armor.first, html: {class: 'details-form'}, remote: true, method: 'get' do |f| %>
+<%= form_for (Armor.all - @character.armors).first, html: {class: 'details-form'}, remote: true, method: 'get' do |f| %>
   <button>Details</button>
 <% end %>

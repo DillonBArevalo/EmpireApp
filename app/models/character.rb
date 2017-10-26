@@ -75,6 +75,11 @@ class Character < ApplicationRecord
     end
   end
 
+  #no tests
+  def obtainable_skills
+    Skill.all.select {|skill| skill_obtainable(skill)[:status]}
+  end
+
   def obtain_skill(skill)
     return {status: false, messages: ["#{skill.name} is a base class skill"]} if skill.base_class_skill
     join = ObtainedSkill.find_by(character_id: self.id, skill_id: skill.id)
