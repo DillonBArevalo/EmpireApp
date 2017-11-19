@@ -30,28 +30,11 @@
   </div>
 
   <div class='flex-row'>
-    <div class='flex-column stat-container side-border left-col all-skills'>
-      <h3>Obtained Skills: </h3>
-      <div>
-        <% @skills_ranks.keys.each do |skill| %>
-          <div><%= skill.skillable.name %>: <%= link_to skill.name, skill %> at rank: <span class='stat'><%= @skills_ranks[skill].ranks %></span></div>
-        <% end %>
-      </div>
-    </div>
+    <%= render partial: 'obtained_skills' %>
     <div class='inventory stat-container right-col side-border'>
       <%= render partial: '/inventories/show' %>
     </div>
   </div>
 
-  <div class='flex-column stat-container side-border skill-descriptions'>
-    <h3>Skill bonuses not applied through raw numbers: </h3>
-    <div>
-      <% @skills_ranks.each do |skill, ranks| %>
-        <% if skill.display_description %>
-          <div><label> <%= skill.name %>, <%= skill.skillable.name %>, ranks: <%= ranks.ranks %> (<%= skill.passive ? 'passive' : 'active' %>):</label>
-            <p>   <%= skill.description %></p></div>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
+  <%= render partial: 'skill_bonuses' %>
 </div>

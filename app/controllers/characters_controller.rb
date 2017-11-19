@@ -33,7 +33,13 @@ class CharactersController < ApplicationController
     @weapon = @character.equipped_weapons.reject {|weapon| weapon.is_shield? }.first
     @shield = @character.equipped_weapons.select {|weapon| weapon.is_shield? }.first
     @armor = @character.equipped_armor
-    @equipped_weapon = EquippedWeapon.new
+    if @character.creator == current_user
+      @equipped_weapon = EquippedWeapon.new
+      @obtained_classes = @character.character_classes
+      @unobtained_classes = CharacterClass.all - @obtained_classes
+      @weapon_classes = WeaponClass.all
+      @obtained_class = ObtainedClass.new
+    end
   end
 
   def edit

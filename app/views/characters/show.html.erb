@@ -14,42 +14,55 @@
 </div>
 
 <% if current_user?(@character.creator) %>
-  <div class='flex-row obtain_equipment_forms'>
-    <div>
-      <h2>Add skill points to your character:</h2>
-      <div class='flex-row'>
+  <div class='flex-column'>
+    <div class='flex-row obtain_equipment_forms'>
+      <div class='card'>
+        <h2>Add skill points to your character:</h2>
+        <div class='flex-row'>
 
-      <span>current unspent skill points: <%= @character.available_skill_points %></span>
-        <%= form_for @character do |f| %>
-          <%= hidden_field_tag :add_skill_points, true %>
-          <%= number_field_tag :skill_points, nil, class: 'number-field' %>
-          <%= f.submit 'add_skill_points' %>
-        <% end %>
+        <span>current unspent skill points: <span class='unspent-skill-points'> <%= @character.available_skill_points %></span></span>
+          <%= form_for @character do |f| %>
+            <%= hidden_field_tag :add_skill_points, true %>
+            <%= number_field_tag :skill_points, nil, class: 'number-field' %>
+            <%= f.submit 'add_skill_points' %>
+          <% end %>
+        </div>
+
       </div>
 
+      <div class='obtain_weapon_form obtain_form card'>
+        <%= render partial: '/obtained_weapons/form' %>
+      </div>
+
+      <div class='obtain_armor_form obtain_form card'>
+        <%= render partial: '/obtained_armors/form' %>
+      </div>
     </div>
 
-    <div class='obtain_weapon_form obtain_form'>
-      <%= render partial: '/obtained_weapons/form' %>
-    </div>
+    <div class='flex-row obtain_skills_forms'>
+      <!-- hide if have all classes. also with ajax -->
 
-    <div class='obtain_armor_form obtain_form'>
-      <%= render partial: '/obtained_armors/form' %>
+      <%= render partial: 'obtain_classes_form' %>
+
+
+
+    <% if @character.unspent_energy_upgrade_points > 0 %>
+      <div class='card energy_increase_form'>
+        <!-- AJAX MEEEE -->
+        <h2>Upgrade your character's stats:</h2>
+        <p><%= @character.name %> currently has <span id='unspent_points'><%= @character.unspent_energy_upgrade_points %></span> points to spend:</p>
+        <%= form_for @character, html: {id: 'upgrade_form'} do |f| %>
+          <%= hidden_field_tag :upgrade, true %>
+          <%= label_tag :boost_energy_budget %>
+          <%= number_field_tag 'character[budget_amount]', @character.unspent_energy_upgrade_points, in: 0..@character.unspent_energy_upgrade_points, class: 'number-field', id: 'budget_amount' %>
+          <%= label_tag :boost_energy_pool %>
+          <%= number_field_tag 'character[pool_amount]', 0, in: 0..@character.unspent_energy_upgrade_points, class: 'number-field', id: 'pool_amount' %>
+          <%= f.submit 'upgrade' %>
+        <% end %>
+      </div>
+    <% end %>
     </div>
   </div>
-
-  <% if @character.unspent_energy_upgrade_points > 0 %>
-    <h2>Upgrade your character's stats:</h2>
-    <p><%= @character.name %> currently has <span id='unspent_points'><%= @character.unspent_energy_upgrade_points %></span> points to spend:</p>
-    <%= form_for @character, html: {id: 'upgrade_form'} do |f| %>
-      <%= hidden_field_tag :upgrade, true %>
-      <%= label_tag :boost_energy_budget %>
-      <%= number_field_tag 'character[budget_amount]', @character.unspent_energy_upgrade_points, in: 0..@character.unspent_energy_upgrade_points, class: 'number-field', id: 'budget_amount' %>
-      <%= label_tag :boost_energy_pool %>
-      <%= number_field_tag 'character[pool_amount]', 0, in: 0..@character.unspent_energy_upgrade_points, class: 'number-field', id: 'pool_amount' %>
-      <%= f.submit 'upgrade' %>
-    <% end %>
-  <% end %>
 <% end %>
 
 <%= render partial: 'show' %>
