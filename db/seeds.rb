@@ -56,7 +56,7 @@ w_p_attack1 = AttackOption.create!(name: 'Impale', description: 'A hard swing to
 AttackOptionsCondition.create!(attack_option_id: w_p_attack1.id, condition_id: off_balance.id, threshold: 20)
 AttackOptionsCondition.create!(attack_option_id: w_p_attack1.id, condition_id: bleeding.id, threshold: 30)
 
-falchion = Weapon.create!(user_id: core_user.id, weapon_type_id: sword.id, name: 'falchion', description: 'A medium length, slightly curved, broad bladed, heavy sword meant for brutal chops that can cleave through armor and sever limbs.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 27, hands_used: 1)
+falchion = Weapon.create!(user_id: core_user.id, weapon_type_id: sword.id, name: 'Falchion', description: 'A medium length, slightly curved, broad bladed, heavy sword meant for brutal chops that can cleave through armor and sever limbs.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 27, hands_used: 1)
 WeaponClassesWeapon.create!(weapon_class_id: class1.id, weapon_id: falchion.id)
 f_attack1 = AttackOption.create!(name: 'Chop', description: 'A hard chop. Falchions are designed to disarm, as in literally remove arms (or legs or heads...).', weapon_id: falchion.id, damage_type_id: bludgeoning_slashing.id, strength_dice: 1, dexterity_dice: 1, energy_modifier: 1.5, die_number: 1, die_size: 8, damage_dice: 1, damage_die_size: 8, strength_damage_bonus: 2, flat_damage_bonus: 12)
 AttackOptionsCondition.create!(attack_option_id: f_attack1.id, condition_id: wounded.id, threshold: 12)

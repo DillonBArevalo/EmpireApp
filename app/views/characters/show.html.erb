@@ -44,15 +44,8 @@
 
       <%= render partial: 'obtain_classes_form' %>
 
-      <div class='obtain-class-skills-form card'>
 
-      </div>
 
-      <div class='obtain-weapon-skills-form card'>
-
-      </div>
-
-    </div>
     <% if @character.unspent_energy_upgrade_points > 0 %>
       <div class='card energy_increase_form'>
         <!-- AJAX MEEEE -->
@@ -68,6 +61,7 @@
         <% end %>
       </div>
     <% end %>
+    </div>
   </div>
 <% end %>
 
