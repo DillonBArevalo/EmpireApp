@@ -1,3 +1,13 @@
 // Place all the styles related to the Armors controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#armor-form-container {
+  .form-field {
+    border-bottom: none;
+  }
+  .left {
+    box-sizing: border-box;
+    padding: 10px;
+  }
+}
