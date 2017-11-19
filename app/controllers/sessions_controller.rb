@@ -2,6 +2,10 @@ class SessionsController < ApplicationController
   # get /login
   def new
     @user = User.new
+    respond_to do |f|
+      f.html {}
+      f.js {@header = 'Login'}
+    end
   end
 
   # post /login
@@ -9,11 +13,17 @@ class SessionsController < ApplicationController
     @user = User.find_by(username: login_params[:username])
     if @user && @user.try(:authenticate, login_params[:password])
       session[:id] = @user.id
-      redirect_to @user
+      respond_to do |f|
+        f.html {redirect_to @user}
+        f.js {render 'modals/reload'}
+      end
     else
       @errors = ['Username or password is incorrect!']
       @user = User.new({username: login_params[:username]}) unless @user
-      render 'new'
+      respond_to do |f|
+        f.html {render 'new'}
+        f.js {render 'modals/errors'}
+      end
     end
   end
 

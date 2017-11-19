@@ -1,4 +1,9 @@
 <h2>Obtain new armor:</h2>
   <%= form_for [@character, ObtainedArmor.new], remote: true do |f|%>
-    <%= select_tag :armor_id, options_from_collection_for_select(([Armor.new(name: 'Obtain armor')] + Armor.all - @character.armors), :id, :name), class: 'select_equipment' %>
+    <%= select_tag :armor_id, options_from_collection_for_select((Armor.all - @character.armors), :id, :name), class: 'select_equipment' %>
+    <%= f.submit 'Obtain armor' %>
   <% end %>
+
+<%= form_for (Armor.all - @character.armors).first, html: {class: 'details-form'}, remote: true, method: 'get' do |f| %>
+  <button>Details</button>
+<% end %>

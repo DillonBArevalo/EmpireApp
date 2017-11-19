@@ -10,10 +10,10 @@
 
   <body>
   <%= render 'layouts/nav_bar' %>
+  <div id='content'>
   <% if flash[:alert] %>
     <div class="alert"><%= flash[:alert] %></div>
   <% end %>
-  <div id='content'>
     <%= yield %>
   </div>
   </body>

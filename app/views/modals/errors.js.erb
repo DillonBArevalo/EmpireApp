@@ -1,0 +1,2 @@
+$('#modal .errors').remove();
+$('.modal-header').after('<%= j render partial: "/errors", locals: {errors: @errors} %>');

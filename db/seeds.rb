@@ -56,7 +56,7 @@ w_p_attack1 = AttackOption.create!(name: 'Impale', description: 'A hard swing to
 AttackOptionsCondition.create!(attack_option_id: w_p_attack1.id, condition_id: off_balance.id, threshold: 20)
 AttackOptionsCondition.create!(attack_option_id: w_p_attack1.id, condition_id: bleeding.id, threshold: 30)
 
-falchion = Weapon.create!(user_id: core_user.id, weapon_type_id: sword.id, name: 'falchion', description: 'A medium length, slightly curved, broad bladed, heavy sword meant for brutal chops that can cleave through armor and sever limbs.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 27, hands_used: 1)
+falchion = Weapon.create!(user_id: core_user.id, weapon_type_id: sword.id, name: 'Falchion', description: 'A medium length, slightly curved, broad bladed, heavy sword meant for brutal chops that can cleave through armor and sever limbs.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 30, extra_attack_cost: 27, hands_used: 1)
 WeaponClassesWeapon.create!(weapon_class_id: class1.id, weapon_id: falchion.id)
 f_attack1 = AttackOption.create!(name: 'Chop', description: 'A hard chop. Falchions are designed to disarm, as in literally remove arms (or legs or heads...).', weapon_id: falchion.id, damage_type_id: bludgeoning_slashing.id, strength_dice: 1, dexterity_dice: 1, energy_modifier: 1.5, die_number: 1, die_size: 8, damage_dice: 1, damage_die_size: 8, strength_damage_bonus: 2, flat_damage_bonus: 12)
 AttackOptionsCondition.create!(attack_option_id: f_attack1.id, condition_id: wounded.id, threshold: 12)
@@ -68,7 +68,7 @@ h_a_attack1 = AttackOption.create!(name: 'Chop', description: 'A quick swing of 
 AttackOptionsCondition.create!(attack_option_id: h_a_attack1.id, condition_id: bleeding.id, threshold: 12)
 AttackOptionsCondition.create!(attack_option_id: h_a_attack1.id, condition_id: wounded.id, threshold: 20)
 
-mace = Weapon.create!(user_id: core_user.id, weapon_type_id: club.id, name: 'Mace', description: 'A metal weight on the end of a handle maces come in many shapes and sizes. They all specialize in dealing massive impact damage with a head heavy, powerful strike.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 35, extra_attack_cost: 30, hands_used: 1)
+mace = Weapon.create!(user_id: core_user.id, weapon_type_id: club.id, name: 'Mace', description: 'A metal weight on the end of a handle: maces come in many shapes and sizes. They all specialize in dealing massive impact damage with a head heavy, powerful strike.', defense_die_number: 1, defense_die_size: 4, flat_defense_bonus: 5, defense_energy_modifier: 1, extra_block_cost: 35, extra_attack_cost: 30, hands_used: 1)
 WeaponClassesWeapon.create!(weapon_class_id: class1.id, weapon_id: mace.id)
 m_attack1 = AttackOption.create!(name: 'Smash', description: 'A brutal swing of the heavy head on a mace. Even if it doesn\'t cave in a skull or break a bone, the shock as it reverberates off your armor will still cause significant damage!', weapon_id: mace.id, damage_type_id: bludgeoning.id, strength_dice: 2, energy_modifier: 1.5, die_number: 1, die_size: 4, damage_dice: 1, damage_die_size: 4, strength_damage_bonus: 2, flat_damage_bonus: 15)
 AttackOptionsCondition.create!(attack_option_id: m_attack1.id, condition_id: off_balance.id, threshold: 20)

@@ -54,6 +54,10 @@ class WeaponsController < ApplicationController
     @empty = @weapon.inventories.empty?
     @attack_options = @weapon.attack_options
     @character = Character.first
+    respond_to do |f|
+      f.html {}
+      f.js {@header = @weapon.name}
+    end
   end
 
   def edit

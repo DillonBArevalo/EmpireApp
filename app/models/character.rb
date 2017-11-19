@@ -1,12 +1,12 @@
 class Character < ApplicationRecord
   belongs_to :creator, foreign_key: :user_id, class_name: 'User'
 
-  has_many :obtained_classes, dependent: :delete_all
+  has_many :obtained_classes, dependent: :destroy
   has_many :character_classes, through: :obtained_classes, source: :classable, source_type: 'CharacterClass'
   has_many :weapon_classes, through: :obtained_classes, source: :classable, source_type: 'WeaponClass'
   has_many :possible_class_skills, through: :character_classes, source: :skills
 
-  has_many :obtained_skills, -> { order 'skill_id ASC' }, dependent: :delete_all
+  has_many :obtained_skills, -> { order 'skill_id ASC' }, dependent: :destroy
   has_many :skills, -> { order 'id ASC' }, through: :obtained_skills
   has_many :displaying_skills, -> {where display_description: true}, through: :obtained_skills, source: :skill
   has_many :class_bcs, through: :character_classes, source: :base_class_skills
@@ -22,7 +22,7 @@ class Character < ApplicationRecord
 
   belongs_to :equipped_armor, class_name: 'Armor', optional: true
 
-  has_many :equipped_w, class_name: 'EquippedWeapon', dependent: :delete_all
+  has_many :equipped_w, class_name: 'EquippedWeapon', dependent: :destroy
   has_many :equipped_weapons, through: :equipped_w, source: :weapon
   has_many :attack_options, through: :equipped_weapons
 
@@ -73,6 +73,11 @@ class Character < ApplicationRecord
       self.increment!(:unspent_energy_upgrade_points, -amounts_hash[:pool_amount].to_i)
       self.increment!(:energy_pool_level_bonus, (amounts_hash[:pool_amount].to_i * 10))
     end
+  end
+
+  #no tests
+  def obtainable_skills
+    Skill.all.select {|skill| skill_obtainable(skill)[:status]}
   end
 
   def obtain_skill(skill)
