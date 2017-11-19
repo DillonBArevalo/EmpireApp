@@ -10,9 +10,26 @@ The app is live [here](https://empire-character-creator-app.herokuapp.com/).
 
 [View User Stories](/user_stories.md)
 
+## Screenshots:
+
+Displays a full character sheet for characters you create with options to improve your character:
+![character page](./readme-images/character-sheet.png)
+
+Dynamically adds equipment to your character on one page and updates character sheet:
+![obtain equipment](./readme-images/obtain-equipment.png)
+
+Displays details on a modal for whatever equipment is selected with the press of a button:
+![equipment details modal](./readme-images/modal.png)
+
+
+
 ## Basic Use
 
 Empire is, as a system, somewhat complex. In designing it Jack and I decided that adding some up front math and a complex character creation was worth the trouble if it helped create a more engaging gameplay experience. Having a difficult character creation process is still a trouble, however, so I created this website to streamline the process. With this website you can very quickly and easily create a character, level them up, fully equip them with anything currently in the game (or homebrewed things too!), and see all the relevant stat blocks created for you. This makes generating attack, defense, and damage numbers and applying skill bonuses as easy as clicking a button and makes the system much more approachable.
+
+To try out the website feel free to create an account or log in to with the following credentials:
+Username: Example
+Password: password
 
 ## Tech Stack
 
