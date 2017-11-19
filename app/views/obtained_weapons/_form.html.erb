@@ -5,6 +5,8 @@
   <%= f.submit 'Obtain weapon' %>
 <% end %>
 
-<%= form_for (Weapon.all - @character.weapons).first, html: {class: 'details-form'}, remote: true, method: 'get' do |f| %>
-  <button>Details</button>
+<% if !(Weapon.all - @character.weapons).empty? %>
+  <%= form_for (Weapon.all - @character.weapons).first, html: {class: 'details-form'}, remote: true, method: 'get' do |f| %>
+    <button>Details</button>
+  <% end %>
 <% end %>
