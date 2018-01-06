@@ -23,4 +23,8 @@ class Weapon < ApplicationRecord
   def is_shield?
     !self.weapon_classes.select {|type| type.name == 'Shields'}.empty?
   end
+
+  def api_export
+
+  end
 end

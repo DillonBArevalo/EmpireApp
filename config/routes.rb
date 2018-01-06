@@ -23,6 +23,10 @@ Rails.application.routes.draw do
     resources :obtained_armors, only: [:create]
   end
 
+  namespace :api, :defaults => {:format => :json} do
+    resources :armors, only: [:index, :show]
+  end
+
   resources :armor_types, only: [:index, :show]
 
   resources :obtained_armors, only: [:destroy]
